@@ -3808,7 +3808,7 @@
     },
     {
       "name": "tauri-plugin-deep-link",
-      "version": "2.6.2",
+      "version": "2.6.3",
       "url": "https://github.com/tauri-apps/plugins-workspace",
       "licenses": [
         45
