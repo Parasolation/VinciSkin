@@ -1,0 +1,30 @@
+name: Refresh License Manifest
+
+# Runs the same generation the License Check job verifies, on a runner that has
+# cargo-about, and hands back the file. The check job diffs the manifest against
+# Cargo.lock, so the artifact is what that job expects to find committed.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    name: Generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@v2
+        with: { tool: cargo-about@0.9.1 }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: node scripts/generate-licenses.mjs
+      - name: Show what changed
+        run: git --no-pager diff --stat
+      - uses: actions/upload-artifact@v4
+        with:
+          name: third-party-licenses
+          path: public/third-party-licenses.json
+          retention-days: 7
