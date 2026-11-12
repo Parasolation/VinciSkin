@@ -74,43 +74,43 @@ A status word has one meaning.
 - **Deferred** - the team agreed on the feature, and it waits for a call site
 - **Proposed** - an idea for review, and not a decision
 
-| Feature                 | Status    | Note                                                                   |
-| ----------------------- | --------- | ---------------------------------------------------------------------- |
-| The tab rail            | Available | Nine tabs, `Tabs.List variant="pills"` in `Settings.tsx`               |
-| The section card        | Available | `SectionCard`. Heading on the ground, panel under it                   |
-| The two-column grid     | Available | `SettingsGrid`, with `lg:col-span-2` for a wide card                   |
-| The setting row         | Available | `SettingRow`, inline and stacked, toggle and action                    |
-| The cluster separator   | Available | Survives on the Project editor card alone, between three rows          |
-| The dependent row       | Available | `SettingRow` `dependent` and `hidden`. Two instances                   |
-| The defaults            | Available | `Settings::default()` in Rust, `APPEARANCE_DEFAULTS` in front          |
-| The card reset          | Available | `ResetAppearanceButton`, over the keys its card's scope collected      |
-| The group               | Available | `SettingGroup`. Five cards took groups, and General is one column      |
-| Group ids               | Available | Sixteen ids across five cards. The anchor, and a future search         |
-| `DS-SETTING-LEVEL`      | Available | In the `design-system` skill, cited by `SettingGroup`                  |
-| The setting key         | Available | `SettingKey`, on every row. Nothing reads it until the reset lands     |
-| The tab in the URL      | Available | `?tab=`, on a controlled rail written back with `replace`              |
-| The focus anchor        | Available | `?focus=`, addressing one group or one row. Two call sites aim it      |
-| `get_default_settings`  | Available | One command, one query that never goes stale, one default table        |
-| The gutter gear         | Available | On every row that can be put back. Right-click the row for it too      |
-| The modified bar        | Available | Dimmed accent on the edge of a row that is off its default             |
-| The group reset         | Available | On a group with two or more changed rows, with `Undo`                  |
-| `DS-SETTING-GUTTER`     | Available | In the `design-system` skill, cited by the gutter and the group        |
-| The setting index       | Available | `SETTINGS_INDEX`. Id, key and title for 44 rows, in one table          |
-| The public setting id   | Available | `appearance.theme`. Group ids are namespaced beside them               |
-| Copy setting ID         | Available | In the gear's menu, on every row the index carries                     |
-| Settings in the palette | Available | A source of its own, so a resting box still lists the commands         |
-| `vinciskin://settings`        | Available | A route beside `vinciskin://install`, with `Copy link to setting` on it      |
-| The group action slot   | Available | The prop ships unused. No group needs one yet                          |
-| The settings catalog    | Planned   | `messages/en/settings.json`. Every title, description and hint         |
-| The domain setting id   | Planned   | `launch.mode`. Fifteen ids move, and the old ones retire               |
-| The UI path             | Planned   | A second space for tab, card and group. `general/league/launching`     |
-| The node menu           | Planned   | `Copy ID` and `Copy link` at four levels, out of one popup             |
-| Typed link minting      | Planned   | `settingSearch` and `settingLink`. A typo is a compile error           |
-| The id as the file key  | Planned   | `settings.json` keyed by id. An old file loads, the next save rewrites |
-| The retired id          | Planned   | Fifteen entries, and a toast when a link resolves through one          |
-| `Open settings.json`    | Proposed  | The key is the id now, so the file is editable by hand. Needs a reason |
-| The collapsible group   | Deferred  | No card in the migration folds. It lands with the first that does      |
-| The changed dot         | Deferred  | It is drawn on a collapsed header alone                                |
+| Feature                 | Status    | Note                                                                    |
+| ----------------------- | --------- | ----------------------------------------------------------------------- |
+| The tab rail            | Available | Nine tabs, `Tabs.List variant="pills"` in `Settings.tsx`                |
+| The section card        | Available | `SectionCard`. Heading on the ground, panel under it                    |
+| The two-column grid     | Available | `SettingsGrid`, with `lg:col-span-2` for a wide card                    |
+| The setting row         | Available | `SettingRow`, inline and stacked, toggle and action                     |
+| The cluster separator   | Available | Survives on the Project editor card alone, between three rows           |
+| The dependent row       | Available | `SettingRow` `dependent` and `hidden`. Two instances                    |
+| The defaults            | Available | `Settings::default()` in Rust, `APPEARANCE_DEFAULTS` in front           |
+| The card reset          | Available | `ResetAppearanceButton`, over the keys its card's scope collected       |
+| The group               | Available | `SettingGroup`. Five cards took groups, and General is one column       |
+| Group ids               | Available | Sixteen ids across five cards. The anchor, and a future search          |
+| `DS-SETTING-LEVEL`      | Available | In the `design-system` skill, cited by `SettingGroup`                   |
+| The setting key         | Available | `SettingKey`, on every row. Nothing reads it until the reset lands      |
+| The tab in the URL      | Available | `?tab=`, on a controlled rail written back with `replace`               |
+| The focus anchor        | Available | `?focus=`, addressing one group or one row. Two call sites aim it       |
+| `get_default_settings`  | Available | One command, one query that never goes stale, one default table         |
+| The gutter gear         | Available | On every row that can be put back. Right-click the row for it too       |
+| The modified bar        | Available | Dimmed accent on the edge of a row that is off its default              |
+| The group reset         | Available | On a group with two or more changed rows, with `Undo`                   |
+| `DS-SETTING-GUTTER`     | Available | In the `design-system` skill, cited by the gutter and the group         |
+| The setting index       | Available | `SETTINGS_INDEX`. Id, key and title for 44 rows, in one table           |
+| The public setting id   | Available | `appearance.theme`. Group ids are namespaced beside them                |
+| Copy setting ID         | Available | In the gear's menu, on every row the index carries                      |
+| Settings in the palette | Available | A source of its own, so a resting box still lists the commands          |
+| `vinciskin://settings`  | Available | A route beside `vinciskin://install`, with `Copy link to setting` on it |
+| The group action slot   | Available | The prop ships unused. No group needs one yet                           |
+| The settings catalog    | Planned   | `messages/en/settings.json`. Every title, description and hint          |
+| The domain setting id   | Planned   | `launch.mode`. Fifteen ids move, and the old ones retire                |
+| The UI path             | Planned   | A second space for tab, card and group. `general/league/launching`      |
+| The node menu           | Planned   | `Copy ID` and `Copy link` at four levels, out of one popup              |
+| Typed link minting      | Planned   | `settingSearch` and `settingLink`. A typo is a compile error            |
+| The id as the file key  | Planned   | `settings.json` keyed by id. An old file loads, the next save rewrites  |
+| The retired id          | Planned   | Fifteen entries, and a toast when a link resolves through one           |
+| `Open settings.json`    | Proposed  | The key is the id now, so the file is editable by hand. Needs a reason  |
+| The collapsible group   | Deferred  | No card in the migration folds. It lands with the first that does       |
+| The changed dot         | Deferred  | It is drawn on a collapsed header alone                                 |
 
 The group was accepted in review on 2026-08-25, and the work is planned at
 `docs/plans/settings-groups.md`. Every phase shipped the same day, so the group, its ids, both
@@ -461,17 +461,17 @@ something again.
 
 ### Copy
 
-| Where         | Text                                                                       |
-| ------------- | -------------------------------------------------------------------------- |
-| Gear label    | `Actions for Auto run`, so a card of gears is not one name repeated        |
-| Gear menu     | `Reset setting`, `Default: Off` under it, then the two copies              |
-| Header gear   | `Actions for Mod safety`, the same shape at a group and a card             |
-| Copy toast    | `Copied ID of "Auto run"`, with `startup.autoRun` as its description       |
-| Link toast    | `Copied link to "Auto run"`, with the `vinciskin://` URL as its description      |
-| Retired toast | `general.autoRun is now startup.autoRun`, when a link resolves through one |
-| Group button  | `Reset 2 changed settings in this group`, as label and tip                 |
-| Card button   | `Reset to default`, which is what the Appearance card says                 |
-| Toast         | `Reset 2 settings`, with an `Undo` action                                  |
+| Where         | Text                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| Gear label    | `Actions for Auto run`, so a card of gears is not one name repeated         |
+| Gear menu     | `Reset setting`, `Default: Off` under it, then the two copies               |
+| Header gear   | `Actions for Mod safety`, the same shape at a group and a card              |
+| Copy toast    | `Copied ID of "Auto run"`, with `startup.autoRun` as its description        |
+| Link toast    | `Copied link to "Auto run"`, with the `vinciskin://` URL as its description |
+| Retired toast | `general.autoRun is now startup.autoRun`, when a link resolves through one  |
+| Group button  | `Reset 2 changed settings in this group`, as label and tip                  |
+| Card button   | `Reset to default`, which is what the Appearance card says                  |
+| Toast         | `Reset 2 settings`, with an `Undo` action                                   |
 
 ## Anchors
 

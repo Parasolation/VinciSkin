@@ -11,9 +11,7 @@ use vinciskin_core::game_index::GameIndex;
 use vinciskin_core::game_wads::GameArchives;
 use vinciskin_core::hashtables::{HashtableCache, WadPathResolver};
 use vinciskin_core::meta_schema;
-use vinciskin_core::object_index::{
-    CacheNames, FileTarget, ObjectIndex, WalkRequest, WalkTarget,
-};
+use vinciskin_core::object_index::{CacheNames, FileTarget, ObjectIndex, WalkRequest, WalkTarget};
 use vinciskin_core::problems::budget::files_at_once;
 use vinciskin_core::problems::{Budget, GameBuild};
 
@@ -25,7 +23,8 @@ use vinciskin_core::problems::{Budget, GameBuild};
 #[test]
 #[ignore = "reads the League install VINCISKIN_LEAGUE_PATH names"]
 fn measure_the_live_install() {
-    let league = std::env::var_os("VINCISKIN_LEAGUE_PATH").expect("VINCISKIN_LEAGUE_PATH names the install");
+    let league =
+        std::env::var_os("VINCISKIN_LEAGUE_PATH").expect("VINCISKIN_LEAGUE_PATH names the install");
     tracing_subscriber::fmt()
         .with_env_filter("vinciskin_core=debug")
         .with_test_writer()
@@ -57,7 +56,8 @@ fn measure_the_live_install() {
 #[test]
 #[ignore = "reads the League install VINCISKIN_LEAGUE_PATH names"]
 fn measure_the_reference_walk() {
-    let league = std::env::var_os("VINCISKIN_LEAGUE_PATH").expect("VINCISKIN_LEAGUE_PATH names the install");
+    let league =
+        std::env::var_os("VINCISKIN_LEAGUE_PATH").expect("VINCISKIN_LEAGUE_PATH names the install");
     let config = Config {
         league_path: Some(PathBuf::from(league)),
         ..Config::default()

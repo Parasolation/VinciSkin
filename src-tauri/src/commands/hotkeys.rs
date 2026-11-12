@@ -1,9 +1,9 @@
 use crate::error::{AppResult, IpcResult};
 use crate::hotkeys::{HotkeyAction, HotkeyManager};
 use crate::state::{persist_settings, SettingsState};
-use vinciskin_core::launcher::wait_for_game_exit;
 use std::process::Command;
 use tauri::{AppHandle, State};
+use vinciskin_core::launcher::wait_for_game_exit;
 
 use super::off_thread;
 

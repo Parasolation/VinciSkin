@@ -158,7 +158,10 @@ fn a_written_chunk_reads_back_and_nothing_else_moves() {
     entry and the body moved. */
     assert_eq!(written.room, entry.compressed_size());
     assert!(written.used <= written.room);
-    assert!(!written.appended, "the fixture leaves room for its own stand-in");
+    assert!(
+        !written.appended,
+        "the fixture leaves room for its own stand-in"
+    );
     let after = fs::read(&archive).unwrap();
     assert_eq!(after.len(), before.len());
 
@@ -203,15 +206,17 @@ fn a_replacement_too_big_for_its_room_is_appended() {
     let name = "data/characters/annie/skins/skin0.bin".to_owned();
     build_archive(
         &archive,
-        &[(name.clone(), vec![1u8; 4]), ("other.bin".to_owned(), vec![2u8; 64])],
+        &[
+            (name.clone(), vec![1u8; 4]),
+            ("other.bin".to_owned(), vec![2u8; 64]),
+        ],
     );
     let before = fs::read(&archive).unwrap();
     /* The entry that names the chunk is the one thing before the appended body that must change:
     it has to point at where the body went. */
     let target = WadHash::from(name.as_str());
     let index = {
-        let wad =
-            Wad::mount(std::io::BufReader::new(fs::File::open(&archive).unwrap())).unwrap();
+        let wad = Wad::mount(std::io::BufReader::new(fs::File::open(&archive).unwrap())).unwrap();
         wad.chunks()
             .as_slice()
             .iter()
@@ -235,7 +240,9 @@ fn a_replacement_too_big_for_its_room_is_appended() {
         .filter(|at| before[*at] != after[*at])
         .collect();
     assert!(
-        moved.iter().all(|at| (entry..entry + archive::ENTRY_LEN).contains(at)),
+        moved
+            .iter()
+            .all(|at| (entry..entry + archive::ENTRY_LEN).contains(at)),
         "something before the appended body moved outside its own entry: {moved:?}"
     );
 
@@ -326,8 +333,7 @@ fn a_real_stand_in_reports_whether_it_fits_its_room() {
     let game_dir = GameDir::resolve(&config(&root)).expect("the install resolves");
     let (_, archive) = super::champion_archive(&game_dir, "annie").expect("annie has an archive");
 
-    let mut wad =
-        Wad::mount(std::io::BufReader::new(fs::File::open(&archive).unwrap())).unwrap();
+    let mut wad = Wad::mount(std::io::BufReader::new(fs::File::open(&archive).unwrap())).unwrap();
     let target = WadHash::from(skin_bin_path("annie", 0).as_str());
     let chunk = *wad.chunks().get(target).expect("the base skin is there");
     let (room, uncompressed) = (chunk.compressed_size(), chunk.uncompressed_size());
@@ -399,8 +405,7 @@ fn a_real_archive_survives_a_swap_with_every_other_chunk_intact() {
 
     /* The whole archive still mounts, keeps its chunk count, and every chunk it holds still
     decodes - which is what says the other 4082 were left where they were. */
-    let mut wad =
-        Wad::mount(std::io::BufReader::new(fs::File::open(&archive).unwrap())).unwrap();
+    let mut wad = Wad::mount(std::io::BufReader::new(fs::File::open(&archive).unwrap())).unwrap();
     let chunks: Vec<_> = wad.chunks().as_slice().to_vec();
     assert_eq!(wad.chunks().len(), 4083, "the chunk count is the client's");
 
@@ -413,7 +418,10 @@ fn a_real_archive_survives_a_swap_with_every_other_chunk_intact() {
     }
     println!("read back {read} chunks");
 
-    let patched = *wad.chunks().get(target).expect("the base skin is still there");
+    let patched = *wad
+        .chunks()
+        .get(target)
+        .expect("the base skin is still there");
     let bytes = wad.load_chunk_decompressed(&patched).unwrap().into_vec();
     assert_eq!(bytes, stand_in, "the base skin holds the stand-in");
     assert_eq!(
@@ -435,7 +443,9 @@ fn a_real_archive_survives_a_swap_with_every_other_chunk_intact() {
         .filter(|at| before[*at] != after[*at])
         .collect();
     assert!(
-        moved.iter().all(|at| (entry..entry + archive::ENTRY_LEN).contains(at)),
+        moved
+            .iter()
+            .all(|at| (entry..entry + archive::ENTRY_LEN).contains(at)),
         "{} bytes moved outside the entry: {moved:?}",
         moved.len()
     );
@@ -443,10 +453,7 @@ fn a_real_archive_survives_a_swap_with_every_other_chunk_intact() {
 
 /// A pack's own archive, so a test can tell the install's bytes from the pack's.
 fn pack_archive(path: &Path, character: &str, marker: u8) {
-    build_archive(
-        path,
-        &[(skin_bin_path(character, 0), vec![marker; 96])],
-    );
+    build_archive(path, &[(skin_bin_path(character, 0), vec![marker; 96])]);
 }
 
 /// The install's `Annie.wad.client`, under a game directory of its own.
@@ -504,7 +511,11 @@ fn a_pack_writes_its_archive_into_the_overlay_and_takes_it_back() {
     let restored = restore_pack(&config, storage.path(), "Champions/Annie.wad.client").unwrap();
     assert_eq!(restored.state, SwapState::Untouched);
     assert!(!overlay.exists(), "the overlay entry is gone");
-    assert_eq!(fs::read(&archive).unwrap(), client_bytes, "byte for byte the client's");
+    assert_eq!(
+        fs::read(&archive).unwrap(),
+        client_bytes,
+        "byte for byte the client's"
+    );
     assert!(pack_swaps(&config, storage.path()).unwrap().is_empty());
 }
 
@@ -518,10 +529,17 @@ fn a_pack_naming_an_archive_the_install_does_not_hold_is_refused() {
     let storage = tempfile::tempdir().unwrap();
     let packs = tempfile::tempdir().unwrap();
     let pack = packs.path().join("Yuumi.wad.client");
-    build_archive(&pack, &[("data/no/such/chunk.bin".to_owned(), vec![1u8; 32])]);
+    build_archive(
+        &pack,
+        &[("data/no/such/chunk.bin".to_owned(), vec![1u8; 32])],
+    );
 
-    let error = apply_pack(&config(game.path()), storage.path(), &pack, &NullEventSink).unwrap_err();
-    assert!(error.to_string().contains("holds no Yuumi.wad.client"), "{error}");
+    let error =
+        apply_pack(&config(game.path()), storage.path(), &pack, &NullEventSink).unwrap_err();
+    assert!(
+        error.to_string().contains("holds no Yuumi.wad.client"),
+        "{error}"
+    );
 }
 
 #[test]
@@ -541,7 +559,10 @@ fn a_wad_named_pack_whose_bytes_are_not_a_wad_is_refused() {
     fs::write(&path, b"NOTAWAD, whatever else it is").unwrap();
 
     let error = pack::read(&path).unwrap_err();
-    assert!(error.to_string().contains("not a version-3 game archive"), "{error}");
+    assert!(
+        error.to_string().contains("not a version-3 game archive"),
+        "{error}"
+    );
 }
 
 #[test]
@@ -552,8 +573,8 @@ fn a_restore_naming_a_path_outside_the_install_is_refused() {
     let config = config(game.path());
 
     /* A record naming somewhere else, which only a hand-edited record file holds. The write it
-       would feed has to resolve through the install rather than through the string, or a page
-       could aim it anywhere on the machine. */
+    would feed has to resolve through the install rather than through the string, or a page
+    could aim it anywhere on the machine. */
     let records = r#"{"packs":{"../../../escape.wad.client":{"pack":"x.fantome",
         "original":{"size":1,"modified":0,"sha256":"aa"},
         "written":{"size":1,"modified":0,"sha256":"bb"}}}}"#;
@@ -562,7 +583,10 @@ fn a_restore_naming_a_path_outside_the_install_is_refused() {
     fs::write(&path, records).unwrap();
 
     let error = restore_pack(&config, storage.path(), "../../../escape.wad.client").unwrap_err();
-    assert!(error.to_string().contains("the install holds no"), "{error}");
+    assert!(
+        error.to_string().contains("the install holds no"),
+        "{error}"
+    );
 }
 
 /// A sink that keeps every event it is handed, for a test about what was announced.

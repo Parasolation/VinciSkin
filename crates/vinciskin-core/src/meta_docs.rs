@@ -5,8 +5,8 @@ use std::sync::Arc;
 use std::time::SystemTime;
 
 use ltk_hash::BinHash;
-use vinciskin_meta_docs::{DocsCache, MetaDocs, PublishedDocs, Refresh};
 use parking_lot::Mutex;
+use vinciskin_meta_docs::{DocsCache, MetaDocs, PublishedDocs, Refresh};
 
 pub use vinciskin_meta_docs::{ClassDocs, Doc, PropertyDocs};
 

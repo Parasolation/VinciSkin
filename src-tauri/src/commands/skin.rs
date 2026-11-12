@@ -6,6 +6,7 @@ use super::material::shader_defs;
 use super::off_thread;
 use crate::error::IpcResult;
 use crate::state::SettingsState;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::bin_document::{BinDocument, BinDocumentError, BinDocumentId, BinDocuments};
 use vinciskin_core::error::AppError;
 use vinciskin_core::game_wads::WadCache;
@@ -14,7 +15,6 @@ use vinciskin_core::skin::{
     bake_mesh_tangents, graph_at, resolve_skin, search_linked, search_linked_materials,
     search_linked_systems, AnimationGraph, GraphRead, SkinModel,
 };
-use tauri::{AppHandle, Manager};
 
 /// Tangents saved into the viewed skin's project-layer mesh.
 ///

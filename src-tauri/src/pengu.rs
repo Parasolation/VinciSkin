@@ -19,9 +19,15 @@ use crate::error::{AppError, AppResult};
 
 /// The runtime files, written into the app's data directory on demand.
 const FILES: [(&str, &[u8]); 8] = [
-    ("Pengu Loader.exe", include_bytes!("../resources/pengu/Pengu Loader.exe")),
+    (
+        "Pengu Loader.exe",
+        include_bytes!("../resources/pengu/Pengu Loader.exe"),
+    ),
     ("core.dll", include_bytes!("../resources/pengu/core.dll")),
-    ("ModernWpf.dll", include_bytes!("../resources/pengu/ModernWpf.dll")),
+    (
+        "ModernWpf.dll",
+        include_bytes!("../resources/pengu/ModernWpf.dll"),
+    ),
     (
         "ModernWpf.Controls.dll",
         include_bytes!("../resources/pengu/ModernWpf.Controls.dll"),
@@ -35,7 +41,10 @@ const FILES: [(&str, &[u8]); 8] = [
         include_bytes!("../resources/pengu/System.ValueTuple.dll"),
     ),
     ("version", include_bytes!("../resources/pengu/version")),
-    ("LICENSE.txt", include_bytes!("../resources/pengu/LICENSE.txt")),
+    (
+        "LICENSE.txt",
+        include_bytes!("../resources/pengu/LICENSE.txt"),
+    ),
 ];
 
 /// The plugin the client page runs, with the bridge port and token filled in.
@@ -45,8 +54,7 @@ const PLUGIN_JS: &str = include_str!("../resources/lcu-bridge/index.js");
 const CORE_DLL: &str = "core.dll";
 
 /// The `Image File Execution Options` key the loader is registered under.
-const IFEO_KEY: &str =
-    r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LeagueClientUx.exe";
+const IFEO_KEY: &str = r"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LeagueClientUx.exe";
 
 /// Where the runtime lives: the app's own data directory.
 fn runtime_dir(app: &AppHandle) -> AppResult<PathBuf> {
@@ -261,9 +269,7 @@ fn run_elevated(exe: &str, args: &str) -> AppResult<()> {
 
 #[cfg(not(windows))]
 fn run_elevated(_exe: &str, _args: &str) -> AppResult<()> {
-    Err(AppError::Other(
-        "the client loader is Windows only".into(),
-    ))
+    Err(AppError::Other("the client loader is Windows only".into()))
 }
 
 #[cfg(test)]

@@ -130,7 +130,7 @@ names them so the rest of the document can say what changes.
 | The session bar           | Global, at the bottom of the window      | The build, the start, the launch, and `In game`          |
 | The ending toast          | The `ritoclient-launcher` branch         | `League closed unexpectedly`, with the client's reason   |
 | Settings, Patching        | The Patching tab                         | Verbose logging, the scan mode, crash reporting, Rebuild |
-| Settings, About           | The About tab                            | `Open Log File`, which reveals `vinciskin.log`         |
+| Settings, About           | The About tab                            | `Open Log File`, which reveals `vinciskin.log`           |
 
 Four gaps in that list shape the design.
 
@@ -811,7 +811,7 @@ sentence, and a stored code this build does not know reads as nothing. Neither i
 | `rebuild-overlay`    | Rebuild the overlay               | A corrupt archive, or a texture failure, in an archive the overlay wrote  |
 | `repair-install`     | Repair the install                | A corrupt archive, when the rebuild does not help. Never for Inconsistent |
 | `system-checks`      | Run the System checks             | The host did not start, or the DLL did not attach                         |
-| `update-manager`     | Update VinciSkin                | The patcher is out of date                                                |
+| `update-manager`     | Update VinciSkin                  | The patcher is out of date                                                |
 | `update-driver`      | Update the graphics driver        | A graphics fault                                                          |
 | `open-project`       | Open the project                  | A workshop test, whenever a path or an archive is named                   |
 | `check-game-path`    | Check the League path             | The overlay build could not read the game directory                       |
@@ -1380,15 +1380,15 @@ them.
 
 | Piece           | Where                                   | Is                                                                                                                                             |
 | --------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `game_log.rs`   | `vinciskin-core/src/diagnostics/`     | The reader, pure over `BufRead`, tested on a fixture                                                                                           |
-| `log_codes.rs`  | `vinciskin-core/src/diagnostics/`     | The table, `include_str!` over the TSV, `lookup(&str)`                                                                                         |
-| `incident.rs`   | `vinciskin-core/src/diagnostics/`     | `Incident`, `Verdict`, `classify`, pure                                                                                                        |
-| `token.rs`      | `vinciskin-core/src/diagnostics/`     | `encode`, `decode`, `find_in` and `resolve` for the incident token, with a pinned vector                                                       |
+| `game_log.rs`   | `vinciskin-core/src/diagnostics/`       | The reader, pure over `BufRead`, tested on a fixture                                                                                           |
+| `log_codes.rs`  | `vinciskin-core/src/diagnostics/`       | The table, `include_str!` over the TSV, `lookup(&str)`                                                                                         |
+| `incident.rs`   | `vinciskin-core/src/diagnostics/`       | `Incident`, `Verdict`, `classify`, pure                                                                                                        |
+| `token.rs`      | `vinciskin-core/src/diagnostics/`       | `encode`, `decode`, `find_in` and `resolve` for the incident token, with a pinned vector                                                       |
 | `dll_lines.rs`  | `patcher/`                              | The DLL's phrases as constants, each with a pointer to the DLL source file                                                                     |
 | `InjectorEvent` | `patcher/injector.rs`                   | `GameAttached`, `OverlayOutcome`, `WadRedirected`, `WadSkipped`, `GameExited`                                                                  |
 | `PatcherEvents` | `patcher/events.rs`                     | `game_attached`, `game_overlay`, `game_exited`, `incident_recorded`                                                                            |
 | The game record | `patcher/thread.rs`                     | Opened at `injected`, closed at `exited`, then classified                                                                                      |
-| `IncidentStore` | `vinciskin-core/src/diagnostics/`     | The JSON files, the cap, and the dismiss flag                                                                                                  |
+| `IncidentStore` | `vinciskin-core/src/diagnostics/`       | The JSON files, the cap, and the dismiss flag                                                                                                  |
 | Commands        | `src-tauri/src/commands/diagnostics.rs` | `list_incidents`, `dismiss_incident`, `dismiss_all_incidents`, `reveal_game_log`, `incident_report`, `incident_token`, `decode_incident_token` |
 | Events          | `src-tauri/src/patcher/thread.rs`       | `patcher-game-attached`, `patcher-game-overlay`, `patcher-game-exited`, `incident-recorded`                                                    |
 

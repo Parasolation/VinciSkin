@@ -14,20 +14,20 @@ scanning the process table on a five-second timer.
 
 ## 1. Where we are
 
-| Piece           | Where                                                     | Shape today                                                                               |
-| --------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Dependency      | `Cargo.toml:8`                                            | `ritoclient-api`, git rev `eb6bf7a` - the "scaffold" commit of 2026-07-28                 |
+| Piece           | Where                                                   | Shape today                                                                               |
+| --------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Dependency      | `Cargo.toml:8`                                          | `ritoclient-api`, git rev `eb6bf7a` - the "scaffold" commit of 2026-07-28                 |
 | Seam            | `crates/vinciskin-core/src/launcher.rs`                 | Three free functions and a `SinkObserver`. No type owns the launch                        |
-| Commands        | `src-tauri/src/commands/launcher.rs`                      | `launch_league`, `get_launch_availability`. `LaunchState` keeps one launch in flight      |
-| Error mapping   | `src-tauri/src/error.rs:252`                              | One `ErrorCode` per `LauncherError` variant, whole error as JSON context                  |
+| Commands        | `src-tauri/src/commands/launcher.rs`                    | `launch_league`, `get_launch_availability`. `LaunchState` keeps one launch in flight      |
+| Error mapping   | `src-tauri/src/error.rs:252`                            | One `ErrorCode` per `LauncherError` variant, whole error as JSON context                  |
 | Events          | `crates/vinciskin-core/src/events.rs:16`                | `LaunchProgress` / `LaunchStage` re-exported from the crate, emitted as `launch-progress` |
 | Process checks  | `crates/vinciskin-core/src/diagnostics/processes.rs:93` | `processes::list_matching` over `RIOT_PROCESS_NAMES`                                      |
-| "Is League up?" | `src/modules/launcher/api/useLaunchAvailability.ts`       | `get_launch_availability` polled every 5 s, purely a process scan                         |
-| Play flow       | `src/modules/launcher/api/usePlay.ts`                     | Patcher, then launch. Ends at `finally { setStep("idle") }` the moment the POST returns   |
-| Status bar      | `src/modules/launcher/components/SessionBar.tsx`          | Steps for build / patcher / launch. Nothing after "League is starting."                   |
-| Bindings        | `src/lib/bindings/Launch*.ts`, `LauncherError.ts`         | Six files the crate claims to generate and does not - see section 6                       |
-| Docs            | `AGENTS.md`                                               | Crate table still lists `crates/ritoclient-api` as a workspace member                     |
-| Licenses        | `public/third-party-licenses.json`                        | Names `ritoclient-api` only                                                               |
+| "Is League up?" | `src/modules/launcher/api/useLaunchAvailability.ts`     | `get_launch_availability` polled every 5 s, purely a process scan                         |
+| Play flow       | `src/modules/launcher/api/usePlay.ts`                   | Patcher, then launch. Ends at `finally { setStep("idle") }` the moment the POST returns   |
+| Status bar      | `src/modules/launcher/components/SessionBar.tsx`        | Steps for build / patcher / launch. Nothing after "League is starting."                   |
+| Bindings        | `src/lib/bindings/Launch*.ts`, `LauncherError.ts`       | Six files the crate claims to generate and does not - see section 6                       |
+| Docs            | `AGENTS.md`                                             | Crate table still lists `crates/ritoclient-api` as a workspace member                     |
+| Licenses        | `public/third-party-licenses.json`                      | Names `ritoclient-api` only                                                               |
 
 ## 2. Why this is not a version bump
 

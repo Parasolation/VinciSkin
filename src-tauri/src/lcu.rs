@@ -21,7 +21,11 @@ use vinciskin_core::config::Config;
 /// Riot's client writes `LeagueClientUx.lockfile` at the root. The Chinese
 /// client has been seen with a bare `lockfile` under `LeagueClient/`, so both
 /// spellings are tried rather than assuming one layout.
-const LOCKFILES: [&str; 3] = ["LeagueClientUx.lockfile", "lockfile", "LeagueClient/lockfile"];
+const LOCKFILES: [&str; 3] = [
+    "LeagueClientUx.lockfile",
+    "lockfile",
+    "LeagueClient/lockfile",
+];
 
 /// The one champ-select endpoint this module reads, and the only scope it needs.
 const SESSION: &str = "/lol-champ-select/v1/session";

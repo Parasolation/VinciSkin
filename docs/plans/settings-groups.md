@@ -523,7 +523,7 @@ scheme is a constant there rather than in the component, next to the id it addre
 | The settings route     | A setting id and a group id both parse, and unknown params are ignored                    |
 | `focus` validation     | Missing, empty, outside the id alphabet and over the limit each rejected                  |
 | The hand-off           | A held link is returned once, and taking it marks the frontend listening                  |
-| `settingLink`          | The public id addressed as `vinciskin://settings?focus=`, for a setting and a group             |
+| `settingLink`          | The public id addressed as `vinciskin://settings?focus=`, for a setting and a group       |
 | `Copy link to setting` | The link reaches the clipboard, beside the id the item above it copies                    |
 
 ## 9. What is left
@@ -596,12 +596,12 @@ Phase 4b added its own:
 
 Phase 4c added its own:
 
-| Where             | The plan said       | What shipped, and why                                                                                                                                             |
-| ----------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| The cold start    | Nothing             | A hand-off in `DeepLinkState`. A URL the app is launched with arrives before the window's script runs, so a link followed while the app was closed reached nobody |
-| `vinciskin://install`   | Untouched           | It was losing a cold start's link the same way, and the hand-off is not per route. Delivery for a running app is unchanged                                        |
-| The window raise  | `handle_argv` alone | `raise_main_window`, called at delivery. At arrival a cold start would show an unpainted window for as long as React takes to boot                                |
-| `DeepLinkRequest` | Rust-internal       | Serialized too, because the held link is returned by a command rather than emitted. Internally tagged, so the event payloads keep the shape the frontend reads    |
+| Where                 | The plan said       | What shipped, and why                                                                                                                                             |
+| --------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The cold start        | Nothing             | A hand-off in `DeepLinkState`. A URL the app is launched with arrives before the window's script runs, so a link followed while the app was closed reached nobody |
+| `vinciskin://install` | Untouched           | It was losing a cold start's link the same way, and the hand-off is not per route. Delivery for a running app is unchanged                                        |
+| The window raise      | `handle_argv` alone | `raise_main_window`, called at delivery. At arrival a cold start would show an unpainted window for as long as React takes to boot                                |
+| `DeepLinkRequest`     | Rust-internal       | Serialized too, because the held link is returned by a command rather than emitted. Internally tagged, so the event payloads keep the shape the frontend reads    |
 
 Tracked as a single `area: frontend`, `type: ux` issue in `Vinnnnnci/VinciSkin`, linking this
 plan and the design document, with a four-item checklist each PR ticks.

@@ -131,7 +131,10 @@ pub fn set_mod_layers(
     settings: State<SettingsState>,
 ) -> IpcResult<()> {
     let config = settings.config();
-    library.0.set_mod_layers(&config, &mod_id, layer_states).into()
+    library
+        .0
+        .set_mod_layers(&config, &mod_id, layer_states)
+        .into()
 }
 
 /// Enable a mod and set its initial layer configuration atomically.

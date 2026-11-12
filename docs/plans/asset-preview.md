@@ -38,8 +38,8 @@ gets rewritten when the second file type arrives.
 | Piece            | Where                                                | Shape today                                                                      |
 | ---------------- | ---------------------------------------------------- | -------------------------------------------------------------------------------- |
 | Layer files      | `<project>/content/<layer>/<relative path>`          | Loose files on disk. `ContentEntry` carries path, size and kind                  |
-| Game chunks      | `crates/vinciskin-core/src/game_wads.rs`           | `GameArchives::read` lists chunks. Nothing reads a chunk's **bytes**             |
-| Game index       | `crates/vinciskin-core/src/game_index.rs`          | Folds every archive into one tree, and **drops which archive a chunk came from** |
+| Game chunks      | `crates/vinciskin-core/src/game_wads.rs`             | `GameArchives::read` lists chunks. Nothing reads a chunk's **bytes**             |
+| Game index       | `crates/vinciskin-core/src/game_index.rs`            | Folds every archive into one tree, and **drops which archive a chunk came from** |
 | Layer tree rows  | `src/modules/workshop/components/ContentTreeRow.tsx` | A file row's click only moves the roving focus                                   |
 | Game tree rows   | `src/modules/workshop/gameBrowser/SourceTreeRow.tsx` | The same                                                                         |
 | Documents        | `src/modules/workshop/documents/contentDocument.ts`  | Six kinds, none of them a file                                                   |

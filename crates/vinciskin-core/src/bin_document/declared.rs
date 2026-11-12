@@ -10,7 +10,6 @@ use std::fmt;
 use std::io::Cursor;
 use std::sync::Arc;
 
-use vinciskin_declarations::{Edit as ManifestEdit, Manifest, ModuleChoice};
 use ltk_game_data::{
     Edit, EntryName, Module, ModuleName, Names, ObjectEdit, PropertyEdit, Selector, Sign, Value,
     apply,
@@ -21,6 +20,7 @@ use ltk_meta::walk::TreeValue as _;
 use ltk_meta::{Bin, BinFile, BinObject, PropertyValueEnum};
 use ltk_mod_project::{ModProjectLayer, game_data::load_layer};
 use serde::{Deserialize, Serialize};
+use vinciskin_declarations::{Edit as ManifestEdit, Manifest, ModuleChoice};
 
 pub use self::copy::RowDeclaration;
 use self::diagnostics::Raised;

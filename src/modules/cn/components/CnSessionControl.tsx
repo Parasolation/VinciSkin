@@ -66,9 +66,7 @@ export function CnSessionControl() {
         setPatcher({ running: true, state: null, error: null });
       }
     } catch (error: unknown) {
-      const title = injectRunning
-        ? m.cn_inject_stop_failed_title()
-        : m.cn_inject_failed_title();
+      const title = injectRunning ? m.cn_inject_stop_failed_title() : m.cn_inject_failed_title();
       toast.error(title, errorMessage(error));
     } finally {
       setInjectBusy(false);

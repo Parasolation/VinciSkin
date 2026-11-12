@@ -9,6 +9,8 @@ use std::sync::Arc;
 
 use hexshade::TranslationCache;
 use ltk_hash::{BinHash, Hash as _};
+use serde::Deserialize;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::bin_document::{AssetLookup, BinDocument, BinDocumentId, RowNames};
 use vinciskin_core::game_wads::WadCache;
 use vinciskin_core::material::defs::ShaderDefsCache;
@@ -20,8 +22,6 @@ use vinciskin_game::program::{
     read_embedded_program, read_programs, MaterialProgram, ParticleDefine, ParticleShader,
     PassProgram, ProgramOptions, Resolution,
 };
-use serde::Deserialize;
-use tauri::{AppHandle, Manager};
 
 /// Where the materials a program read names are declared.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]

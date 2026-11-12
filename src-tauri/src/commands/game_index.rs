@@ -8,6 +8,7 @@ use super::off_thread;
 use crate::error::{AppError, AppResult, IpcResult};
 use crate::state::SettingsState;
 use ltk_hash::{Hash as _, WadHash};
+use tauri::{AppHandle, Manager};
 use vinciskin_core::config::Config;
 use vinciskin_core::game_index::{
     FindGeneration, GameDirListing, GameFileEntry, GameFindResult, GameIndex, GameIndexState,
@@ -16,7 +17,6 @@ use vinciskin_core::game_index::{
 use vinciskin_core::game_wads::{GameArchives, WadCache};
 use vinciskin_core::hashtables::WadPathResolverState;
 use vinciskin_core::matcher::{FindQuery, PatternSyntax};
-use tauri::{AppHandle, Manager};
 
 /// Report what the folded game index holds, building it on first use.
 #[tauri::command]

@@ -9,12 +9,12 @@ use super::material::shader_defs;
 use super::off_thread;
 use crate::error::IpcResult;
 use crate::state::SettingsState;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::bin_document::{BinDocument, BinDocumentId};
 use vinciskin_core::game_wads::WadCache;
 use vinciskin_core::meta_schema::SchemaNames;
 use vinciskin_core::preview::AssetRef;
 use vinciskin_core::vfx::{resolve_system, search_linked_materials, VfxSystem};
-use tauri::{AppHandle, Manager};
 
 /// One particle system of an open document, with every reference resolved.
 ///

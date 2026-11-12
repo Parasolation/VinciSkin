@@ -6,11 +6,11 @@
 //! edit has to come out as the edited tree holds it. A plan that does not is replaced by a set
 //! of the whole value, which drops the signed keys beside it.
 
-use vinciskin_declarations::{Edit as ManifestEdit, ModuleChoice, Operation, ValueText};
 use ltk_game_data::{PropertySkipReason, Sign, Value};
 use ltk_hash::BinHash;
 use ltk_meta::PropertyValueEnum;
 use ltk_meta::property::{Kind, values};
+use vinciskin_declarations::{Edit as ManifestEdit, ModuleChoice, Operation, ValueText};
 
 use super::super::edit::Edit;
 use super::super::items::split_item;

@@ -4,11 +4,11 @@
 //! Each plan is checked the way a property edit's is: the declarations apply again, and the
 //! object has to come out as the edit asked. A plan that does not is taken back.
 
-use vinciskin_declarations::{ObjectEdit as ManifestObjectEdit, ObjectOperation};
 use ltk_game_data::{ClassName, EntryName, Names as _, Target};
 use ltk_hash::BinHash;
 use ltk_meta::{BinObject, PropertyValueEnum};
 use serde::{Deserialize, Serialize};
+use vinciskin_declarations::{ObjectEdit as ManifestObjectEdit, ObjectOperation};
 
 use super::super::edit::bin_hash;
 use super::super::{BinDocument, BinDocumentError, ClassChoice, EditRejection, hex};

@@ -154,9 +154,7 @@ pub fn read_spell(
         preview.effect_key = match spell.get(&h("mMissileEffectKey")) {
             None => None,
             Some(value) => match leaf(Some(value)) {
-                Some(Leaf::Hash(key)) => {
-                    key.try_as_bin_hash().filter(|key| key.0 != 0).map(hex)
-                }
+                Some(Leaf::Hash(key)) => key.try_as_bin_hash().filter(|key| key.0 != 0).map(hex),
                 _ => {
                     read.issue("mSpell.mMissileEffectKey", SpellIssueKind::Invalid);
                     None

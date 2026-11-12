@@ -105,7 +105,9 @@ describe("the gear", () => {
     await user.click(await screen.findByRole("menuitem", { name: "Copy link to setting" }));
 
     await waitFor(async () =>
-      expect(await navigator.clipboard.readText()).toBe("vinciskin://settings?focus=general.autoRun"),
+      expect(await navigator.clipboard.readText()).toBe(
+        "vinciskin://settings?focus=general.autoRun",
+      ),
     );
   });
 });

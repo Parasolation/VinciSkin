@@ -3,9 +3,9 @@
 use super::document_assets::parse_entry;
 use super::off_thread;
 use crate::error::IpcResult;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::bin_document::{BinDocumentId, BinDocuments};
 use vinciskin_core::spell::{read_spell as read, SpellPreview};
-use tauri::{AppHandle, Manager};
 
 /// The missile inputs written on one spell in an open document.
 #[tauri::command]

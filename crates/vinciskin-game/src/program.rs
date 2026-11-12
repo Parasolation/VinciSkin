@@ -9,6 +9,7 @@ use hexshade::{
     Defines, ShaderCache, ShaderPath, ShaderSource, SourceError, StageProgram, TranslationCache,
 };
 use ltk_hash::{BinHash, WadHash};
+use serde::{Deserialize, Serialize};
 use vinciskin_core::bin_document::{AssetLookup, BinDocument, RowNames};
 use vinciskin_core::error::AppResult;
 use vinciskin_core::material::MaterialWarning;
@@ -17,7 +18,6 @@ use vinciskin_core::material::pass::{
     SamplerState, TextureSource, resolve_embedded_passes, resolve_passes,
 };
 use vinciskin_core::preview::AssetRef;
-use serde::{Deserialize, Serialize};
 
 /// The defines a studio adds to every pass, off the engine's global list. The pass wins
 /// on a conflict.

@@ -10,12 +10,12 @@ use crate::workshop::{
 use chrono::Local;
 use fs_err as fs;
 use indexmap::IndexMap;
-use vinciskin_core::hashtables::{BinHashTablesState, WadPathResolverState};
-use vinciskin_core::object_index::CacheNames;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use tauri::State;
+use vinciskin_core::hashtables::{BinHashTablesState, WadPathResolverState};
+use vinciskin_core::object_index::CacheNames;
 
 #[tauri::command]
 pub fn get_workshop_projects(
@@ -544,7 +544,9 @@ fn save_project_editor_state_inner(project_path: &str, content: &str) -> AppResu
 }
 
 fn editor_state_path(project_path: &str) -> PathBuf {
-    Path::new(project_path).join(".vinciskin").join("editor.json")
+    Path::new(project_path)
+        .join(".vinciskin")
+        .join("editor.json")
 }
 
 #[cfg(test)]
@@ -584,6 +586,10 @@ mod tests {
             get_project_editor_state_inner(&project).unwrap().as_deref(),
             Some("second")
         );
-        assert!(!dir.path().join(".vinciskin").join(".editor.json.tmp").exists());
+        assert!(!dir
+            .path()
+            .join(".vinciskin")
+            .join(".editor.json.tmp")
+            .exists());
     }
 }

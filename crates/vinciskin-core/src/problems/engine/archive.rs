@@ -182,7 +182,11 @@ impl ArchiveFiles {
             let entry = zip.by_index_raw(index)?;
             let (name, size) = (entry.name().to_owned(), entry.size());
 
-            if let Some(FantomeEntry::PackedWad { layer, name: wad_name }) = classify_entry(&name) {
+            if let Some(FantomeEntry::PackedWad {
+                layer,
+                name: wad_name,
+            }) = classify_entry(&name)
+            {
                 packed.push(PackedWad {
                     layer: layer.to_owned(),
                     name: wad_name.to_owned(),

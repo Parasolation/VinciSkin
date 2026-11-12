@@ -3,9 +3,9 @@
 use super::bin::installed_schema;
 use super::off_thread;
 use crate::error::{AppError, IpcResult};
+use tauri::AppHandle;
 use vinciskin_core::meta_docs::{self, ClassDocs};
 use vinciskin_core::object_index::parse_hash;
-use tauri::AppHandle;
 
 /// User agent sent with documentation requests. The publisher asks clients to identify
 /// themselves.

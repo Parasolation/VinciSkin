@@ -17,11 +17,11 @@ use std::collections::BTreeMap;
 use std::io::BufReader;
 
 use fs_err as fs;
+use ltk_wad::Wad;
 use vinciskin_core::config::Config;
 use vinciskin_core::game_wads::GameArchives;
 use vinciskin_core::hashtables::WadPathResolver;
 use vinciskin_core::launcher::tencent_install_root;
-use ltk_wad::Wad;
 
 #[test]
 #[ignore = "needs an installed Chinese client"]
@@ -229,11 +229,11 @@ fn a_champions_skins_are_held_as_bins_a_swap_can_copy() {
     use std::io::Cursor;
 
     use ltk_hash::BinHash;
+    use ltk_meta::{Bin, PropertyValueEnum};
+    use ltk_wad::WadHash;
     use vinciskin_core::game_wads::WadCache;
     use vinciskin_core::hashtables::LayeredHashDb;
     use vinciskin_core::overlay::{install_holds_skin, skin_bin_path};
-    use ltk_meta::{Bin, PropertyValueEnum};
-    use ltk_wad::WadHash;
 
     let root = tencent_install_root().expect("the Chinese client is installed");
     let config = Config {

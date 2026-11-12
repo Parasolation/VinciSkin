@@ -2,9 +2,9 @@ use super::off_thread;
 use crate::error::{AppResult, IpcResult};
 use crate::mods::{BulkInstallResult, CslolModInfo, ModLibraryState};
 use crate::state::SettingsState;
-use vinciskin_core::mods::LayoutMigrationState;
 use std::path::PathBuf;
 use tauri::{AppHandle, Manager, State};
+use vinciskin_core::mods::LayoutMigrationState;
 
 /// What the library layout migration has to say for itself this launch.
 ///

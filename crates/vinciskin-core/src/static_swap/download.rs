@@ -98,7 +98,10 @@ pub fn fetch(url: &str, scratch: &Path) -> AppResult<PathBuf> {
         return Err(refused(url.as_str(), "it is not an https address"));
     }
     if !allowed(url.host_str()) {
-        return Err(refused(url.as_str(), "it is not a host a pack is fetched from"));
+        return Err(refused(
+            url.as_str(),
+            "it is not a host a pack is fetched from",
+        ));
     }
 
     let name = file_name(&url)?;
@@ -118,9 +121,15 @@ pub fn fetch(url: &str, scratch: &Path) -> AppResult<PathBuf> {
         .send()
         .map_err(|error| AppError::Other(error.to_string()))?;
     if !response.status().is_success() {
-        return Err(refused(url.as_str(), &format!("it answered {}", response.status())));
+        return Err(refused(
+            url.as_str(),
+            &format!("it answered {}", response.status()),
+        ));
     }
-    if response.content_length().is_some_and(|size| size > MAX_BYTES) {
+    if response
+        .content_length()
+        .is_some_and(|size| size > MAX_BYTES)
+    {
         return Err(too_big(url.as_str()));
     }
 

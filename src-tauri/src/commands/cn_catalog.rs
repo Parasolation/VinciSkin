@@ -12,17 +12,17 @@ use crate::error::{AppError, AppResult, IpcResult};
 use crate::events::TauriEventSink;
 use crate::mods::ModLibraryState;
 use crate::state::SettingsState;
+use std::path::{Path, PathBuf};
+use tauri::{AppHandle, Manager, State};
 use vinciskin_core::cn_catalog::{
     fetch_hero_skins, fetch_heroes, hero_portrait_url, is_trusted_image_url, patch_label, CnError,
     GtimgCdn, Hero, Quality, Skin,
 };
 use vinciskin_core::config::Config;
 use vinciskin_core::static_swap::{ChampionSwap, PackSwap};
-use std::path::{Path, PathBuf};
-use tauri::{AppHandle, Manager, State};
 
-use crate::patcher::{PatcherState, PatcherStatus, LOADER_EXE_NAME};
 use crate::cn_auto::{AutoStatus, AutoSwapState};
+use crate::patcher::{PatcherState, PatcherStatus, LOADER_EXE_NAME};
 
 /// Sent with every request, the way the other publishers are told who is asking.
 const USER_AGENT: &str = concat!("vinciskin/", env!("CARGO_PKG_VERSION"));
@@ -323,7 +323,11 @@ fn overlay_dir(storage: &Path) -> PathBuf {
 /// directory, falling back to next-to-executable and the crate's `resources/`.
 fn resolve_resource(app_handle: &AppHandle, file_name: &str) -> AppResult<PathBuf> {
     let candidates = [
-        app_handle.path().resource_dir().ok().map(|d| d.join(file_name)),
+        app_handle
+            .path()
+            .resource_dir()
+            .ok()
+            .map(|d| d.join(file_name)),
         std::env::current_exe()
             .ok()
             .and_then(|p| p.parent().map(|p| p.join(file_name))),

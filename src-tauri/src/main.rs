@@ -3,10 +3,9 @@
     windows_subsystem = "windows"
 )]
 
-mod commands;
-mod cn_auto;
 mod bridge;
-mod pengu;
+mod cn_auto;
+mod commands;
 mod deep_link;
 mod error;
 mod events;
@@ -18,6 +17,7 @@ mod log_layer;
 mod logging;
 mod mods;
 mod patcher;
+mod pengu;
 mod protocol;
 mod redact;
 mod setup;
@@ -25,9 +25,9 @@ mod state;
 mod tray;
 mod workshop;
 
-use vinciskin_core::bin_document::BinDocuments;
 use tauri::webview::PageLoadEvent;
 use tauri::Manager;
+use vinciskin_core::bin_document::BinDocuments;
 
 /// The one window the frontend runs in, as `tauri.conf.json` leaves it unlabelled.
 const MAIN_WINDOW: &str = "main";

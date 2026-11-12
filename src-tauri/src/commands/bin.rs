@@ -12,6 +12,7 @@ use super::off_thread;
 use crate::error::{AppError, AppResult, IpcResult};
 use crate::state::SettingsState;
 use ltk_hash::BinHash;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::bin_document::{
     BinChange, BinDocumentHandle, BinDocumentId, BinDocuments, BinEdit, BinFindResult, BinRow,
     BinRows, ChangeBaseline, ChoiceQuery, Choices, DeclareContext, DeclaredModuleChoice,
@@ -25,7 +26,6 @@ use vinciskin_core::object_index::{parse_hash, CacheNames, ObjectIndexSnapshot};
 use vinciskin_core::preview::AssetRef;
 use vinciskin_core::problems::GameBuild;
 use vinciskin_core::workshop::{ModuleAction, ProjectDir};
-use tauri::{AppHandle, Manager};
 
 /// The window an object open reads its properties under: every one of them. A class
 /// declares tens of fields, and a page is for a container.

@@ -1,9 +1,9 @@
 use std::io::Cursor;
 
 use ltk_hash::Hash as _;
-use vinciskin_core::material::pass::PassState;
 use ltk_meta::property::values;
 use ltk_meta::{Bin, BinObject};
+use vinciskin_core::material::pass::PassState;
 
 use super::*;
 

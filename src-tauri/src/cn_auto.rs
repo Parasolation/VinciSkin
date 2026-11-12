@@ -26,8 +26,8 @@ use crate::bridge;
 use crate::error::{AppError, AppResult};
 use crate::lcu;
 use crate::lcu::Selection;
-use crate::pengu;
 use crate::mods::ModLibraryState;
+use crate::pengu;
 use crate::state::SettingsState;
 use vinciskin_core::cn_catalog::{fetch_heroes, GtimgCdn, HeroCatalog};
 use vinciskin_core::static_swap::overlay_apply;
@@ -240,7 +240,13 @@ fn tick(
     let library = app_handle.state::<ModLibraryState>();
     let storage = library.inner().0.storage_dir(&config)?;
 
-    overlay_apply(&config, &storage, &character, selection.skin_id, selection.champion_id)?;
+    overlay_apply(
+        &config,
+        &storage,
+        &character,
+        selection.skin_id,
+        selection.champion_id,
+    )?;
     *last = Some(key);
 
     let applied = AutoApplied {
@@ -249,7 +255,11 @@ fn tick(
         character,
     };
     let _ = app_handle.emit("cn-auto-swap-applied", &applied);
-    tracing::info!(champion = applied.champion_id, skin = applied.skin_id, "auto-applied a skin");
+    tracing::info!(
+        champion = applied.champion_id,
+        skin = applied.skin_id,
+        "auto-applied a skin"
+    );
     Ok((current, Some(applied)))
 }
 
@@ -262,11 +272,8 @@ fn character_for(app_handle: &AppHandle, champion_id: u32) -> AppResult<String> 
     let mut heroes = catalog.0.lock();
 
     if heroes.is_none() {
-        let cdn = GtimgCdn::new(USER_AGENT)
-            .map_err(|error| AppError::Other(error.to_string()))?;
-        *heroes = Some(
-            fetch_heroes(&cdn).map_err(|error| AppError::Other(error.to_string()))?,
-        );
+        let cdn = GtimgCdn::new(USER_AGENT).map_err(|error| AppError::Other(error.to_string()))?;
+        *heroes = Some(fetch_heroes(&cdn).map_err(|error| AppError::Other(error.to_string()))?);
     }
 
     let hero = heroes

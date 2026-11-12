@@ -1,10 +1,10 @@
 //! A project layer's declarations manifest (ADR-0042), edited through
 //! `vinciskin-declarations`.
 
-use vinciskin_declarations::Manifest;
 use ltk_game_data::{EntryName, ModuleName};
 use ltk_meta::path::PropertyPath;
 use serde::Deserialize;
+use vinciskin_declarations::Manifest;
 
 pub use self::outline::{
     DeclarationsLayer, DeclarationsLoadError, DeclaredEntry, DeclaredKey, DeclaredModule,

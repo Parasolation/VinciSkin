@@ -4083,71 +4083,71 @@ for Tauri. The payload is the same list, and the target runs
 
 ### Answered
 
-| Question                                         | Answer                                               |
-| ------------------------------------------------ | ---------------------------------------------------- |
-| Does the bar reach a second project?             | Yes. Projects answers from either surface            |
-| Where does the route back to Workshop live?      | A crumb inside the project bar                       |
-| Does the project name title stay in the header?  | No. The bar carries the name and the version tag     |
-| Does the palette search the installed game?      | Yes, in a section that streams in after the project  |
-| Can a user turn a search source off?             | Yes, in the Project editor settings                  |
-| What do the `←` `→` arrows walk?                 | The shell's navigation history, with the position    |
-| Does the navigation history survive a restart?   | No. The stack is the session's                       |
-| Which library builds the palette?                | None. It is `@/components` over base-ui              |
-| Which side matches the game's 819,136 paths?     | The backend, which is the only side that holds them  |
-| Which group does a preview open into?            | One of its own, beside whoever asked for it          |
-| Does a single click in a tree open a file?       | No. A double click does, or the row's Open item      |
-| Does opening a file add a tab or reuse one?      | Adds one, and a setting switches it to reuse         |
-| How many archives stay mounted behind a preview? | Four, and the least recently used one gives way      |
-| How do a preview's pixels reach the webview?     | An `vinciskin-asset` URI scheme, and not an IPC result     |
-| What does a preview read an asset's bytes from?  | A reference: a layer file, a game chunk, or a file   |
-| Does the secondary side panel hold another view? | No view today, and the panel stays generic           |
-| Does the search box read one layer or every one? | Every layer                                          |
-| Does a layer change close the preview tabs?      | No, and a title takes a `<layer>/` prefix instead    |
-| Where does a saved layout belong?                | The project, in `.ltk/editor.json`                   |
-| Which declarative data type comes first?         | Property bin links                                   |
-| Where does the game browser open?                | A tab, and a panel type for either side panel        |
-| Which hash table resolves a WAD path?            | The mimir shared cache                               |
-| How many game index caches does the app keep?    | One, and it is the memory-mapped one                 |
-| Does the root browser show a row for an archive? | No. The Game WADs tab is where one opens             |
-| Which archives does the game index cover?        | Every archive under `DATA/FINAL`, recursed           |
-| How many game browsers open at one time?         | One for the game, and one for each archive           |
-| Can one panel type appear more than one time?    | The editor surface can, by a tab drag                |
-| Which model arranges the panels?                 | A split tree, and not a free-form grid               |
-| Which library resizes a seam?                    | `react-resizable-panels`, which is headless          |
-| Does a project with one filled panel show two?   | It cannot, because the layout is per project         |
-| Do the side panels enter the split tree?         | No. They stay the shell's, as in Visual Studio Code  |
-| Where do a second surface's tabs go on a reset?  | Into the surviving strip, in reading order           |
-| Does an explorer have a current directory?       | Yes. The location, and the breadcrumb names it       |
-| How many views does an explorer draw?            | Three. The tree, the grid and the details list       |
-| Where does a tile's thumbnail come from?         | The `vinciskin-asset` scheme, at the tile's own width      |
-| Which rows does a filter box read?               | The location, and everything below it                |
-| Does a leaf ever draw a second row of chrome?    | The explorers do. A location is not a title          |
-| Can the palette find a bin object by its path?   | Yes, once the object index lands                     |
-| Which side holds the object names?               | The mimir cache. The manager stores no second copy   |
-| Does `ltk_meta` still block the object index?    | No. `BinStream::entries` is the header scan          |
-| Does the object cache hold resolved names?       | No. 359,095 hashes resolve at load in 200ms          |
-| Does the object index read the project's bins?   | Yes, and that half ships second                      |
-| Which side matches the project's objects?        | The frontend, on the content scan's payload          |
-| Does a bin's dependency list earn a stored edge? | Once **#190** reads one. Nothing stores one today    |
-| Does the object build ride the game index build? | No. Its own build, over the built game index         |
-| Does the object index read a `PTCH`?             | Yes, eagerly, for the objects a patch bin adds       |
-| When does the object build run?                  | At startup, with the Objects switch on               |
-| Does one object earn one row, or one per file?   | One per declaring file. The source tells them apart  |
-| Can a query filter by class?                     | Yes. `class:` prefix or hex, with completions on Tab |
-| Is an unnamed chunk read by the object build?    | Yes, when its first bytes say bin                    |
-| Which reader wants the dependency graph?         | Not search. The link picker and the problems list    |
-| Does the tree gain the grid's multi-select?      | Yes. A selected directory is every file below it     |
-| Does a shared chunk land under every archive?    | No. One file, under the archive the copy chooses     |
-| Does `Ctrl+C` reach the system clipboard?        | Yes, with the chunk paths, one on each line          |
-| Is the conflict answer a setting?                | Yes. Ask, Skip or Replace, and Ask is the default    |
-| Does the layer file tree take the selection now? | No. The copy runs from the game into the mod         |
-| How does an unnamed chunk get an extension?      | `LeagueFileKind::identify_from_bytes`, as wadtools   |
-| Does the selection belong to a view?             | No. To the explorer, and a view switch keeps it      |
-| What does an item dropped on a surface do?       | Opens there. A tab moves, and an item opens          |
-| Which crate holds the extractor?                 | `ltk_wad`. wadtools and the manager both drive it    |
-| Does an extract keep the game paths?             | Yes by default, and a switch flattens it             |
-| How does the crate recover a chunk's name?       | A byte scan of the bins, found by their first block  |
-| Where do the manager's checks collect?           | One Problems panel, on a rule for each check         |
-| What repairs a mod that a game patch broke?      | Problems, on a migration table shipped in the build  |
+| Question                                         | Answer                                                 |
+| ------------------------------------------------ | ------------------------------------------------------ |
+| Does the bar reach a second project?             | Yes. Projects answers from either surface              |
+| Where does the route back to Workshop live?      | A crumb inside the project bar                         |
+| Does the project name title stay in the header?  | No. The bar carries the name and the version tag       |
+| Does the palette search the installed game?      | Yes, in a section that streams in after the project    |
+| Can a user turn a search source off?             | Yes, in the Project editor settings                    |
+| What do the `←` `→` arrows walk?                 | The shell's navigation history, with the position      |
+| Does the navigation history survive a restart?   | No. The stack is the session's                         |
+| Which library builds the palette?                | None. It is `@/components` over base-ui                |
+| Which side matches the game's 819,136 paths?     | The backend, which is the only side that holds them    |
+| Which group does a preview open into?            | One of its own, beside whoever asked for it            |
+| Does a single click in a tree open a file?       | No. A double click does, or the row's Open item        |
+| Does opening a file add a tab or reuse one?      | Adds one, and a setting switches it to reuse           |
+| How many archives stay mounted behind a preview? | Four, and the least recently used one gives way        |
+| How do a preview's pixels reach the webview?     | An `vinciskin-asset` URI scheme, and not an IPC result |
+| What does a preview read an asset's bytes from?  | A reference: a layer file, a game chunk, or a file     |
+| Does the secondary side panel hold another view? | No view today, and the panel stays generic             |
+| Does the search box read one layer or every one? | Every layer                                            |
+| Does a layer change close the preview tabs?      | No, and a title takes a `<layer>/` prefix instead      |
+| Where does a saved layout belong?                | The project, in `.ltk/editor.json`                     |
+| Which declarative data type comes first?         | Property bin links                                     |
+| Where does the game browser open?                | A tab, and a panel type for either side panel          |
+| Which hash table resolves a WAD path?            | The mimir shared cache                                 |
+| How many game index caches does the app keep?    | One, and it is the memory-mapped one                   |
+| Does the root browser show a row for an archive? | No. The Game WADs tab is where one opens               |
+| Which archives does the game index cover?        | Every archive under `DATA/FINAL`, recursed             |
+| How many game browsers open at one time?         | One for the game, and one for each archive             |
+| Can one panel type appear more than one time?    | The editor surface can, by a tab drag                  |
+| Which model arranges the panels?                 | A split tree, and not a free-form grid                 |
+| Which library resizes a seam?                    | `react-resizable-panels`, which is headless            |
+| Does a project with one filled panel show two?   | It cannot, because the layout is per project           |
+| Do the side panels enter the split tree?         | No. They stay the shell's, as in Visual Studio Code    |
+| Where do a second surface's tabs go on a reset?  | Into the surviving strip, in reading order             |
+| Does an explorer have a current directory?       | Yes. The location, and the breadcrumb names it         |
+| How many views does an explorer draw?            | Three. The tree, the grid and the details list         |
+| Where does a tile's thumbnail come from?         | The `vinciskin-asset` scheme, at the tile's own width  |
+| Which rows does a filter box read?               | The location, and everything below it                  |
+| Does a leaf ever draw a second row of chrome?    | The explorers do. A location is not a title            |
+| Can the palette find a bin object by its path?   | Yes, once the object index lands                       |
+| Which side holds the object names?               | The mimir cache. The manager stores no second copy     |
+| Does `ltk_meta` still block the object index?    | No. `BinStream::entries` is the header scan            |
+| Does the object cache hold resolved names?       | No. 359,095 hashes resolve at load in 200ms            |
+| Does the object index read the project's bins?   | Yes, and that half ships second                        |
+| Which side matches the project's objects?        | The frontend, on the content scan's payload            |
+| Does a bin's dependency list earn a stored edge? | Once **#190** reads one. Nothing stores one today      |
+| Does the object build ride the game index build? | No. Its own build, over the built game index           |
+| Does the object index read a `PTCH`?             | Yes, eagerly, for the objects a patch bin adds         |
+| When does the object build run?                  | At startup, with the Objects switch on                 |
+| Does one object earn one row, or one per file?   | One per declaring file. The source tells them apart    |
+| Can a query filter by class?                     | Yes. `class:` prefix or hex, with completions on Tab   |
+| Is an unnamed chunk read by the object build?    | Yes, when its first bytes say bin                      |
+| Which reader wants the dependency graph?         | Not search. The link picker and the problems list      |
+| Does the tree gain the grid's multi-select?      | Yes. A selected directory is every file below it       |
+| Does a shared chunk land under every archive?    | No. One file, under the archive the copy chooses       |
+| Does `Ctrl+C` reach the system clipboard?        | Yes, with the chunk paths, one on each line            |
+| Is the conflict answer a setting?                | Yes. Ask, Skip or Replace, and Ask is the default      |
+| Does the layer file tree take the selection now? | No. The copy runs from the game into the mod           |
+| How does an unnamed chunk get an extension?      | `LeagueFileKind::identify_from_bytes`, as wadtools     |
+| Does the selection belong to a view?             | No. To the explorer, and a view switch keeps it        |
+| What does an item dropped on a surface do?       | Opens there. A tab moves, and an item opens            |
+| Which crate holds the extractor?                 | `ltk_wad`. wadtools and the manager both drive it      |
+| Does an extract keep the game paths?             | Yes by default, and a switch flattens it               |
+| How does the crate recover a chunk's name?       | A byte scan of the bins, found by their first block    |
+| Where do the manager's checks collect?           | One Problems panel, on a rule for each check           |
+| What repairs a mod that a game patch broke?      | Problems, on a migration table shipped in the build    |
 
 A row moves here when the body of this document carries the answer.

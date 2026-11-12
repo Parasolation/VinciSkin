@@ -167,7 +167,10 @@ fn declared_wads(path: &Path) -> AppResult<Vec<String>> {
 
         names.push(name);
         if names.len() > MAX_WADS {
-            return Err(refused(path, &format!("it carries more than {MAX_WADS} WADs")));
+            return Err(refused(
+                path,
+                &format!("it carries more than {MAX_WADS} WADs"),
+            ));
         }
     }
     Ok(names)

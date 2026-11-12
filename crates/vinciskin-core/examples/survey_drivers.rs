@@ -19,13 +19,13 @@ use std::path::{Path, PathBuf};
 use fs_err as fs;
 use indexmap::IndexMap;
 use ltk_hash::{BinHash, Hash as _};
-use vinciskin_core::bin_document::{BinDocument, RowNames};
-use vinciskin_core::hashtables::{BinHashTables, HashtableCache};
-use vinciskin_core::vfx::{VfxValue, resolve_system};
 use ltk_meta::property::values;
 use ltk_meta::{BinObject, PropertyValueEnum};
 use ltk_wad::WadHash;
 use serde::Serialize;
+use vinciskin_core::bin_document::{BinDocument, RowNames};
+use vinciskin_core::hashtables::{BinHashTables, HashtableCache};
+use vinciskin_core::vfx::{VfxValue, resolve_system};
 
 /// `shimmerEmitterDefinitionData`, the list of `VfxSystemDefinitionData` holding shimmer emitters.
 const SHIMMER_LIST: BinHash = BinHash(0xeb0a_abeb);

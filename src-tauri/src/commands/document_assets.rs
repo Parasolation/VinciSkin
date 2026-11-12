@@ -7,6 +7,7 @@ use super::game_index::built_game_index;
 use crate::error::{AppError, AppResult};
 use crate::state::SettingsState;
 use ltk_hash::{BinHash, Hash as _, WadHash};
+use tauri::{AppHandle, Manager};
 use vinciskin_core::bin_document::{
     AssetLookup, BinDocument, BinDocumentId, BinDocuments, ProjectNames, RowNames,
 };
@@ -15,7 +16,6 @@ use vinciskin_core::hashtables::{BinHashTablesState, WadPathResolverState};
 use vinciskin_core::object_index::{parse_hash, CacheNames};
 use vinciskin_core::preview::AssetRef;
 use vinciskin_core::workshop::LayerChunks;
-use tauri::{AppHandle, Manager};
 
 /// An object hash a command was handed, `0x` and eight hex digits.
 pub(super) fn parse_entry(entry: &str) -> AppResult<BinHash> {

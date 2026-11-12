@@ -78,7 +78,11 @@ pub(super) fn write_chunk(path: &Path, target: WadHash, bytes: &[u8]) -> AppResu
     let mut file = fs::OpenOptions::new().read(true).write(true).open(path)?;
 
     let length = file.metadata()?.len();
-    let offset = if appended { length } else { chunk.data_offset as u64 };
+    let offset = if appended {
+        length
+    } else {
+        chunk.data_offset as u64
+    };
 
     /* The entry first, because it is one sector and the body may be many: a body that fails part
     way leaves an entry pointing at nothing, and a reader that stops now at least stops on a
@@ -160,7 +164,10 @@ fn encode(bytes: &[u8]) -> EncodedChunk {
         let Ok(compressed) = zstd::bulk::compress(bytes, level) else {
             continue;
         };
-        if best.as_ref().is_none_or(|held| compressed.len() < held.len()) {
+        if best
+            .as_ref()
+            .is_none_or(|held| compressed.len() < held.len())
+        {
             best = Some(compressed);
         }
     }

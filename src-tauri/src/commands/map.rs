@@ -8,6 +8,7 @@ use super::material::shader_defs;
 use super::off_thread;
 use crate::error::{AppResult, IpcResult};
 use crate::state::SettingsState;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::bin_document::{BinDocument, BinDocumentId, BinDocuments};
 use vinciskin_core::game_wads::WadCache;
 use vinciskin_core::preview::AssetRef;
@@ -15,7 +16,6 @@ use vinciskin_game::map::{
     map_characters, map_outline, map_particles, map_variants, resolve_map, unresolved_map,
     MapCharacter, MapChunk, MapFiles, MapModel, MapParticle, MapPath, MapVariant,
 };
-use tauri::{AppHandle, Manager};
 
 /// The materials a map's submeshes name, and its lighting and screen effects.
 ///

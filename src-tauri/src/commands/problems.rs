@@ -9,11 +9,11 @@ use super::off_thread;
 use crate::error::{AppError, AppResult, IpcResult};
 use crate::mods::ModLibraryState;
 use crate::state::SettingsState;
+use std::path::Path;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::hashtables::WadPathResolverState;
 use vinciskin_core::problems;
 use vinciskin_core::problems::{FixReport, ProblemId, ProblemsState};
-use std::path::Path;
-use tauri::{AppHandle, Manager};
 
 /// Run every rule over one project.
 ///

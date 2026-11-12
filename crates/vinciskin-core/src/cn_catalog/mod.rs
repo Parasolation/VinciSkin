@@ -7,7 +7,9 @@
 
 use std::time::Duration;
 
-use vinciskin_cn::catalog::gtimg::{HERO_LIST_URL, hero_skin_url, parse_hero_list, parse_hero_skins};
+use vinciskin_cn::catalog::gtimg::{
+    HERO_LIST_URL, hero_skin_url, parse_hero_list, parse_hero_skins,
+};
 
 pub use vinciskin_cn::catalog::gtimg::{hero_portrait_url, is_trusted_image_url};
 pub use vinciskin_cn::catalog::{Hero, HeroCatalog, Quality, Skin, SkinCatalog};

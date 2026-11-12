@@ -127,7 +127,8 @@ mod tests {
 
     #[test]
     fn hiding_the_riot_client_can_be_turned_off() {
-        let config: Config = serde_json::from_str(r#"{ "hideRiotClientOnLaunch": false }"#).unwrap();
+        let config: Config =
+            serde_json::from_str(r#"{ "hideRiotClientOnLaunch": false }"#).unwrap();
         assert!(!config.hide_riot_client_on_launch);
     }
 

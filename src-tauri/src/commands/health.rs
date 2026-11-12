@@ -9,13 +9,13 @@ use super::off_thread;
 use crate::error::{AppResult, IpcResult};
 use crate::mods::{ModHealthVerdict, ModLibrary, ModLibraryState};
 use crate::state::SettingsState;
+use std::collections::BTreeMap;
+use tauri::{AppHandle, Manager, State};
 use vinciskin_core::config::Config;
 use vinciskin_core::mods::{
     HealthCheckReadiness, HealthSweepReport, HealthSweepState, LibraryRepairReport, SweepScope,
 };
 use vinciskin_core::problems::FixReport;
-use std::collections::BTreeMap;
-use tauri::{AppHandle, Manager, State};
 
 /// Check one mod and return the verdict its badge reads.
 #[tauri::command]

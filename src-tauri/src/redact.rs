@@ -25,7 +25,10 @@ mod tests {
             url("https://example.com/a/b.fantome?token=secret#frag"),
             "https://example.com/a/b.fantome"
         );
-        assert_eq!(url("vinciskin://install?url=https://x/y?token=1"), "vinciskin://install");
+        assert_eq!(
+            url("vinciskin://install?url=https://x/y?token=1"),
+            "vinciskin://install"
+        );
     }
 
     #[test]

@@ -1,9 +1,9 @@
 use super::off_thread;
 use crate::error::IpcResult;
 use crate::state::SettingsState;
-use vinciskin_core::strings::{StringKeyIndexState, StringKeySearchResult};
 use std::collections::HashMap;
 use tauri::{AppHandle, Manager, State};
+use vinciskin_core::strings::{StringKeyIndexState, StringKeySearchResult};
 
 /// Search known stringtable field names for the workshop strings editor.
 ///

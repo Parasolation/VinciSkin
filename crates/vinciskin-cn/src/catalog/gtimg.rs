@@ -304,7 +304,15 @@ mod tests {
     portrait rather than becoming part of a path. */
     #[test]
     fn an_alias_that_is_not_a_plain_identifier_names_no_portrait() {
-        for alias in ["", "..", "../Annie", "Annie/../Olaf", "Annie.png", "安妮", "A nnie"] {
+        for alias in [
+            "",
+            "..",
+            "../Annie",
+            "Annie/../Olaf",
+            "Annie.png",
+            "安妮",
+            "A nnie",
+        ] {
             assert_eq!(hero_portrait_url(alias), None, "{alias}");
         }
     }
@@ -353,7 +361,14 @@ mod tests {
         assert_eq!(
             catalog.heroes[0].keywords,
             vec![
-                "疾风剑豪", "剑豪", "亚索", "Yasuo", "ys", "jh", "jfjh", "yaso u"
+                "疾风剑豪",
+                "剑豪",
+                "亚索",
+                "Yasuo",
+                "ys",
+                "jh",
+                "jfjh",
+                "yaso u"
             ]
         );
     }
@@ -362,7 +377,8 @@ mod tests {
     without them still parses. */
     #[test]
     fn a_hero_without_keywords_parses_with_none() {
-        let json = r#"{"hero":[{"heroId":"1","name":"黑暗之女","alias":"Annie"}],"version":"16.19"}"#;
+        let json =
+            r#"{"hero":[{"heroId":"1","name":"黑暗之女","alias":"Annie"}],"version":"16.19"}"#;
         let catalog = parse_hero_list(json).unwrap();
 
         assert!(catalog.heroes[0].keywords.is_empty());
@@ -374,7 +390,11 @@ mod tests {
         let catalog = parse_hero_list(HERO_LIST_FIXTURE).expect("fixture parses");
 
         for hero in &catalog.heroes {
-            assert!(!hero.keywords.is_empty(), "{} carries no keywords", hero.alias);
+            assert!(
+                !hero.keywords.is_empty(),
+                "{} carries no keywords",
+                hero.alias
+            );
         }
 
         let yasuo = catalog

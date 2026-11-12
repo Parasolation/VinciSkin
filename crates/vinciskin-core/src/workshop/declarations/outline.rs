@@ -9,7 +9,6 @@ use std::ops::Range;
 
 use camino::Utf8Path;
 use fs_err as fs;
-use vinciskin_declarations::{Binding, BodyAt, Layout};
 use ltk_game_data::{
     BinHash, EntryName, Error as GameDataError, LinkEdit, MANIFEST_NAMES, Module, ObjectEdit,
     PropertyEdit, Selector,
@@ -18,6 +17,7 @@ use ltk_meta::path::{PropertyPath, Subscript};
 use ltk_mod_project::game_data::load_layer;
 use ltk_mod_project::{ModIgnore, ModProjectLayer};
 use serde::Serialize;
+use vinciskin_declarations::{Binding, BodyAt, Layout};
 
 use super::ProjectDir;
 use crate::bin_document::{DeclaredSign, hex};

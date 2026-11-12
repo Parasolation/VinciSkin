@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 
-import {
-  Button,
-  ComboboxField,
-  EmptyState,
-  Spinner,
-  Switch,
-  useToast,
-} from "@/components";
+import { Button, ComboboxField, EmptyState, Spinner, Switch, useToast } from "@/components";
 import { describeError, m } from "@/i18n";
 import { api, type CnHero, type CnQuality, isOk, unwrap } from "@/lib/tauri";
 import { usePlay } from "@/modules/launcher";
@@ -148,11 +141,7 @@ export function CnCatalog() {
               </label>
             </div>
 
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setPacksOpen((open) => !open)}
-            >
+            <Button size="sm" variant="ghost" onClick={() => setPacksOpen((open) => !open)}>
               {m.cn_packs_title()}
             </Button>
 

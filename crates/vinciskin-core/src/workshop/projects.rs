@@ -217,11 +217,8 @@ impl Workshop {
             .read_info()
             .map_err(|e| AppError::Fantome(format!("Failed to read META/info.json: {e}")))?;
 
-        let mut wad_files: Vec<String> = reader
-            .wad_names()
-            .into_iter()
-            .map(|wad| wad.name)
-            .collect();
+        let mut wad_files: Vec<String> =
+            reader.wad_names().into_iter().map(|wad| wad.name).collect();
         wad_files.sort_by(|a, b| compare_names(a, b));
 
         Ok(FantomePeekResult {

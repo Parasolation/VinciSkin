@@ -12,8 +12,8 @@ A report is most useful with:
 - The steps that reproduce it
 - The log file, from the path below
 
-| Platform      | Log file                                                        |
-| ------------- | --------------------------------------------------------------- |
+| Platform      | Log file                                              |
+| ------------- | ----------------------------------------------------- |
 | Windows       | `%APPDATA%\com.vinciskin.app\logs\vinciskin.log`      |
 | Linux / macOS | `~/.local/share/com.vinciskin.app/logs/vinciskin.log` |
 

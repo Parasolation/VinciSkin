@@ -7,13 +7,13 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use fs_err as fs;
-use vinciskin_core::events::{BackendEvent, EventSink};
-use vinciskin_core::workshop::LayerFilesChanged;
 use notify::{RecommendedWatcher, RecursiveMode};
 use notify_debouncer_mini::{
     new_debouncer, DebounceEventResult, DebouncedEvent, DebouncedEventKind, Debouncer,
 };
 use parking_lot::Mutex;
+use vinciskin_core::events::{BackendEvent, EventSink};
+use vinciskin_core::workshop::LayerFilesChanged;
 
 use crate::error::{AppError, AppResult};
 

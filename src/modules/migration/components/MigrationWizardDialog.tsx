@@ -103,8 +103,8 @@ function BrowseStep({ onBrowse, isScanning, error }: BrowseStepProps) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-surface-300">
-        Select your cslol-manager installation directory. VinciSkin will scan for installed mods
-        and let you choose which ones to import.
+        Select your cslol-manager installation directory. VinciSkin will scan for installed mods and
+        let you choose which ones to import.
       </p>
       <p className="text-sm text-surface-400">
         The directory should contain an{" "}

@@ -8,9 +8,9 @@ use crate::events::TauriEventSink;
 use crate::mods::{ModLibrary, ModLibraryState, WadReportState};
 use crate::state::{IncidentStoreState, SettingsState};
 use crate::workshop::{ProjectRegistry, Workshop, WorkshopState};
+use std::sync::Arc;
 use vinciskin_core::diagnostics::store::IncidentStore;
 use vinciskin_core::events::EventSink;
-use std::sync::Arc;
 
 pub fn run(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     let app_handle = app.handle().clone();

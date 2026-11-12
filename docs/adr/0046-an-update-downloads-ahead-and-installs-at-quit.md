@@ -29,7 +29,7 @@ found.
 **The endpoint is upstream's, and so is the signature.** The check read
 `https://github.com/LeagueToolkit/ltk-manager/releases/download/updater/latest.json` and verified
 the installer against that project's minisign public key. Both are in `tauri.conf.json`, and neither
-can describe a build made here: an update this app could install is an update to the *upstream*
+can describe a build made here: an update this app could install is an update to the _upstream_
 build, which would replace this fork with one that patches.
 
 That is not a defect to fix but the shape of a fork. A build whose whole point is that it does not

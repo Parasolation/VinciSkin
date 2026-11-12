@@ -336,10 +336,8 @@ impl PatcherState {
             "starting the injection loader (elevated)"
         );
 
-        let handle = elevated::spawn_runas(
-            &loader_exe.to_string_lossy(),
-            &overlay.to_string_lossy(),
-        )?;
+        let handle =
+            elevated::spawn_runas(&loader_exe.to_string_lossy(), &overlay.to_string_lossy())?;
 
         inner.status = PatcherStatus {
             running: true,

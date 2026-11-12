@@ -1,4 +1,4 @@
-   // @vitest-environment happy-dom
+// @vitest-environment happy-dom
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { act, renderHook, screen } from "@testing-library/react";

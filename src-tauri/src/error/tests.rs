@@ -1,8 +1,8 @@
 //! Unit tests for the response payload's wire shape and the IPC envelope.
 
 use super::*;
-use vinciskin_core::hashtables::{HashtableError, SyncHolder};
 use serde_json::Value;
+use vinciskin_core::hashtables::{HashtableError, SyncHolder};
 
 fn wire(error: AppError) -> Value {
     serde_json::to_value(AppErrorResponse::from(error)).unwrap()

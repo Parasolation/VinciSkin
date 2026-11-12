@@ -26,9 +26,9 @@ use vinciskin_core::diagnostics::incident::{
     OverlayOutcome, ProjectFootprint, RawEvidence, ScanMode, SessionFailure, SkippedArchive,
     VerdictKind,
 };
+use vinciskin_core::diagnostics::incident::{InjectionStage, SessionOrigin, WadScanFailure};
 use vinciskin_core::diagnostics::store::IncidentStore;
 use vinciskin_core::error::ErrorKind;
-use vinciskin_core::diagnostics::incident::{InjectionStage, SessionOrigin, WadScanFailure};
 
 /// The prefix every seeded id carries.
 const PREFIX: &str = "mock-";

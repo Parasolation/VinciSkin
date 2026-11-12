@@ -3,9 +3,9 @@
 use super::off_thread;
 use crate::error::IpcResult;
 use crate::state::SettingsState;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::game_wads::{GameArchives, GameWadEntry, GameWadSummary};
 use vinciskin_core::hashtables::WadPathResolverState;
-use tauri::{AppHandle, Manager};
 
 /// List the game's WAD archives under `DATA/FINAL`, sorted by name.
 #[tauri::command]

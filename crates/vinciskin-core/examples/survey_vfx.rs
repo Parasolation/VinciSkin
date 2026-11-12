@@ -16,10 +16,10 @@ use std::path::{Path, PathBuf};
 use fs_err as fs;
 use indexmap::IndexMap;
 use ltk_hash::BinHash;
-use vinciskin_core::bin_document::owned;
 use ltk_meta::property::values;
 use ltk_meta::walk::{Leaf, TreeValue as _};
 use ltk_meta::{BinFile, BinObject, PropertyValueEnum};
+use vinciskin_core::bin_document::owned;
 
 /// `VfxEmitterDefinitionData`, the class every count is per instance of.
 const EMITTER: BinHash = BinHash(0x09cd_e442);

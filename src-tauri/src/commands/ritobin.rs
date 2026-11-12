@@ -3,10 +3,10 @@
 //! The integration is a Windows Explorer verb, so both commands are a registry
 //! read away from answering. See [`vinciskin_core::ritobin`].
 
+use tauri::{AppHandle, Manager};
 use vinciskin_core::game_wads::WadCache;
 use vinciskin_core::preview::AssetRef;
 use vinciskin_core::ritobin::RitobinVerb;
-use tauri::{AppHandle, Manager};
 
 use super::off_thread;
 use crate::error::{AppError, IpcResult};

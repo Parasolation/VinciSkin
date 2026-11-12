@@ -128,9 +128,7 @@ describe("TokenDecoder", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(
-          "This token is from a newer VinciSkin, format DIAG2. Update to read it.",
-        ),
+        screen.getByText("This token is from a newer VinciSkin, format DIAG2. Update to read it."),
       ).toBeInTheDocument();
     });
     expect(screen.queryByText("From a token")).not.toBeInTheDocument();

@@ -117,7 +117,11 @@
   --vinciskin-doc-ignore-text: color-mix(in srgb, var(--vinciskin-doc-ignore) 50%, black);
   --vinciskin-doc-readme-text: color-mix(in srgb, var(--vinciskin-doc-readme) 50%, black);
   --vinciskin-doc-license-text: color-mix(in srgb, var(--vinciskin-doc-license) 50%, black);
-  --vinciskin-doc-declarations-text: color-mix(in srgb, var(--vinciskin-doc-declarations) 50%, black);
+  --vinciskin-doc-declarations-text: color-mix(
+    in srgb,
+    var(--vinciskin-doc-declarations) 50%,
+    black
+  );
   --vinciskin-folder-text: color-mix(in srgb, var(--vinciskin-folder) 60%, black);
   --vinciskin-bin-class-text: color-mix(in srgb, var(--vinciskin-bin-class) 55%, black);
   --vinciskin-bin-kind-text: color-mix(in srgb, var(--vinciskin-bin-kind) 55%, black);

@@ -1,7 +1,7 @@
 //! Tauri adapter for the core [`EventSink`].
 
-use vinciskin_core::events::{BackendEvent, EventSink};
 use tauri::{AppHandle, Emitter};
+use vinciskin_core::events::{BackendEvent, EventSink};
 
 /// Delivers [`BackendEvent`]s to the webview.
 ///

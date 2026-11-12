@@ -9,9 +9,9 @@ use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Serialize};
 
-use vinciskin_cn::install::tencent::{RegistryProbe, TencentInstallSource};
 use ritoclient::ids::products;
 use ritoclient::prelude::*;
+use vinciskin_cn::install::tencent::{RegistryProbe, TencentInstallSource};
 
 use crate::utils::path::slashed;
 
@@ -87,7 +87,8 @@ pub fn installed_patchlines() -> Vec<InstalledPatchline> {
 /// The Tencent client's patchlines, which only Windows records.
 fn tencent_patchlines() -> Vec<InstalledPatchline> {
     #[cfg(windows)]
-    let found = TencentInstallSource::new(vinciskin_cn::install::tencent::WinRegistryProbe).discover();
+    let found =
+        TencentInstallSource::new(vinciskin_cn::install::tencent::WinRegistryProbe).discover();
 
     #[cfg(not(windows))]
     let found = Vec::new();

@@ -122,7 +122,7 @@ so the scan reads the arena in place.
 
 | Piece        | Where                                                                |
 | ------------ | -------------------------------------------------------------------- |
-| The scorer   | `crates/vinciskin-core/src/fuzzy.rs`, a port of `score.ts`         |
+| The scorer   | `crates/vinciskin-core/src/fuzzy.rs`, a port of `score.ts`           |
 | The scan     | `GameIndex::search`, with a `Scan` walking the arena depth first     |
 | Cancellation | `SearchGeneration`, an `AtomicU64` a command claims a ticket from    |
 | The command  | `search_game_index`, on `spawn_blocking` like every other index read |

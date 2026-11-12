@@ -18,10 +18,10 @@ use std::io::Cursor;
 
 use fs_err as fs;
 use ltk_hash::{BinHash, Hash as _};
+use ltk_meta::BinFile;
 use vinciskin_core::bin_document::BinDocument;
 use vinciskin_core::hashtables::HashtableCache;
 use vinciskin_core::vfx::resolve_system;
-use ltk_meta::BinFile;
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();

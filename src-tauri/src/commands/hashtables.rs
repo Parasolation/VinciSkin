@@ -5,6 +5,7 @@ use crate::error::IpcResult;
 use crate::events::TauriEventSink;
 use crate::mods::ModLibraryState;
 use crate::state::SettingsState;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::game_index::GameIndexState;
 use vinciskin_core::hashtables::{
     BinHashTablesState, HashtableCache, HashtableCacheStatus, HashtableSyncReport,
@@ -18,7 +19,6 @@ use vinciskin_core::meta_schema::{
 use vinciskin_core::mods::{HealthSweepState, SweepScope};
 use vinciskin_core::problems::BinNames;
 use vinciskin_core::strings::StringKeyIndexState;
-use tauri::{AppHandle, Manager};
 
 /// User agent sent with hashtable release downloads.
 const SYNC_USER_AGENT: &str = concat!("vinciskin/", env!("CARGO_PKG_VERSION"));

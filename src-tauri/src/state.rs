@@ -1,12 +1,12 @@
 use fs_err as fs;
-use vinciskin_core::config::Config;
-use vinciskin_core::diagnostics::store::IncidentStore;
 use parking_lot::Mutex;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 use tauri::{AppHandle, Manager};
 use ts_rs::TS;
+use vinciskin_core::config::Config;
+use vinciskin_core::diagnostics::store::IncidentStore;
 
 /// Get the application data directory for storing settings using Tauri's path resolver.
 pub fn get_app_data_dir(app_handle: &AppHandle) -> Option<PathBuf> {

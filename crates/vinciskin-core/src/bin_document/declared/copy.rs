@@ -2,7 +2,6 @@
 //! declared in its place. "Declaring from a game bin" in docs/ux/BIN_EDITOR.md.
 
 use indexmap::IndexMap;
-use vinciskin_declarations::{Edit as ManifestEdit, ModuleChoice, Operation, ValueText};
 use ltk_game_data::{Reference, Value};
 use ltk_hash::BinHash;
 use ltk_meta::PropertyValueEnum;
@@ -10,6 +9,7 @@ use ltk_meta::path::{FieldNames as _, MapKey, PropertyPath, ValuePath};
 use ltk_meta::property::values;
 use ltk_meta::walk::TreeValue as _;
 use serde::Serialize;
+use vinciskin_declarations::{Edit as ManifestEdit, ModuleChoice, Operation, ValueText};
 
 use super::super::{
     BinDocument, BinDocumentError, EditRejection, EntryKey, Node, RowNames, Step, descend, hex,

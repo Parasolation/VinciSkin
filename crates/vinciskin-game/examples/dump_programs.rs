@@ -17,6 +17,7 @@ use std::time::Instant;
 use fs_err as fs;
 use hexshade::TranslationCache;
 use ltk_hash::{BinHash, Hash as _, WadHash};
+use ltk_wad::Wad;
 use vinciskin_core::bin_document::{AssetLookup, BinDocument};
 use vinciskin_core::error::{AppError, AppResult};
 use vinciskin_core::material::SHADER_DEFS_PATH;
@@ -24,7 +25,6 @@ use vinciskin_core::preview::AssetRef;
 use vinciskin_game::program::{
     MaterialProgram, ProgramOptions, ProgramRead, Resolution, read_programs,
 };
-use ltk_wad::Wad;
 
 const SHADER_CACHE: &str = "ShaderCache.dx11.wad.client";
 

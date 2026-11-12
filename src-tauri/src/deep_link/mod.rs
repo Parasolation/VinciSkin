@@ -427,7 +427,8 @@ mod tests {
 
     #[test]
     fn parse_valid_minimal_url() {
-        let req = install("vinciskin://install?url=https://cdn.example.com/mods/skin.modpkg").unwrap();
+        let req =
+            install("vinciskin://install?url=https://cdn.example.com/mods/skin.modpkg").unwrap();
         assert_eq!(req.url, "https://cdn.example.com/mods/skin.modpkg");
         assert!(req.name.is_none());
         assert!(req.source.is_none());
@@ -446,7 +447,8 @@ mod tests {
 
     #[test]
     fn rejects_http_url() {
-        let err = parse_deep_link_url("vinciskin://install?url=http://cdn.example.com/mods/skin.modpkg");
+        let err =
+            parse_deep_link_url("vinciskin://install?url=http://cdn.example.com/mods/skin.modpkg");
         assert!(err.is_err());
     }
 
@@ -464,7 +466,8 @@ mod tests {
 
     #[test]
     fn rejects_private_ip() {
-        let err = parse_deep_link_url("vinciskin://install?url=https://192.168.1.1/mods/skin.modpkg");
+        let err =
+            parse_deep_link_url("vinciskin://install?url=https://192.168.1.1/mods/skin.modpkg");
         assert!(err.is_err());
     }
 
@@ -486,7 +489,8 @@ mod tests {
 
     #[test]
     fn rejects_unknown_action() {
-        let err = parse_deep_link_url("vinciskin://update?url=https://cdn.example.com/mods/skin.modpkg");
+        let err =
+            parse_deep_link_url("vinciskin://update?url=https://cdn.example.com/mods/skin.modpkg");
         assert!(err.is_err());
     }
 
@@ -505,7 +509,8 @@ mod tests {
 
     #[test]
     fn parse_settings_group_id() {
-        let request = parse_deep_link_url("vinciskin://settings?focus=patching.mod-safety").unwrap();
+        let request =
+            parse_deep_link_url("vinciskin://settings?focus=patching.mod-safety").unwrap();
         assert_eq!(
             request,
             DeepLinkRequest::Settings(DeepLinkSettingsRequest {
@@ -517,7 +522,8 @@ mod tests {
     #[test]
     fn settings_ignores_unknown_params() {
         let request =
-            parse_deep_link_url("vinciskin://settings?focus=general.autoRun&tab=appearance").unwrap();
+            parse_deep_link_url("vinciskin://settings?focus=general.autoRun&tab=appearance")
+                .unwrap();
         assert_eq!(
             request,
             DeepLinkRequest::Settings(DeepLinkSettingsRequest {
@@ -600,15 +606,17 @@ mod tests {
     #[test]
     fn parse_empty_optional_params() {
         let req =
-            install("vinciskin://install?url=https://cdn.example.com/mod.modpkg&name=&source=").unwrap();
+            install("vinciskin://install?url=https://cdn.example.com/mod.modpkg&name=&source=")
+                .unwrap();
         assert_eq!(req.name.as_deref(), Some(""));
         assert_eq!(req.source.as_deref(), Some(""));
     }
 
     #[test]
     fn parse_url_with_query_string_in_download_url() {
-        let req = install("vinciskin://install?url=https://cdn.example.com/mod.modpkg%3Ftoken%3Dabc123")
-            .unwrap();
+        let req =
+            install("vinciskin://install?url=https://cdn.example.com/mod.modpkg%3Ftoken%3Dabc123")
+                .unwrap();
         assert!(req.url.contains("token"));
     }
 
@@ -637,7 +645,9 @@ mod tests {
 
     #[test]
     fn rejects_loopback_127() {
-        assert!(parse_deep_link_url("vinciskin://install?url=https://127.0.0.1/mod.modpkg").is_err());
+        assert!(
+            parse_deep_link_url("vinciskin://install?url=https://127.0.0.1/mod.modpkg").is_err()
+        );
     }
 
     #[test]
@@ -647,24 +657,34 @@ mod tests {
 
     #[test]
     fn rejects_10_x_private_range() {
-        assert!(parse_deep_link_url("vinciskin://install?url=https://10.0.0.1/mod.modpkg").is_err());
         assert!(
-            parse_deep_link_url("vinciskin://install?url=https://10.255.255.255/mod.modpkg").is_err()
+            parse_deep_link_url("vinciskin://install?url=https://10.0.0.1/mod.modpkg").is_err()
+        );
+        assert!(
+            parse_deep_link_url("vinciskin://install?url=https://10.255.255.255/mod.modpkg")
+                .is_err()
         );
     }
 
     #[test]
     fn rejects_172_16_to_31_private_range() {
-        assert!(parse_deep_link_url("vinciskin://install?url=https://172.16.0.1/mod.modpkg").is_err());
         assert!(
-            parse_deep_link_url("vinciskin://install?url=https://172.31.255.255/mod.modpkg").is_err()
+            parse_deep_link_url("vinciskin://install?url=https://172.16.0.1/mod.modpkg").is_err()
+        );
+        assert!(
+            parse_deep_link_url("vinciskin://install?url=https://172.31.255.255/mod.modpkg")
+                .is_err()
         );
     }
 
     #[test]
     fn allows_172_outside_private_range() {
-        assert!(parse_deep_link_url("vinciskin://install?url=https://172.15.0.1/mod.modpkg").is_ok());
-        assert!(parse_deep_link_url("vinciskin://install?url=https://172.32.0.1/mod.modpkg").is_ok());
+        assert!(
+            parse_deep_link_url("vinciskin://install?url=https://172.15.0.1/mod.modpkg").is_ok()
+        );
+        assert!(
+            parse_deep_link_url("vinciskin://install?url=https://172.32.0.1/mod.modpkg").is_ok()
+        );
     }
 
     #[test]
@@ -674,7 +694,9 @@ mod tests {
 
     #[test]
     fn rejects_localhost_uppercase() {
-        assert!(parse_deep_link_url("vinciskin://install?url=https://LOCALHOST/mod.modpkg").is_err());
+        assert!(
+            parse_deep_link_url("vinciskin://install?url=https://LOCALHOST/mod.modpkg").is_err()
+        );
     }
 
     // --- Domain allowlist validation ---
@@ -727,7 +749,8 @@ mod tests {
     /// Trust is the reader's setting, so parsing alone never claims a verdict.
     #[test]
     fn parsing_leaves_the_trust_unstamped() {
-        let req = install("vinciskin://install?url=https://cdn.example.com/mods/skin.modpkg").unwrap();
+        let req =
+            install("vinciskin://install?url=https://cdn.example.com/mods/skin.modpkg").unwrap();
         assert_eq!(req.untrusted_domain, None);
     }
 

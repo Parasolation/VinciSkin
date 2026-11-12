@@ -9,10 +9,10 @@
 use crate::commands::shell::reveal_in_explorer_inner;
 use crate::error::{AppError, AppResult, IpcResult};
 use crate::state::{get_app_data_dir, IncidentStoreState, SettingsState};
+use tauri::{AppHandle, State};
 use vinciskin_core::diagnostics::incident::Incident;
 use vinciskin_core::diagnostics::token::{DecodedIncident, IncidentToken};
 use vinciskin_core::diagnostics::{run_all, CheckCtx, DiagnosticReport};
-use tauri::{AppHandle, State};
 
 #[tauri::command]
 #[specta::specta]

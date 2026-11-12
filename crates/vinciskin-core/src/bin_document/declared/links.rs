@@ -4,10 +4,10 @@
 //! Each plan is checked the way an object edit's is: the declarations apply again, and the
 //! list has to come out as the edit asked. A plan that does not is taken back.
 
-use vinciskin_declarations::{LinkEdit, LinkOperation, LinkSign};
 use ltk_game_data::{LinkPath, Module};
 use ltk_meta::Bin;
 use serde::Serialize;
+use vinciskin_declarations::{LinkEdit, LinkOperation, LinkSign};
 
 use super::super::dependencies::{ADDRESS, names};
 use super::super::{BinDocument, BinDocumentError, EditRejection};

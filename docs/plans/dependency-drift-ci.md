@@ -27,10 +27,10 @@ Neither repo has Renovate, Dependabot, or any other dependency automation today.
 ### Floors that disagree, as of writing
 
 | Crate      | league-mod | vinciskin |
-| ---------- | ---------- | ----------- |
-| `ltk_file` | `0.2.8`    | `0.2.11`    |
-| `ltk_rst`  | `0.2.0`    | `0.2.1`     |
-| `ltk_wad`  | `0.5.3`    | `0.5.3`     |
+| ---------- | ---------- | --------- |
+| `ltk_file` | `0.2.8`    | `0.2.11`  |
+| `ltk_rst`  | `0.2.0`    | `0.2.1`   |
+| `ltk_wad`  | `0.5.3`    | `0.5.3`   |
 
 These are caret requirements, so the resolver unifies them and nothing breaks. What they cost is
 honesty: the declared floor is meant to say "the oldest version this is tested against", and

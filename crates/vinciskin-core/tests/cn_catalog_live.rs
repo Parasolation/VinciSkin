@@ -9,9 +9,7 @@
 //! `vinciskin-cn/tests/fixtures` are one capture of that, so this is what notices a
 //! rename the capture predates.
 
-use vinciskin_core::cn_catalog::{
-    GtimgCdn, fetch_hero_skins, fetch_heroes, is_trusted_image_url,
-};
+use vinciskin_core::cn_catalog::{GtimgCdn, fetch_hero_skins, fetch_heroes, is_trusted_image_url};
 
 /// The CDN is not ours, so the request says who is asking.
 const USER_AGENT: &str = concat!("vinciskin/", env!("CARGO_PKG_VERSION"));

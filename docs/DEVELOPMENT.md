@@ -88,8 +88,8 @@ pnpm tauri build
 
 Output is written to `src-tauri/target/release/bundle/`:
 
-| Platform | Path                                     | Format             |
-| -------- | ---------------------------------------- | ------------------ |
+| Platform | Path                                   | Format             |
+| -------- | -------------------------------------- | ------------------ |
 | Windows  | `bundle/nsis/VinciSkin_*-setup.exe`    | NSIS installer     |
 | macOS    | `bundle/dmg/VinciSkin_*.dmg`           | DMG disk image     |
 | macOS    | `bundle/macos/VinciSkin.app`           | Application bundle |

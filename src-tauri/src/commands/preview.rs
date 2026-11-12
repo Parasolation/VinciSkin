@@ -10,9 +10,9 @@ use std::path::PathBuf;
 use super::off_thread;
 use crate::error::IpcResult;
 use crate::state::SettingsState;
+use tauri::{AppHandle, Manager};
 use vinciskin_core::game_wads::WadCache;
 use vinciskin_core::preview::{AssetInfo, AssetRef};
-use tauri::{AppHandle, Manager};
 
 /// Report what a previewable asset holds, without decoding it.
 ///
