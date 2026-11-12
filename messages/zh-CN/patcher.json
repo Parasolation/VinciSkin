@@ -1,0 +1,23 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "patcher.ALREADY_RUNNING.title": "补丁器已在运行",
+  "patcher.BUSY.title": "修改模组前请先停止补丁器",
+  "patcher.INJECTION_FAILED.HOST.title": "注入宿主失败",
+  "patcher.INJECTION_FAILED.INJECTION.title": "DLL 注入失败",
+  "patcher.NOT_RUNNING.title": "补丁器未在运行",
+  "patcher.UNSUPPORTED_PLATFORM.title": "补丁器尚不支持此平台",
+  "patcher_error_title": "补丁器错误",
+  "patcher_rebuild_action": "重建覆盖层",
+  "patcher_rebuild_done_description": "覆盖层已从头重新生成。",
+  "patcher_rebuild_done_title": "覆盖层已重建",
+  "patcher_rebuild_failed_title": "重建失败",
+  "patcher_rebuild_pending_clear_label": "取消排队的重建",
+  "patcher_rebuild_pending_hint": "下次启动会从头重建覆盖层。取消即可保留当前覆盖层。",
+  "patcher_rebuild_pending_label": "已排队重建",
+  "patcher_rebuild_queue_action": "下次启动时重建",
+  "patcher_rebuild_queued_description": "补丁器下次启动时会从头重建覆盖层。",
+  "patcher_rebuild_queued_title": "已排队重建",
+  "patcher_skinhack_excluded_description": "{name} 被检测为皮肤外挂，未加载。",
+  "patcher_skinhack_excluded_title": "已排除皮肤外挂",
+  "patcher_start_failed_title": "无法启动补丁器"
+}

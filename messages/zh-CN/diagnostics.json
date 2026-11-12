@@ -1,0 +1,120 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "diagnostics_copy_report_action": "复制报告",
+  "diagnostics_copy_token_action": "复制令牌",
+  "diagnostics_day_today_label": "今天",
+  "diagnostics_day_yesterday_label": "昨天",
+  "diagnostics_dismiss_action": "忽略",
+  "diagnostics_dismissed_label": "已忽略",
+  "diagnostics_duration_hours_label": "{hours} 小时",
+  "diagnostics_duration_hours_minutes_label": "{hours} 小时 {mins} 分钟",
+  "diagnostics_duration_minutes_label": "{mins} 分钟",
+  "diagnostics_duration_seconds_label": "{secs} 秒",
+  "diagnostics_ending_crashpad_label": "crashpad 已运行",
+  "diagnostics_ending_empty": "未记录原因",
+  "diagnostics_ending_exit_code_label": "退出码 {code}",
+  "diagnostics_evidence_empty": "此对局没有记录任何内容。",
+  "diagnostics_evidence_title": "证据",
+  "diagnostics_facts_log_found_label": "已找到日志",
+  "diagnostics_facts_no_log_label": "无日志",
+  "diagnostics_game_log_open_failed_title": "无法打开游戏日志",
+  "diagnostics_hints_title": "提示",
+  "diagnostics_incident_details_action": "详情",
+  "diagnostics_launch_match_label": "对局",
+  "diagnostics_launch_pbe_label": "PBE",
+  "diagnostics_launch_replay_label": "回放",
+  "diagnostics_launch_spectator_label": "观战",
+  "diagnostics_mod_disable_failed_title": "无法禁用该模组",
+  "diagnostics_mod_disabled_description": "{name} 将不会出现在下一局游戏中。",
+  "diagnostics_mod_disabled_title": "模组已禁用",
+  "diagnostics_open_game_log_action": "打开游戏日志",
+  "diagnostics_origin_library_label": "模组库",
+  "diagnostics_origin_testing_label": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "正在测试 {count} 个项目",
+        "countPlural=other": "正在测试 {count} 个项目"
+      }
+    }
+  ],
+  "diagnostics_origin_workshop_label": "工坊测试",
+  "diagnostics_overlay_detail_disabled_label": "未校验",
+  "diagnostics_overlay_detail_end_of_life_label": "DLL 构建版本",
+  "diagnostics_overlay_detail_hook_failed_label": "钩子",
+  "diagnostics_overlay_disabled_label": "覆盖层被扫描关闭",
+  "diagnostics_overlay_end_of_life_label": "DLL 拒绝此游戏版本",
+  "diagnostics_overlay_hook_failed_label": "某个钩子未能安装",
+  "diagnostics_overlay_live_label": "覆盖层已生效",
+  "diagnostics_overlay_none_label": "DLL 没有反馈",
+  "diagnostics_overlay_too_late_label": "DLL 接入过晚",
+  "diagnostics_patcher_busy_hint": "请先停止补丁器",
+  "diagnostics_phase_in_game_label": "已进入游戏",
+  "diagnostics_phase_loading_label": "停在加载界面",
+  "diagnostics_phase_torn_down_label": "正常结束",
+  "diagnostics_phase_unknown_label": "未读取日志",
+  "diagnostics_report_copied_description": "将其粘贴到问题报告或支持帖子中。",
+  "diagnostics_report_copied_title": "已复制报告",
+  "diagnostics_report_copy_failed_title": "无法复制报告",
+  "diagnostics_scan_eager_label": "主动扫描",
+  "diagnostics_scan_lazy_label": "惰性扫描",
+  "diagnostics_shader_compile_description": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "League 无法编译 {count} 个着色器变体。",
+        "countPlural=other": "League 无法编译 {count} 个着色器变体。"
+      }
+    }
+  ],
+  "diagnostics_shader_compile_pipeline_description": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "League 无法编译 {count} 个着色器变体，随后绘制了一个没有管线的材质。",
+        "countPlural=other": "League 无法编译 {count} 个着色器变体，随后绘制了一个没有管线的材质。"
+      }
+    }
+  ],
+  "diagnostics_shader_pipeline_description": "League 绘制了一个没有管线的材质。",
+  "diagnostics_shader_unnamed_description": "编译失败项没有指明任何顶点着色器。League 仅为 data/shaders/shaders.bin 中的 CustomShaderDef 对象构建着色器程序，因此若模组在任何其他 bin 中定义着色器，就会用一个不含程序的对象替换游戏自身的副本。",
+  "diagnostics_skinhack_title": "触发了皮肤外挂检测",
+  "diagnostics_suspect_disable_action": "禁用",
+  "diagnostics_suspect_disabled_label": "已禁用",
+  "diagnostics_suspect_open_action": "打开",
+  "diagnostics_suspects_title": "可疑项",
+  "diagnostics_token_build_failed_title": "无法生成令牌",
+  "hint.close-game": "关闭 League of Legends 并等待其退出，然后再次启动补丁器。",
+  "hint.check-game-path": "请在设置中检查 League of Legends 安装路径。",
+  "hint.copy-report": "寻求帮助时请复制报告。",
+  "hint.disable-suspect": "引用了自身并未附带文件的模组会导致读取中断。请禁用可疑项后再次游戏。",
+  "hint.elevate": "League 可能以管理员权限运行，因此请允许宿主提权，或以管理员身份运行 VinciSkin。",
+  "hint.free-memory": "关闭其他正在运行的程序，并确保 League 所在磁盘有可用空间。",
+  "hint.large-textures": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "此对局中有 {count} 个模组归档。请禁用任何用大得多的纹理进行替换的模组，然后再次游戏。",
+        "countPlural=other": "此对局中有 {count} 个模组归档。请禁用任何用大得多的纹理进行替换的模组，然后再次游戏。"
+      }
+    }
+  ],
+  "hint.open-project": "在编辑器中打开该项目。",
+  "hint.rebuild-overlay": "重建覆盖层。",
+  "hint.reimport-mod": "重新导入或重新构建扫描所指的模组，然后再次启动补丁器。",
+  "hint.remove-skinhack": "禁用扫描所指的模组，然后再次启动补丁器。",
+  "hint.repair-game": "请在 Riot Client 中修复安装，因为扫描发现游戏自带文件存在问题。",
+  "hint.repair-install": "当重建无效时，请在 Riot Client 中修复安装。",
+  "hint.scan-up-front": "请开启预先扫描每个 WAD，因为 DLL 是按需扫描归档的，而游戏在开局第一分钟内就结束了。",
+  "hint.shader-definition": "移除模组在 data/shaders/shaders.bin 之外定义的 CustomShaderDef，并保留材质与游戏着色器的关联。",
+  "hint.signature": "宿主以提权方式运行，因此请检查 DLL 的签名，以及是否有防病毒软件拦截了它。",
+  "hint.start-first": "请先启动补丁器，再启动 League。",
+  "hint.system-checks": "在诊断页面运行系统检查。",
+  "hint.texture-dimensions": "常见原因是模组纹理的宽或高不是 4 的倍数，因此请检查您更改过的任何纹理的尺寸。",
+  "hint.update-driver": "更新显卡驱动；若更新无效，请检查显示设置。",
+  "hint.update-manager": "更新 VinciSkin。"
+}

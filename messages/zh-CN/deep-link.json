@@ -1,0 +1,18 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "deep_link_install_action": "安装",
+  "deep_link_install_complete_title": "安装完成",
+  "deep_link_install_done_action": "完成",
+  "deep_link_install_downloading_label": "正在下载…",
+  "deep_link_install_failed_description": "无法安装 {name}",
+  "deep_link_install_failed_title": "安装失败",
+  "deep_link_install_succeeded_description": "*{name}* 已成功安装。",
+  "deep_link_install_succeeded_title": "模组已安装",
+  "deep_link_install_title": "安装模组",
+  "deep_link_install_unknown_mod_label": "未知模组",
+  "deep_link_install_validating_label": "正在校验…",
+  "deep_link_untrusted_description": "信任后即可安装此模组，并允许该域名的链接今后直接安装。",
+  "deep_link_untrusted_reject_action": "拒绝",
+  "deep_link_untrusted_title": "{domain} 不是受信任的提供方",
+  "deep_link_untrusted_trust_action": "信任并安装"
+}

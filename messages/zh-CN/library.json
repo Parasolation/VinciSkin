@@ -1,0 +1,254 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "library_card_select_label": "选择 {name}",
+  "library_details_cancel_action": "取消",
+  "library_details_champions_description": "以逗号分隔的英雄列表（例如 Ahri, Yasuo）",
+  "library_details_champions_label": "英雄",
+  "library_details_champions_placeholder": "例如 Riven, Lee Sin",
+  "library_details_discard_action": "丢弃",
+  "library_details_discard_description": "离开此模组将丢弃您输入的内容。在您保存之前不会写入任何内容。",
+  "library_details_discard_heading": "丢弃您的更改？",
+  "library_details_discard_title": "未保存的更改",
+  "library_details_edit_action": "编辑",
+  "library_details_installed_label": "安装于 {date}",
+  "library_details_layers_label": "层",
+  "library_details_maps_label": "地图",
+  "library_details_maps_placeholder": "选择地图…",
+  "library_details_name_label": "模组名称",
+  "library_details_name_placeholder": "例如 我的超棒模组",
+  "library_details_none_open_description": "从模组卡片的菜单中打开",
+  "library_details_none_open_title": "未打开任何模组",
+  "library_details_open_location_action": "打开所在位置",
+  "library_details_overrides_count_label": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} 个覆盖项",
+        "countPlural=other": "{count} 个覆盖项"
+      }
+    }
+  ],
+  "library_details_packaging_chunks_label": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} 个数据块",
+        "countPlural=other": "{count} 个数据块"
+      }
+    }
+  ],
+  "library_details_packaging_description": "此模组的归档报告的校验和与其自身文件不符。模组仍可正常使用——管理器在构建时会予以修正——但打包它的工具写入了错误的元数据，因此值得重新导出。",
+  "library_details_packaging_label": "打包",
+  "library_details_save_action": "保存",
+  "library_details_save_failed_title": "无法更新元数据",
+  "library_details_saved_hint": "模组信息已成功保存。",
+  "library_details_saved_title": "元数据已更新",
+  "library_details_suggestions_apply_action": "全部应用",
+  "library_details_suggestions_description": "根据此模组所修补的游戏文件检测得出。点击即可添加，然后保存。",
+  "library_details_suggestions_label": "自动检测的建议",
+  "library_details_tags_label": "标签",
+  "library_details_tags_placeholder": "选择标签…",
+  "library_details_thumbnail_filter_label": "图片",
+  "library_details_thumbnail_remove_action": "移除缩略图",
+  "library_details_thumbnail_set_action": "设置缩略图",
+  "library_details_unknown_author_label": "未知作者",
+  "library_details_wads_analyzed_label": "分析于 {when}",
+  "library_details_wads_champions_label": "英雄",
+  "library_details_wads_count_label": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} 个 WAD",
+        "countPlural=other": "{count} 个 WAD"
+      }
+    }
+  ],
+  "library_details_wads_failed_description": "无法分析此模组。",
+  "library_details_wads_label": "WAD 占用范围",
+  "library_details_wads_maps_label": "地图",
+  "library_details_wads_none_description": "此模组未修补任何游戏 WAD。",
+  "library_details_wads_other_label": "其他",
+  "library_details_wads_reading_label": "正在读取此模组的文件",
+  "library_details_wads_reanalyze_action": "重新分析",
+  "library_details_wads_retry_action": "重试",
+  "library_details_wads_stale_hint": "可能已过时。重新分析或打补丁以刷新。",
+  "library_details_wads_ui_label": "UI",
+  "library_documents_close_action": "关闭文档",
+  "library_documents_details_tab": "详情",
+  "library_documents_licenses_tab": "许可",
+  "library_documents_no_mod_title": "未打开任何模组",
+  "library_documents_readme_tab": "自述文件",
+  "library_documents_removed_description": "此面板先前显示的模组已不再安装",
+  "library_documents_removed_title": "模组已卸载",
+  "library_documents_resize_action": "调整抽屉大小",
+  "library_documents_title": "文档",
+  "library_documents_toggle_action": "文档",
+  "library_health_all_repairable_description": "所有问题均可自动修复，因此*建议修复*",
+  "library_health_cancel_failed_title": "无法停止本次运行",
+  "library_health_check_clean_hint": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "已检查 {count} 个模组",
+        "countPlural=other": "已检查 {count} 个模组"
+      }
+    }
+  ],
+  "library_health_check_clean_title": "未发现问题",
+  "library_health_check_library_failed_title": "无法检查模组库",
+  "library_health_check_mod_failed_title": "无法检查模组",
+  "library_health_check_stop_action": "停止检查",
+  "library_health_checking_label": "正在检查您的模组",
+  "library_health_enabled_label": "已启用",
+  "library_health_flagged_hint": "您的部分模组存在非致命且无法修复的问题",
+  "library_health_informational_only_description": "这些发现值得了解，且都不是故障",
+  "library_health_informational_toggle_label": "信息",
+  "library_health_mixed_description": "*建议修复*，未被修复的内容仍会加载",
+  "library_health_needs_update_label": "需要更新版本",
+  "library_health_no_repair_description": "它们都无法自动修复，但也都不会阻止模组加载",
+  "library_health_not_fixable_label": "无法自动修复",
+  "library_health_nothing_to_repair_hint": "您的模组已是最新。",
+  "library_health_nothing_to_repair_title": "无需修复",
+  "library_health_patcher_running_hint": "修复会重写覆盖层正在读取的模组。",
+  "library_health_patcher_running_title": "请先停止补丁器",
+  "library_health_repair_action": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "修复 {count} 个模组",
+        "countPlural=other": "修复 {count} 个模组"
+      }
+    }
+  ],
+  "library_health_repair_all_action": "全部修复 {count} 个",
+  "library_health_repair_enabled_action": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "修复 {count} 个已启用的模组",
+        "countPlural=other": "修复 {count} 个已启用的模组"
+      }
+    }
+  ],
+  "library_health_repair_library_failed_title": "无法修复模组",
+  "library_health_repair_mod_failed_title": "无法修复模组",
+  "library_health_repair_mod_label": "修复 {name}",
+  "library_health_repair_one_action": "修复",
+  "library_health_repair_options_label": "更多修复选项",
+  "library_health_repair_partial_hint": [
+    {
+      "declarations": ["input repaired", "input failed", "local repairedPlural = repaired: plural"],
+      "selectors": ["repairedPlural"],
+      "match": {
+        "repairedPlural=one": "已修复 {repaired} 个模组，{failed} 个无法修复。",
+        "repairedPlural=other": "已修复 {repaired} 个模组，{failed} 个无法修复。"
+      }
+    }
+  ],
+  "library_health_repair_partial_title": "已尽力修复",
+  "library_health_repair_stop_label": "停止修复",
+  "library_health_repaired_findings_title": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "已修复 {count} 项问题",
+        "countPlural=other": "已修复 {count} 项问题"
+      }
+    }
+  ],
+  "library_health_repaired_hint": "它们已为您的下一局游戏准备就绪。",
+  "library_health_repaired_title": [
+    {
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "已修复 {count} 个模组",
+        "countPlural=other": "已修复 {count} 个模组"
+      }
+    }
+  ],
+  "library_health_repairing_label": "正在修复您的模组",
+  "library_health_repairing_more_label": "正在修复 {name} 及另外 {count} 个",
+  "library_health_repairing_one_label": "正在修复 {name}",
+  "library_health_replace_description": "它们都无法自动修复，因此请寻找更新版本",
+  "library_health_rule_not_fixable_label": "无法自动修复",
+  "library_health_rule_partly_fixable_label": "{count} 项无法自动修复",
+  "library_health_show_action": "前往查看",
+  "library_health_some_replaceable_description": "*建议修复*，不过部分需要改用更新版本",
+  "library_health_status_broken_hint": "您的部分模组已损坏且无法修复。请打开列表。",
+  "library_health_status_flagged_hint": "您的部分模组加载后会出现异常行为。请打开列表。",
+  "library_health_status_hide_hint": "隐藏检测出问题的模组。",
+  "library_health_status_repairable_hint": "您的部分模组需要处理。请打开列表并修复它们。",
+  "library_health_type_mismatch_description": "应为 *{expected}*，实际为 *{found}*",
+  "library_launch_already_running_label": "已在运行",
+  "library_launch_league_action": "启动 League",
+  "library_launch_league_only_action": "仅启动 League",
+  "library_launch_options_label": "更多启动选项",
+  "library_league_close_action": "关闭 League",
+  "library_licenses_no_text_description": "此模组声明了许可，但未附带其文本",
+  "library_licenses_none_open_description": "从模组卡片的菜单中打开",
+  "library_licenses_none_open_title": "未打开任何模组",
+  "library_licenses_undeclared_description": "此模组的作者未为其声明许可",
+  "library_licenses_undeclared_title": "未声明许可",
+  "library_licenses_unreadable_description": "此模组的归档无响应，因此无法读取其许可",
+  "library_mod_auto_categories_hint": "根据此模组的内容自动检测",
+  "library_mod_champion_skin_label": "{champion} 皮肤",
+  "library_mod_copy_id_action": "复制 ID",
+  "library_mod_details_action": "详情",
+  "library_mod_disable_label": "禁用 {name}",
+  "library_mod_enable_label": "启用 {name}",
+  "library_mod_hashtables_syncing_label": "正在同步哈希表…",
+  "library_mod_hashtables_unsynced_label": "哈希表未同步",
+  "library_mod_health_action": "检查健康状态",
+  "library_mod_health_clean_title": "未发现问题",
+  "library_mod_missing_title": "模组库中已不存在此模组",
+  "library_mod_open_location_action": "打开所在位置",
+  "library_mod_options_label": "{name} 的更多选项",
+  "library_mod_overflow_label": "+{count}",
+  "library_mod_readme_action": "自述文件",
+  "library_mod_remove_from_folder_action": "从文件夹中移除",
+  "library_mod_skinhack_action": "什么是皮肤外挂？",
+  "library_mod_skinhack_description": "皮肤外挂是一种可获取付费 League of Legends 皮肤的模组。",
+  "library_mod_skinhack_policy_hint": "使用皮肤外挂违反分发政策，并可能使您的账号面临风险。VinciSkin 会拦截这些模组，以保护用户和模组社区。",
+  "library_mod_skinhack_report_hint": "如果您认为此模组被误判，请在 GitHub 仓库页面提交 issue 并附上相关信息，我们会进行调查。",
+  "library_mod_skinhack_title": "什么是皮肤外挂？",
+  "library_mod_storage_archive_label": "归档",
+  "library_mod_storage_label": "存储",
+  "library_mod_storage_project_label": "项目",
+  "library_mod_uninstall_action": "卸载",
+  "library_mod_update_action": "从文件更新",
+  "library_mod_update_archive_label": "模组归档",
+  "library_mod_update_error_title": "无法更新模组",
+  "library_mod_update_success_title": "模组已更新",
+  "library_nav_label": "模组",
+  "library_patcher_no_mods_hint": "未启用任何模组——没有可打补丁的内容",
+  "library_patcher_only_action": "仅启动补丁器",
+  "library_patcher_start_action": "启动",
+  "library_patcher_start_hint": "启动补丁器，然后自行启动 League",
+  "library_patcher_stop_action": "停止补丁器",
+  "library_patcher_stop_hint": "停止补丁器",
+  "library_patcher_stopping_hint": "正在停止补丁器…",
+  "library_patcher_stopping_label": "正在停止…",
+  "library_play_action": "开始游戏",
+  "library_play_building_label": "正在构建…",
+  "library_play_cancelling_label": "正在取消…",
+  "library_play_hint": "启动补丁器并启动 League",
+  "library_play_launching_label": "正在启动…",
+  "library_play_league_running_hint": "League 已在运行——您的模组将在下一局游戏中生效",
+  "library_play_league_running_no_mods_hint": "League 已在运行——启用一个模组即可打补丁",
+  "library_play_no_mods_hint": "未启用任何模组——League 将以无模组方式启动",
+  "library_play_starting_label": "正在启动…",
+  "library_readme_absent_description": "此模组的作者未附带自述文件",
+  "library_readme_absent_title": "无自述文件",
+  "library_readme_none_open_description": "从模组卡片的菜单中打开其自述文件",
+  "library_readme_none_open_title": "未打开任何模组",
+  "library_readme_unreadable_description": "此模组的归档无响应，因此该模组可能完全无法使用",
+  "library_readme_unreadable_title": "自述文件无法读取"
+}
