@@ -1,9 +1,10 @@
 //! Discovers the League installs a machine holds, as the manager would.
 
-use vinciskin_cn::install::tencent::{TencentInstallSource, WinRegistryProbe};
-use vinciskin_cn::install::InstallSource;
-
+#[cfg(windows)]
 fn main() {
+    use vinciskin_cn::install::tencent::{TencentInstallSource, WinRegistryProbe};
+    use vinciskin_cn::install::InstallSource;
+
     let source = TencentInstallSource::new(WinRegistryProbe);
     let found = source.discover();
 
@@ -19,4 +20,9 @@ fn main() {
         );
         println!("  DATA     = {}", game.join("DATA").exists());
     }
+}
+
+#[cfg(not(windows))]
+fn main() {
+    eprintln!("discover reads the Windows registry, so it only runs on Windows.");
 }
