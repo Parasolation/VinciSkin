@@ -2,6 +2,8 @@
 
 use std::path::{Path, PathBuf};
 
+use fs_err as fs;
+
 use super::{InstallSource, InstalledPatchline};
 
 /// The Tencent install key. The real one lives under the current user.
@@ -95,7 +97,7 @@ pub fn find_in_wegame_root(root: &Path) -> Option<PathBuf> {
         let mut next = Vec::new();
 
         for directory in level {
-            let Ok(entries) = std::fs::read_dir(&directory) else {
+            let Ok(entries) = fs::read_dir(&directory) else {
                 continue;
             };
 
@@ -260,22 +262,22 @@ mod tests {
     fn a_wegame_root_is_scanned_for_a_game_data_folder() {
         let root = std::env::temp_dir().join(format!("vinciskin-cn-wegame-{}", std::process::id()));
         let install = root.join("WeGameApps").join("Games").join("League");
-        std::fs::create_dir_all(install.join("Game").join("Data")).unwrap();
+        fs::create_dir_all(install.join("Game").join("Data")).unwrap();
 
         let found = find_in_wegame_root(&root);
 
-        std::fs::remove_dir_all(&root).ok();
+        fs::remove_dir_all(&root).ok();
         assert_eq!(found, Some(install));
     }
 
     #[test]
     fn a_wegame_root_without_a_game_data_folder_yields_nothing() {
         let root = std::env::temp_dir().join(format!("vinciskin-cn-empty-{}", std::process::id()));
-        std::fs::create_dir_all(&root).unwrap();
+        fs::create_dir_all(&root).unwrap();
 
         let found = find_in_wegame_root(&root);
 
-        std::fs::remove_dir_all(&root).ok();
+        fs::remove_dir_all(&root).ok();
         assert_eq!(found, None);
     }
 }

@@ -11,6 +11,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+use fs_err as fs;
 use parking_lot::Mutex;
 use serde::Deserialize;
 
@@ -102,7 +103,7 @@ fn load_token(path: Option<&Path>) -> String {
         return token();
     };
 
-    if let Ok(held) = std::fs::read_to_string(path) {
+    if let Ok(held) = fs::read_to_string(path) {
         let held = held.trim();
         if held.len() >= 16 {
             return held.to_owned();
@@ -111,9 +112,9 @@ fn load_token(path: Option<&Path>) -> String {
 
     let fresh = token();
     if let Some(parent) = path.parent() {
-        let _ = std::fs::create_dir_all(parent);
+        let _ = fs::create_dir_all(parent);
     }
-    let _ = std::fs::write(path, &fresh);
+    let _ = fs::write(path, &fresh);
     fresh
 }
 

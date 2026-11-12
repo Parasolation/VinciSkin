@@ -11,6 +11,7 @@
 
 use std::path::PathBuf;
 
+use fs_err as fs;
 use serde_json::Value;
 
 use vinciskin_core::config::Config;
@@ -77,7 +78,7 @@ fn candidates(config: &Config) -> Vec<PathBuf> {
 /// closed.
 pub fn endpoint(config: &Config) -> Option<Endpoint> {
     for path in candidates(config) {
-        let Ok(text) = std::fs::read_to_string(&path) else {
+        let Ok(text) = fs::read_to_string(&path) else {
             continue;
         };
         if let Some(endpoint) = parse_lockfile(&text) {
