@@ -3401,7 +3401,7 @@ and Flat as the layout.
 A WAD archive stores a path hash and not a path, so the manager needs a hash table to show
 a name.
 
-The manager integrates the mimir shared cache for this. Read `VinciSkin/VinciSkin`
+The manager integrates the mimir shared cache for this. Read `Vinnnnnci/VinciSkin`
 issue **#326**.
 
 | Concern | What the mimir cache gives                                       |

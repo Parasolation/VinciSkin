@@ -22,7 +22,7 @@ No additional system dependencies required beyond Rust and Node.js.
 ## Getting Started
 
 ```bash
-git clone https://github.com/VinciSkin/VinciSkin.git
+git clone https://github.com/Vinnnnnci/VinciSkin.git
 cd vinciskin
 pnpm install
 ```

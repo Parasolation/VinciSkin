@@ -6,9 +6,9 @@
 - **Crates:** `vinciskin-core`, in `preview/map`
 - **Related:** [ADR-0035](0035-a-skinned-preview-is-a-skinned-mesh-posed-by-a-baked-clip.md), whose
   `vinciskin-asset` buffer forms this one joins. The decision issue is
-  [Bucket grid size and draw radius](https://github.com/VinciSkin/VinciSkin/issues/644),
+  [Bucket grid size and draw radius](https://github.com/Vinnnnnci/VinciSkin/issues/644),
   which holds the measurement, and
-  [VSKM wire format](https://github.com/VinciSkin/VinciSkin/issues/643), which holds the
+  [VSKM wire format](https://github.com/Vinnnnnci/VinciSkin/issues/643), which holds the
   format table.
 
 ## Context and problem statement

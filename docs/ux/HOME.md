@@ -300,7 +300,7 @@ read raw from `main`, so a notice is a reviewed change and the schema is ours:
       "id": "2026-09-patch-26-9",
       "severity": "warning",
       "title": "Patch 26.9: the patcher takes longer to hook",
-      "url": "https://github.com/VinciSkin/VinciSkin/discussions/...",
+      "url": "https://github.com/Vinnnnnci/VinciSkin/discussions/...",
       "publishedAt": "2026-09-01T12:00:00Z",
       "expiresAt": "2026-09-20T00:00:00Z",
       "versions": "<1.16.0"

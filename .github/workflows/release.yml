@@ -16,7 +16,7 @@ jobs:
     name: Build & Release
     runs-on: windows-latest
     if: >
-      github.repository_owner == 'VinciSkin' && (
+      github.repository_owner == 'Vinnnnnci' && (
         github.event_name == 'push' ||
         (github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/v'))
       )
@@ -100,7 +100,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           TAG="${{ steps.version.outputs.tag }}"
-          REPO="https://github.com/VinciSkin/VinciSkin"
+          REPO="https://github.com/Vinnnnnci/VinciSkin"
           SETUP="LTK.Manager_${VERSION}_x64-setup.exe"
           WRITTEN="docs/releases/$VERSION.md"
 

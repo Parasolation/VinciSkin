@@ -12,7 +12,7 @@ jobs:
   prepare:
     name: Create Release PR
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'VinciSkin'
+    if: github.repository_owner == 'Vinnnnnci'
     permissions:
       contents: write
       pull-requests: write

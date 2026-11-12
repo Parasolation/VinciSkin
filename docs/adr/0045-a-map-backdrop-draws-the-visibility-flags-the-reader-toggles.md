@@ -5,7 +5,7 @@
 - **Crates:** none. The rule is frontend, in `src/modules/viewport/assets/parsing/mapBuffer.ts`
 - **Related:** Supersedes the layer sentence of
   [ADR-0044](0044-a-map-backdrop-ships-in-one-buffer.md), which drew layer 0 alone.
-  [A variant at mask 255 stacks in every layer](https://github.com/VinciSkin/VinciSkin/issues/653)
+  [A variant at mask 255 stacks in every layer](https://github.com/Vinnnnnci/VinciSkin/issues/653)
   holds the visibility controllers, which this decision leaves out.
 
 ## Context and problem statement

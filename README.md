@@ -12,8 +12,8 @@ One of the main goals is to support mods so they work indefinitely without break
 If you make mods, the built-in **Workshop** is where you browse the game's files, edit your mod
 and pack it, without leaving the window.
 
-[![Releases](https://img.shields.io/github/v/release/VinciSkin/VinciSkin?style=for-the-badge)](https://github.com/VinciSkin/VinciSkin/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/VinciSkin/VinciSkin/total?style=for-the-badge)](https://github.com/VinciSkin/VinciSkin/releases)
+[![Releases](https://img.shields.io/github/v/release/Vinnnnnci/VinciSkin?style=for-the-badge)](https://github.com/Vinnnnnci/VinciSkin/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/Vinnnnnci/VinciSkin/total?style=for-the-badge)](https://github.com/Vinnnnnci/VinciSkin/releases)
 [![Windows 10+](https://img.shields.io/badge/Windows-10+-0078D4?style=for-the-badge&logo=windows)](#download)
 [![Discord](https://img.shields.io/badge/Discord-join-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/yhzDVRyQex)
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)](LICENSE)
@@ -28,7 +28,7 @@ and pack it, without leaving the window.
 
 ## Download
 
-1. Get the latest installer from the [Releases page](https://github.com/VinciSkin/VinciSkin/releases/latest),
+1. Get the latest installer from the [Releases page](https://github.com/Vinnnnnci/VinciSkin/releases/latest),
    the `-setup.exe`.
 2. Run it and open **VinciSkin**.
 3. On first launch the app looks for your League of Legends installation. If it cannot find
@@ -147,7 +147,7 @@ what it holds, change what it declares, test it in game and pack it.
   questions and find mods.
 - **Wiki** - [wiki.leaguetoolkit.dev](https://wiki.leaguetoolkit.dev) has guides on installing
   and making mods.
-- **Found a bug?** - [Open an issue](https://github.com/VinciSkin/VinciSkin/issues/new/choose).
+- **Found a bug?** - [Open an issue](https://github.com/Vinnnnnci/VinciSkin/issues/new/choose).
   The app writes a log at `%APPDATA%\com.vinciskin.app\logs\vinciskin.log`, and
   attaching it helps.
 - **Other tools** - [awesome-league](https://github.com/LeagueToolkit/awesome-league) lists the
@@ -168,7 +168,7 @@ infrastructure, and it buys no features.
 
 If you paid somebody for a copy of VinciSkin, that payment did not reach the project. The
 official build is the `-setup.exe` on the
-[Releases page](https://github.com/VinciSkin/VinciSkin/releases/latest).
+[Releases page](https://github.com/Vinnnnnci/VinciSkin/releases/latest).
 
 ## License
 

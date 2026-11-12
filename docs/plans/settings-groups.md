@@ -603,7 +603,7 @@ Phase 4c added its own:
 | The window raise  | `handle_argv` alone | `raise_main_window`, called at delivery. At arrival a cold start would show an unpainted window for as long as React takes to boot                                |
 | `DeepLinkRequest` | Rust-internal       | Serialized too, because the held link is returned by a command rather than emitted. Internally tagged, so the event payloads keep the shape the frontend reads    |
 
-Tracked as a single `area: frontend`, `type: ux` issue in `VinciSkin/VinciSkin`, linking this
+Tracked as a single `area: frontend`, `type: ux` issue in `Vinnnnnci/VinciSkin`, linking this
 plan and the design document, with a four-item checklist each PR ticks.
 
 Each phase updates `docs/ux/SETTINGS.md`: the feature row moves to **Available**, and the change

@@ -87,5 +87,5 @@ can read. They are used to fix bugs and for nothing else, and are never sold or 
 
 ### Questions
 
-Open an issue at <https://github.com/VinciSkin/VinciSkin/issues>, or ask in the project's
+Open an issue at <https://github.com/Vinnnnnci/VinciSkin/issues>, or ask in the project's
 Discord at <https://discord.gg/yhzDVRyQex>.

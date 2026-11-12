@@ -18,7 +18,7 @@ of the repository's Discussions, which Home lists as news.
       "id": "2026-09-patch-26-9",
       "severity": "warning",
       "title": "Patch 26.9: the patcher takes longer to hook",
-      "url": "https://github.com/VinciSkin/VinciSkin/discussions/220",
+      "url": "https://github.com/Vinnnnnci/VinciSkin/discussions/220",
       "publishedAt": "2026-09-01T12:00:00Z",
       "expiresAt": "2026-09-20T00:00:00Z",
       "versions": "<1.16.0"

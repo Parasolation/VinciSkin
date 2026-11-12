@@ -10,7 +10,7 @@ settle are in the last section.
 
 ## Sources
 
-- Issues #542, #536 and #543 on `VinciSkin/VinciSkin`
+- Issues #542, #536 and #543 on `Vinnnnnci/VinciSkin`
 - `crates/vinciskin-core/src/mods/`, the install, index and library surfaces
 - `crates/vinciskin-core/src/mods/archive/metadata.rs`, the import's extraction
 - `src/modules/library/`, the Library's components and state

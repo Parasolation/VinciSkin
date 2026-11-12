@@ -193,7 +193,7 @@ is the title that is a noun phrase.
 
 ### Issue tracker
 
-Issues live as GitHub issues in `VinciSkin/VinciSkin`, driven through the `gh` CLI. See
+Issues live as GitHub issues in `Vinnnnnci/VinciSkin`, driven through the `gh` CLI. See
 `docs/agents/issue-tracker.md`.
 
 ### Triage labels

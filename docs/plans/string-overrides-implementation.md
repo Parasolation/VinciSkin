@@ -1,7 +1,7 @@
 # String Overrides — Implementation Plan
 
 > Status: **implemented on feature branches** (2026-07-02): league-mod `feat/string-override-application` (pushed; Phase 2 complete incl. tests) and vinciskin `feat/apply-string-overrides` (Phase 3 complete). Remaining: manual E2E (§7 step 3) and the release chain (§7 step 4, gated on PR #138 review).
-> Closes: vinciskin [#123](https://github.com/VinciSkin/VinciSkin/issues/123), league-mod [#97](https://github.com/LeagueToolkit/league-mod/issues/97).
+> Closes: vinciskin [#123](https://github.com/Vinnnnnci/VinciSkin/issues/123), league-mod [#97](https://github.com/LeagueToolkit/league-mod/issues/97).
 > Depends on: league-toolkit [PR #138](https://github.com/LeagueToolkit/league-toolkit/pull/138) (`ltk_rst` API rework) — consumed as a **git dependency on the PR branch** while review is pending (head `d033293` as of 2026-07-02), so development is not blocked on the merge/publish.
 
 ## 1. Current state (verified 2026-07-02)

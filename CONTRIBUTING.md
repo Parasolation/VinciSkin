@@ -5,7 +5,7 @@ reports a bug, builds the app, or works on the code.
 
 ## Reporting a bug
 
-Open an issue from the [issue templates](https://github.com/VinciSkin/VinciSkin/issues/new/choose).
+Open an issue from the [issue templates](https://github.com/Vinnnnnci/VinciSkin/issues/new/choose).
 A report is most useful with:
 
 - The app version, from **Settings > About**

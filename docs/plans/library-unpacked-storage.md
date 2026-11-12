@@ -1,6 +1,6 @@
 # Store library mods as unpacked mod projects under slug directories
 
-Implementation plan for [#348](https://github.com/VinciSkin/VinciSkin/issues/348).
+Implementation plan for [#348](https://github.com/Vinnnnnci/VinciSkin/issues/348).
 
 > **Superseded in part by ADR-0002, ADR-0003 and ADR-0004.** The `.ltk/` directory and
 > `identity.json` are gone — the mod entry in `library.json` is the only record, and the archive
