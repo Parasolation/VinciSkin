@@ -1,193 +1,55 @@
 <div align="center">
-  <a href="https://github.com/LeagueToolkit">
-    <img src="src-tauri/icons/128x128@2x.png" alt="VinciSkin logo" width="96" height="96">
-  </a>
+  <img src="src-tauri/icons/128x128@2x.png" alt="VinciSkin" width="96" height="96">
   <h1>VinciSkin</h1>
+  <p>英雄联盟国服 mod 管理器</p>
 </div>
 
-VinciSkin is the frontier mod manager for League of Legends. Install custom skins, HUDs, maps, audio and much more.
-One of the main goals is to support mods so they work indefinitely without breaking between patches. It is the
-[League Toolkit](https://github.com/LeagueToolkit) team's successor to [cslol-manager](https://github.com/LeagueToolkit/cslol-manager).
+<div align="center">
 
-If you make mods, the built-in **Workshop** is where you browse the game's files, edit your mod
-and pack it, without leaving the window.
-
-[![Releases](https://img.shields.io/github/v/release/Vinnnnnci/VinciSkin?style=for-the-badge)](https://github.com/Vinnnnnci/VinciSkin/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/Vinnnnnci/VinciSkin/total?style=for-the-badge)](https://github.com/Vinnnnnci/VinciSkin/releases)
-[![Windows 10+](https://img.shields.io/badge/Windows-10+-0078D4?style=for-the-badge&logo=windows)](#download)
-[![Discord](https://img.shields.io/badge/Discord-join-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/yhzDVRyQex)
-[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)](LICENSE)
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E7%88%B1%E5%8F%91%E7%94%B5-946ce6?style=for-the-badge)](https://ifdian.net/a/Vinnnnnci)
-
-<div align="center">
-
-**[Download](#download)** · **[Install a mod](#install-a-mod)** · **[Features](#features)** ·
-**[Make your own mods](#make-your-own-mods)** · **[Help](#help)**
+[![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue?style=for-the-badge)](LICENSE)
+[![Windows 10+](https://img.shields.io/badge/Windows-10+-0078D4?style=for-the-badge&logo=windows)](#)
 
 </div>
 
-## Download
+VinciSkin 是一个面向英雄联盟国服的 mod 管理器，只支持 Windows 10 和 11。导入 mod，开关、排序、按一下启动，进游戏就能看到效果。自带的 Workshop 可以在同一个窗口里浏览游戏文件、改 mod、打包。
 
-1. Get the latest installer from the [Releases page](https://github.com/Vinnnnnci/VinciSkin/releases/latest),
-   the `-setup.exe`.
-2. Run it and open **VinciSkin**.
-3. On first launch the app looks for your League of Legends installation. If it cannot find
-   it, pick the game folder yourself.
+## 国服说明
 
-After that, updates take care of themselves. The app checks for new versions and shows you what
-changed before it updates.
+项目基于国服客户端开发和测试，目前只针对国服。
 
-VinciSkin runs on **Windows 10 and 11** (64-bit). macOS and Linux are planned, but not
-available yet.
+个人测试跑了一个月，没有出现异常。但不代表没有风险：它通过补丁修改游戏加载的资源，这类做法不符合 Riot 和腾讯的用户协议，存在封号风险。测试结果只覆盖我自己的环境，不保证你的账号安全。用不用、用哪个号，自己判断。
 
-## Install a mod
+## 功能
 
-1. Download a mod as a `.modpkg` or `.fantome` file.
-2. Drag it onto the VinciSkin window, or press **Import** (`Ctrl+I`) and pick the file.
-3. Turn the mod on and press **Start**. Then launch League the way you always have, and your
-   mods are in the game.
+- 导入 `.modpkg` 和 `.fantome`，拖进窗口即可
+- mod 库：搜索、文件夹、拖拽排序、单个开关
+- 配置档：多套 mod 方案随时切换
+- mod 健康检查：游戏更新后自动检查，能修的修，修不了的说明原因
+- 启动：只启动补丁器，或者一个按钮完成启动
+- Workshop：浏览游戏归档、编辑 bin、改文本、打包 mod
 
-<div align="center">
-  <img src="docs/screenshots/library-import.webp" alt="The Import button on the library toolbar, with its tooltip reading Import mods, Ctrl I" width="600">
-  <p><em>Import sits on the library toolbar and takes a <code>.modpkg</code> or <code>.fantome</code> file.</em></p>
-</div>
+## 赞助
 
-| Format     | What it is                                                                                             |
-| ---------- | ------------------------------------------------------------------------------------------------------ |
-| `.modpkg`  | The League Toolkit mod package. Carries the mod's details, a thumbnail and layers. The recommended one |
-| `.fantome` | The older Fantome format. Recognized and installed the same way                                        |
+软件免费开源，没有付费功能，也不卖授权。如果它帮到了你，可以在爱发电支持：
 
-### Install from a link
+**[https://ifdian.net/a/Vinnnnnci](https://ifdian.net/a/Vinnnnnci)**
 
-A mod site can offer an **Install with VinciSkin** button. Clicking it opens the app and
-installs the mod for you. The first time a link comes from a site you have not used before, the
-app asks before it trusts the site.
+赞助用于代码签名证书和发布开销。如果你是在别处花钱买的，那笔钱没有到我这里，官方版本只在 [Releases](https://github.com/Vinnnnnci/VinciSkin/releases) 发布。
 
-<div align="center">
-  <img src="docs/screenshots/trust-provider.webp" alt="The Install Mod dialog, warning that ultrawidehud.lol is not a trusted provider, with Reject and Trust and install buttons" width="800">
-  <p><em>A link from a new site asks first. Trusting the site lets its links install from then on.</em></p>
-</div>
+## 参考
 
-The sites you trust are listed under **Settings > Library**, where you can remove one again.
+- [LeagueToolkit](https://github.com/LeagueToolkit)：mod 格式、哈希表和补丁器的底层库
+- [cslol-manager](https://github.com/LeagueToolkit/cslol-manager)：上一代 mod 管理器，注入和启动流程参考了它
 
-## Launching League
+## 许可
 
-Out of the box, **Start** runs the patcher and nothing else. You launch League from the Riot
-Client as usual, and the patcher applies your mods when the game loads. This is the flow every
-cslol-manager user knows, and it depends on nothing outside the app.
+代码使用 [GPL-3.0-or-later](LICENSE)。名称和图标见 [TRADEMARK.md](TRADEMARK.md)。内置的补丁器二进制遵循 [LTK Patcher License](LTK-PATCHER-LICENSE.md)。
 
-Switch **Launcher flow** to **Modern** under **Settings > General** and the button becomes
-**Play**. One press builds your mods, starts the patcher and asks the Riot Client to launch
-League. The status bar follows each step, so a Riot Client that takes a few seconds to appear
-never looks like a hang, and it keeps following the game once it is up. The menu beside Play
-launches League on its own, without patching, and closes the game through the Riot Client while
-one is running.
+## 下载
 
-Two settings go with the Modern flow:
-
-- **Hide Riot Client on game start** sends the client's window to the tray once the game is up.
-- **Stop the patcher when the game ends** stops it with the game. It is off by default, so you
-  can play several games in a row on one patch.
-
-The Modern flow is still marked experimental. When the Riot Client refuses a launch, the app
-says why and what to do, and Classic is one setting away.
-
-## Features
-
-- **Mod library** - Your mods as cards you can search, sort into folders and drag to reorder.
-  One switch turns a mod on or off.
-- **Profiles** - Keep several sets of mods and switch between them.
-- **Mod health** - Each mod is checked when it arrives and again after a game patch. What can
-  be repaired is repaired with one press. What cannot says so, so you know to look for a
-  replacement instead of finding out in game.
-- **Launching** - Start the patcher and launch League yourself, or let one **Play** button do
-  the whole thing through the Riot Client. See [Launching League](#launching-league). Teamfight
-  Tactics can be patched too.
-- **Home** - A notice when a game patch breaks something, news from the project, and the
-  release notes of the version you are on.
-- **Diagnostics** - A page of checks on your machine and your game install, for when something
-  goes wrong.
-- **Appearance** - Dark and light themes, your own accent color, an optional backdrop image, and
-  a tray mode that starts with Windows.
-
-## Make your own mods
-
-The **Workshop** is an editor for mod projects, built into the same window. Open a project, read
-what it holds, change what it declares, test it in game and pack it.
-
-- **Browse the game** - Every archive of your installed game as a file tree, with nothing
-  extracted. Open textures and property files in preview tabs, copy a file straight into your
-  mod, or extract it to disk.
-- **Find any game file** - Press `Ctrl+P` and type a name. The search covers every file of the
-  installed game and of your project, and `$` searches the objects declared inside the game's
-  property files.
-- **Bin editor** - Opens a `.bin` as a tree of typed values rather than as text, with field names
-  resolved and the class documentation from the
-  [meta wiki](https://meta-wiki.leaguetoolkit.dev/) a click away.
-- **String overrides** - Replace in-game text per language, in a table.
-- **Problems** - Checks the project for what the game will refuse, such as a texture size or a
-  property type the current patch no longer accepts, and fixes what can be fixed.
-- **Test and Pack** - Test runs the project in game without packing it. Pack writes a `.modpkg`
-  that is ready to share.
-- **Import** - Bring in a `.fantome`, a `.modpkg` or a Git repository as a project.
-
-<div align="center">
-  <img src="docs/screenshots/workshop-game-search.webp" alt="The Workshop search bar listing every neekoloadscreen texture found across the game's archives, with one open in a preview tab" width="800">
-  <p><em>One search box reaches every file of the installed game.</em></p>
-</div>
-
-<div align="center">
-  <img src="docs/screenshots/workshop-wad-browser.webp" alt="The Workshop showing the list of game archives, the file tree of Ashe.wad.client, and a texture open in a preview tab" width="800">
-  <p><em>Game archives open as file trees, and a texture opens as a tab.</em></p>
-</div>
-
-## Help
-
-- **Discord** - [discord.gg/yhzDVRyQex](https://discord.gg/yhzDVRyQex) is where to ask
-  questions and find mods.
-- **Wiki** - [wiki.leaguetoolkit.dev](https://wiki.leaguetoolkit.dev) has guides on installing
-  and making mods.
-- **Found a bug?** - [Open an issue](https://github.com/Vinnnnnci/VinciSkin/issues/new/choose).
-  The app writes a log at `%APPDATA%\com.vinciskin.app\logs\vinciskin.log`, and
-  attaching it helps.
-- **Other tools** - [awesome-league](https://github.com/LeagueToolkit/awesome-league) lists the
-  tools and libraries for working with League files.
-
-### Before you install
-
-- **Use at your own risk.** VinciSkin is not endorsed by or affiliated with Riot Games.
-- **Servers** - Riot-operated servers are supported. Asian servers and Garena are not officially
-  supported and may run into issues.
-
-## Support
-
-VinciSkin is free software. Sponsorship pays for the code signing certificate and the release
-infrastructure, and it buys no features.
-
-- **[Sponsor on 爱发电](https://ifdian.net/a/Vinnnnnci)**
-
-If you paid somebody for a copy of VinciSkin, that payment did not reach the project. The
-official build is the `-setup.exe` on the
-[Releases page](https://github.com/Vinnnnnci/VinciSkin/releases/latest).
-
-## License
-
-VinciSkin is free software under the
-[GNU General Public License v3.0 or later](LICENSE).
-
-The name and logo are covered by [TRADEMARK.md](TRADEMARK.md), which applies to the builds you
-distribute rather than to the code.
-
-The bundled patcher binaries are covered by the [LTK Patcher License](LTK-PATCHER-LICENSE.md).
-If you want to reuse them in a tool of your own, [CONTRIBUTING.md](CONTRIBUTING.md) has the
-short version.
-
-## Contributing
-
-Contributions are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) covers how to report a bug, how to
-build the app from source and how the project is organized.
+安装包发布在 [Releases](https://github.com/Vinnnnnci/VinciSkin/releases) 页面。首个版本还在准备中。
 
 ---
 
-Developed by the **[League Toolkit](https://github.com/LeagueToolkit)** organization.
-Maintained by [@Vinnnnnci](https://github.com/Vinnnnnci).
+问题反馈：[Issues](https://github.com/Vinnnnnci/VinciSkin/issues) · [Discord](https://discord.gg/yhzDVRyQex)
