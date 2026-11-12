@@ -66,6 +66,7 @@ pub struct PatcherStatus {
 }
 
 /// A process handle, kept so the session can be stopped again.
+#[cfg_attr(not(windows), allow(dead_code))]
 #[derive(Clone, Copy)]
 struct Handle(isize);
 
