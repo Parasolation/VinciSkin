@@ -3863,14 +3863,6 @@
       ]
     },
     {
-      "name": "tauri-plugin-window-state",
-      "version": "2.5.0",
-      "url": "https://github.com/tauri-apps/plugins-workspace",
-      "licenses": [
-        45
-      ]
-    },
-    {
       "name": "tauri-runtime",
       "version": "2.12.2",
       "url": "https://github.com/tauri-apps/tauri",
