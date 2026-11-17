@@ -138,9 +138,8 @@ jobs:
         with:
           targets: x86_64-pc-windows-msvc
 
-      # Both restore only. This job runs on `refs/pull/N/merge`, and a cache
-      # written from a pull request ref is unreadable by the next release.
-      # ci.yml's `warm-release-cache` writes these on `main`.
+      # Both restore only. No job writes these keys on `main`, so a release
+      # starts cold.
       - name: Restore pnpm store
         uses: actions/cache/restore@v4
         with:
