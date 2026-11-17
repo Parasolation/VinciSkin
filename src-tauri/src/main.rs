@@ -52,16 +52,7 @@ fn main() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
-        .plugin(tauri_plugin_autostart::Builder::new().build())
-        .plugin(
-            // Persisting visibility state breaks the start-in-tray option
-            tauri_plugin_window_state::Builder::default()
-                .with_state_flags(
-                    tauri_plugin_window_state::StateFlags::all()
-                        & !tauri_plugin_window_state::StateFlags::VISIBLE,
-                )
-                .build(),
-        );
+        .plugin(tauri_plugin_autostart::Builder::new().build());
 
     builder
         /* The preview's pixels come this way rather than over IPC, so an

@@ -12,10 +12,11 @@
     "windows": [
       {
         "title": "VinciSkin",
-        "width": 1200,
-        "height": 800,
+        "width": 1280,
+        "height": 720,
         "minWidth": 900,
         "minHeight": 600,
+        "center": true,
         "decorations": false,
         "resizable": true,
         "transparent": false,
