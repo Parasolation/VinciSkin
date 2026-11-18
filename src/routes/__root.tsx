@@ -26,7 +26,13 @@ import {
   useModStorageToast,
 } from "@/modules/library";
 import { useAppInfo, useCheckSetupRequired } from "@/modules/settings";
-import { DevConsoleLazy, OfficialNoticeDialog, TitleBar, useDevLogStream } from "@/modules/shell";
+import {
+  DevConsoleLazy,
+  OfficialFooterBar,
+  OfficialNoticeDialog,
+  TitleBar,
+  useDevLogStream,
+} from "@/modules/shell";
 import { useDisplayStore } from "@/stores";
 
 /** `promise`, resolving either way, so a failed load still runs what follows it. */
@@ -159,6 +165,7 @@ function RootLayout() {
           <Outlet />
         </div>
       </main>
+      <OfficialFooterBar />
       <LibraryMigrationDialog />
       <ModHealthSweepListener />
       <InstallMismatchDialog />
