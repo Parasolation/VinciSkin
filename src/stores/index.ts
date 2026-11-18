@@ -6,5 +6,6 @@ export * from "./incidentLine";
 export * from "./installMismatch";
 export * from "./modHealthDrawer";
 export * from "./notifications";
+export * from "./officialNotice";
 export * from "./playSession";
 export * from "./workshopLayout";

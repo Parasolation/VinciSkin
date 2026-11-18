@@ -26,7 +26,7 @@ import {
   useModStorageToast,
 } from "@/modules/library";
 import { useAppInfo, useCheckSetupRequired } from "@/modules/settings";
-import { DevConsoleLazy, TitleBar, useDevLogStream } from "@/modules/shell";
+import { DevConsoleLazy, OfficialNoticeDialog, TitleBar, useDevLogStream } from "@/modules/shell";
 import { useDisplayStore } from "@/stores";
 
 /** `promise`, resolving either way, so a failed load still runs what follows it. */
@@ -162,6 +162,7 @@ function RootLayout() {
       <LibraryMigrationDialog />
       <ModHealthSweepListener />
       <InstallMismatchDialog />
+      <OfficialNoticeDialog />
       <Suspense fallback={null}>
         <ProtocolInstallDialogLazy />
         {import.meta.env.DEV && <DevConsoleLazy />}

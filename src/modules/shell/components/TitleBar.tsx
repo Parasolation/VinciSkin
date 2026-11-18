@@ -1,6 +1,7 @@
 import {
   GearIcon,
   MinusIcon,
+  SealCheckIcon,
   SparkleIcon,
   SquareIcon,
   StethoscopeIcon,
@@ -10,7 +11,15 @@ import { Link } from "@tanstack/react-router";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { type ComponentType, useEffect, useRef, useState } from "react";
 
-import { IconButton, MinionIcon, PoroIcon, ScuttleIcon, Separator, Tooltip } from "@/components";
+import {
+  ExternalLink,
+  IconButton,
+  MinionIcon,
+  PoroIcon,
+  ScuttleIcon,
+  Separator,
+  Tooltip,
+} from "@/components";
 import { usePlatformSupport } from "@/hooks";
 import { m } from "@/i18n";
 import { api, type AppInfo, type VerdictKind } from "@/lib/tauri";
@@ -23,6 +32,9 @@ import { cellActive, cellBase, cellInactive, iconLiftClass } from "./cells";
 import { NotificationCenter } from "./NotificationCenter";
 
 const navItems = [{ to: "/cn", label: m.cn_nav_label(), icon: SparkleIcon, exact: false }] as const;
+
+/** Where the official build and its source live, which the badge names. */
+const OFFICIAL_URL = "https://github.com/Vinnnnnci/VinciSkin";
 
 const tabBaseClass = `relative flex h-full items-center gap-1.5 px-3 text-sm font-medium transition-colors hover:bg-surface-700 ${iconLiftClass}`;
 const tabActiveClass = "text-accent-400";
@@ -83,6 +95,22 @@ function incidentDotKind(kind: VerdictKind) {
 function diagnosticsTooltip(pending: number): string {
   if (pending === 0) return m.shell_diagnostics_label();
   return m.shell_diagnostics_pending_label({ count: pending });
+}
+
+/** The permanent mark that says this build is the project's own. */
+function OfficialMark() {
+  return (
+    <Tooltip content={m.shell_official_badge_label()}>
+      <ExternalLink
+        href={OFFICIAL_URL}
+        hideIcon
+        className="text-[0.625rem] leading-none text-surface-500 hover:text-accent-300"
+      >
+        <SealCheckIcon className="h-3 w-3" weight="bold" />
+        <span className="whitespace-nowrap">{m.shell_official_badge_label()}</span>
+      </ExternalLink>
+    </Tooltip>
+  );
 }
 
 const mascotMarks = {
@@ -195,6 +223,7 @@ export function TitleBar({ title = "VinciSkin", appInfo }: TitleBarProps) {
               </span>
             )}
           </div>
+          <OfficialMark />
         </div>
 
         {/* Navigation tabs */}

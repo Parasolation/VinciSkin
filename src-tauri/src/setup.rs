@@ -15,6 +15,12 @@ use vinciskin_core::events::EventSink;
 pub fn run(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     let app_handle = app.handle().clone();
 
+    // The taskbar and the Alt-Tab list read the title, so the build rides in it.
+    if let Some(window) = app_handle.get_webview_window("main") {
+        let version = &app_handle.package_info().version;
+        let _ = window.set_title(&format!("VinciSkin v{version}"));
+    }
+
     #[cfg(debug_assertions)]
     {
         let logging_guards: tauri::State<'_, crate::logging::LoggingGuards> = app_handle.state();
