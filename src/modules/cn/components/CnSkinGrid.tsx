@@ -152,7 +152,9 @@ export function CnSkinGrid({ hero, quality, onlyApplied }: CnSkinGridProps) {
   /* What the champion was last given, which outlives the archive being put back: the page offers
      the same skin again rather than making the reader find it in the table. */
   const lastSkinId =
-    appliedSkinId === null && swap?.lastSkin !== null ? hero.id * 1000 + swap.lastSkin : null;
+    appliedSkinId === null && swap !== null && swap.lastSkin !== null
+      ? hero.id * 1000 + swap.lastSkin
+      : null;
 
   const cards = filterCards(skinCards(skins.data.skins), {
     quality,
