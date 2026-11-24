@@ -227,6 +227,15 @@ fn fingerprint(path: &Path) -> AppResult<Fingerprint> {
     })
 }
 
+/// The skin number currently configured for `character` in the manager's swap records, if any.
+pub fn configured_skin(storage_dir: &Path, character: &str) -> AppResult<Option<u32>> {
+    let records = read_records(storage_dir)?;
+    Ok(records
+        .champions
+        .get(&character.to_ascii_lowercase())
+        .map(|record| record.skin))
+}
+
 /// Every champion this machine has written into, with what the record and the file agree on.
 ///
 /// A champion whose record is gone is still listed while a skin is remembered for it, because
@@ -313,11 +322,7 @@ fn overlay_path(storage_dir: &Path, archive: &str) -> PathBuf {
 }
 
 /// Show `character` the hero's catalog skin `skin_id` by writing the stand-in
-/// into the overlay the injection host serves.
-///
-/// The game's own archive is never touched: the host injects a DLL that
-/// redirects the game's WAD reads into the overlay. The base skin drops the
-/// overlay entry, which is the game's own archive again.
+/// into the overlay the injection host serves (targeting the default `skin0` slot).
 ///
 /// # Errors
 ///
@@ -331,6 +336,26 @@ pub fn overlay_apply(
     skin_id: u32,
     hero_id: u32,
 ) -> AppResult<ChampionSwap> {
+    overlay_apply_to_slot(config, storage_dir, character, skin_id, hero_id, 0)
+}
+
+/// Show `character` the hero's catalog skin `skin_id` by replacing the equipped
+/// skin slot `target_skin_id` (or `skin0` when `target_skin_id` is `0`) in the
+/// overlay archive.
+///
+/// # Errors
+///
+/// Fails when the install cannot be resolved, when the champion has no archive,
+/// when the pick is the install's to refuse, or when the overlay cannot be
+/// written.
+pub fn overlay_apply_to_slot(
+    config: &Config,
+    storage_dir: &Path,
+    character: &str,
+    skin_id: u32,
+    hero_id: u32,
+    target_skin_id: u32,
+) -> AppResult<ChampionSwap> {
     let game_dir = GameDir::resolve(config)?;
     let character = character.to_ascii_lowercase();
     let (archive_name, archive) = champion_archive(&game_dir, &character)?;
@@ -338,10 +363,15 @@ pub fn overlay_apply(
     let skin = skin_number(hero_id, skin_id).ok_or_else(|| {
         AppError::ValidationFailed(format!("skin {skin_id} is not hero {hero_id}'s"))
     })?;
+    let target_skin = if target_skin_id == 0 {
+        0
+    } else {
+        skin_number(hero_id, target_skin_id).unwrap_or(0)
+    };
 
     let target = overlay_path(storage_dir, &archive_name);
 
-    if skin == 0 {
+    if skin == 0 && target_skin == 0 {
         if target.is_file() {
             fs::remove_file(&target)?;
         }
@@ -354,22 +384,35 @@ pub fn overlay_apply(
         });
     }
 
+    if skin == target_skin {
+        if target.is_file() {
+            fs::remove_file(&target)?;
+        }
+        return Ok(ChampionSwap {
+            character,
+            archive: archive_name,
+            state: SwapState::Applied,
+            skin: Some(skin),
+            last_skin: Some(skin),
+        });
+    }
+
     if !crate::overlay::install_holds_skin(config, &character, skin)? {
         return Err(AppError::ValidationFailed(format!(
             "the install holds no skin {skin} of {character}"
         )));
     }
 
-    let bytes = stand_in(&archive, &character, skin)?;
+    let (actual_target, bytes) = stand_in(&archive, &character, skin, target_skin)?;
     if let Some(parent) = target.parent() {
         fs::create_dir_all(parent)?;
     }
     /* Seeded from the client's own archive, so the overlay file is the whole
-    archive the game reads, with only the classic skin slot replaced. */
+    archive the game reads, with the active equipped skin slot replaced. */
     fs::copy(&archive, &target)?;
     archive::write_chunk(
         &target,
-        WadHash::from(skin_bin_path(&character, 0).as_str()),
+        WadHash::from(skin_bin_path(&character, actual_target).as_str()),
         &bytes,
     )?;
 
@@ -491,7 +534,6 @@ fn archive_changed(path: &Path, original: &Fingerprint) -> bool {
                 .and_then(|time| time.duration_since(std::time::UNIX_EPOCH).ok())
                 .map(|since| since.as_nanos() as i64)
                 .unwrap_or(0);
-
             metadata.len() != original.size || modified != original.modified
         }
         Err(_) => true,
@@ -793,11 +835,15 @@ pub fn forget_pack(storage_dir: &Path, archive: &str) -> AppResult<()> {
     write_pack_records(storage_dir, &records)
 }
 
-/// The bytes a champion's `skin0.bin` should hold to show skin `skin` of that same champion.
+/// The bytes a champion's `skin<target>.bin` should hold to show skin `skin` of that same champion.
 ///
-/// The two objects that skin is loaded out of, renamed onto the base skin, which is what the
-/// overlay's built-in mod writes and what a swap writes here.
-fn stand_in(archive: &Path, character: &str, skin: u32) -> AppResult<Vec<u8>> {
+/// If the target skin's `.bin` does not exist in the archive, falls back to the base `skin0` slot.
+fn stand_in(
+    archive: &Path,
+    character: &str,
+    skin: u32,
+    target_skin: u32,
+) -> AppResult<(u32, Vec<u8>)> {
     let mut wad = ltk_wad::Wad::mount(std::io::BufReader::new(fs::File::open(archive)?))?;
     let hash = WadHash::from(skin_bin_path(character, skin).as_str());
     let chunk = *wad
@@ -806,8 +852,19 @@ fn stand_in(archive: &Path, character: &str, skin: u32) -> AppResult<Vec<u8>> {
         .ok_or_else(|| AppError::ValidationFailed(format!("{character} holds no skin {skin}")))?;
     let bytes = wad.load_chunk_decompressed(&chunk)?;
 
+    let actual_target = if target_skin != 0
+        && wad
+            .chunks()
+            .get(WadHash::from(skin_bin_path(character, target_skin).as_str()))
+            .is_none()
+    {
+        0
+    } else {
+        target_skin
+    };
+
     let content = SkinContent::parse(character, skin, &bytes).ok_or_else(|| {
         AppError::ValidationFailed(format!("skin {skin} of {character} holds no skin to copy"))
     })?;
-    content.renamed_to(0)
+    Ok((actual_target, content.renamed_to(actual_target)?))
 }

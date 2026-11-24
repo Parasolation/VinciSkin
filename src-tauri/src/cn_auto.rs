@@ -1,10 +1,5 @@
-//! Applies the skin the client's champ-select shows, without a click.
-//!
-//! The client already knows which champion and skin the local player has picked
-//! and publishes both over its own local API. This module follows that session:
-//! whenever the pick changes, the overlay the injection host serves is rebuilt
-//! for the new skin, so walking into a game carries whatever was picked on the
-//! carousel. No click in the manager is needed.
+//! Applies the manager's configured skin onto whichever skin slot the client's
+//! champ-select currently has equipped (default skin, owned skin, or chroma).
 //!
 //! Reading the API needs the lockfile the client writes at startup, which the
 //! Chinese install does not leave behind. Where it is missing, a small plugin
@@ -30,7 +25,7 @@ use crate::mods::ModLibraryState;
 use crate::pengu;
 use crate::state::SettingsState;
 use vinciskin_core::cn_catalog::{fetch_heroes, GtimgCdn, HeroCatalog};
-use vinciskin_core::static_swap::overlay_apply;
+use vinciskin_core::static_swap::{configured_skin, overlay_apply_to_slot};
 
 /// How long between session reads. The client answers in milliseconds; this is
 /// the floor, and what keeps a pick that changes every second from queueing
@@ -46,7 +41,7 @@ const USER_AGENT: &str = concat!("vinciskin/", env!("CARGO_PKG_VERSION"));
 pub struct AutoApplied {
     /// The champion whose overlay was rebuilt.
     pub champion_id: u32,
-    /// The skin the client had selected.
+    /// The desired skin that was applied onto the equipped slot.
     pub skin_id: u32,
     /// The champion archive the overlay was written for, as the page names it.
     pub character: String,
@@ -178,7 +173,8 @@ fn follow(
 ) {
     tracing::info!("auto-swap watcher started");
 
-    let mut last: Option<(u32, u32)> = None;
+    let mut last: Option<(u32, u32, u32)> = None;
+
     while running.load(Ordering::SeqCst) {
         match tick(app_handle, &mut last, bridge.as_ref()) {
             Ok((current, applied)) => set(&status, |s| {
@@ -198,10 +194,11 @@ fn follow(
     tracing::info!("auto-swap watcher stopped");
 }
 
-/// One session read: apply the pick if it changed, and say what was applied.
+/// One session read: detect the currently equipped skin in champ-select and
+/// write the manager's configured desired skin onto that exact skin slot.
 fn tick(
     app_handle: &AppHandle,
-    last: &mut Option<(u32, u32)>,
+    last: &mut Option<(u32, u32, u32)>,
     bridge: Option<&Arc<Mutex<Option<Selection>>>>,
 ) -> AppResult<(Option<u32>, Option<AutoApplied>)> {
     let settings = app_handle.state::<SettingsState>();
@@ -223,42 +220,46 @@ fn tick(
         return Ok((current, None));
     }
 
-    /* The client reports its base skin as `<champion>000`, not as zero. Writing
-    that would delete the overlay a reader applied here, so a base-skin session
-    leaves the manager's own choice alone. */
-    let base_skin = selection.champion_id.saturating_mul(1000);
-    if selection.skin_id == base_skin {
-        return Ok((current, None));
-    }
-
-    let key = (selection.champion_id, selection.skin_id);
-    if *last == Some(key) {
-        return Ok((current, None));
-    }
-
     let character = character_for(app_handle, selection.champion_id)?;
     let library = app_handle.state::<ModLibraryState>();
     let storage = library.inner().0.storage_dir(&config)?;
 
-    overlay_apply(
+    // Look up the desired skin the user configured for this champion in VinciSkin.
+    let Some(desired_skin) = configured_skin(&storage, &character)? else {
+        return Ok((current, None));
+    };
+
+    let key = (selection.champion_id, selection.skin_id, desired_skin);
+    if *last == Some(key) {
+        return Ok((current, None));
+    }
+
+    let desired_skin_id = selection
+        .champion_id
+        .saturating_mul(1000)
+        .saturating_add(desired_skin);
+
+    overlay_apply_to_slot(
         &config,
         &storage,
         &character,
-        selection.skin_id,
+        desired_skin_id,
         selection.champion_id,
+        selection.skin_id,
     )?;
     *last = Some(key);
 
     let applied = AutoApplied {
         champion_id: selection.champion_id,
-        skin_id: selection.skin_id,
+        skin_id: desired_skin_id,
         character,
     };
     let _ = app_handle.emit("cn-auto-swap-applied", &applied);
     tracing::info!(
         champion = applied.champion_id,
-        skin = applied.skin_id,
-        "auto-applied a skin"
+        desired_skin = applied.skin_id,
+        equipped_slot = selection.skin_id,
+        "auto-applied configured skin onto equipped slot"
     );
     Ok((current, Some(applied)))
 }
