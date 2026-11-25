@@ -138,6 +138,11 @@ struct Records {
     /// this existed still reads.
     #[serde(default)]
     history: BTreeMap<String, u32>,
+    /// When `false` (default), only the local player's currently picked champion
+    /// stays active in the overlay directory. When `true`, all configured champions
+    /// remain active simultaneously.
+    #[serde(default)]
+    swap_all_champions: bool,
 }
 
 /// Where a manager's storage directory keeps the backups.
@@ -236,6 +241,80 @@ pub fn configured_skin(storage_dir: &Path, character: &str) -> AppResult<Option<
         .map(|record| record.skin))
 }
 
+/// Whether all configured champions remain active in the overlay simultaneously.
+///
+/// Defaults to `false` (only the local player's currently selected champion is kept active).
+pub fn get_swap_all_champions(storage_dir: &Path) -> AppResult<bool> {
+    Ok(read_records(storage_dir)?.swap_all_champions)
+}
+
+/// Persist whether all configured champions should stay active simultaneously.
+///
+/// When enabled (`true`), any configured champion whose overlay file was previously
+/// pruned by single-champion mode is rebuilt immediately.
+pub fn set_swap_all_champions(
+    config: &Config,
+    storage_dir: &Path,
+    enabled: bool,
+) -> AppResult<bool> {
+    let mut records = read_records(storage_dir)?;
+    records.swap_all_champions = enabled;
+
+    if enabled && !records.champions.is_empty() {
+        let game_dir = GameDir::resolve(config)?;
+        let installed = game_dir.champion_archives()?;
+        for (character, record) in records.champions.iter_mut() {
+            let target = overlay_path(storage_dir, &record.archive);
+            if target.is_file() {
+                continue;
+            }
+            if let Some((_, archive)) = archive_named(&installed, character) {
+                if let Ok((actual_target, bytes)) = stand_in(archive, character, record.skin, 0) {
+                    if let Some(parent) = target.parent() {
+                        fs::create_dir_all(parent)?;
+                    }
+                    fs::copy(archive, &target)?;
+                    archive::write_chunk(
+                        &target,
+                        WadHash::from(skin_bin_path(character, actual_target).as_str()),
+                        &bytes,
+                    )?;
+                    record.original = fingerprint(archive)?;
+                    record.written = fingerprint(&target)?;
+                }
+            }
+        }
+    }
+
+    write_records(storage_dir, &records)?;
+    Ok(enabled)
+}
+
+/// Remove every champion archive in the overlay directory except `keep_character`
+/// (and any third-party skin-pack archives), without deleting `records.json`.
+pub fn overlay_keep_only(storage_dir: &Path, keep_character: Option<&str>) -> AppResult<usize> {
+    let pack_records = read_pack_records(storage_dir)?;
+    let mut removed = 0;
+
+    for archive in overlay_archives(storage_dir)? {
+        if pack_records.packs.contains_key(&archive) {
+            continue;
+        }
+        let stem = archive
+            .strip_prefix("Champions/")
+            .and_then(|name| name.split('.').next());
+        let should_keep = match (keep_character, stem) {
+            (Some(keep), Some(name)) => name.eq_ignore_ascii_case(keep),
+            _ => false,
+        };
+        if !should_keep {
+            remove_overlay(storage_dir, &archive, &mut removed)?;
+        }
+    }
+
+    Ok(removed)
+}
+
 /// Every champion this machine has written into, with what the record and the file agree on.
 ///
 /// A champion whose record is gone is still listed while a skin is remembered for it, because
@@ -281,10 +360,15 @@ pub fn swaps(config: &Config, storage_dir: &Path) -> AppResult<Vec<ChampionSwap>
                 };
             };
 
+            let fallback_state = if records.swap_all_champions {
+                SwapState::Untouched
+            } else {
+                SwapState::Applied
+            };
             ChampionSwap {
                 character: character.clone(),
                 archive: record.archive.clone(),
-                state: overlay_state(storage_dir, record).unwrap_or(SwapState::Untouched),
+                state: overlay_state(storage_dir, record).unwrap_or(fallback_state),
                 skin: Some(record.skin),
                 last_skin,
             }

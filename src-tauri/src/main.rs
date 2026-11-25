@@ -229,6 +229,8 @@ fn main() {
             commands::start_cn_auto_swap,
             commands::stop_cn_auto_swap,
             commands::get_cn_auto_status,
+            commands::get_cn_swap_all_champions,
+            commands::set_cn_swap_all_champions,
             commands::restore_cn_client,
             // for dynamic icons
             tray::set_tray_state,

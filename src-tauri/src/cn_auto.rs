@@ -1,13 +1,10 @@
 //! Applies the manager's configured skin onto whichever skin slot the client's
 //! champ-select currently has equipped (default skin, owned skin, or chroma).
 //!
-//! Reading the API needs the lockfile the client writes at startup, which the
-//! Chinese install does not leave behind. Where it is missing, a small plugin
-//! loaded into the client's page reports the same session over its own event
-//! stream instead.
-//!
-//! The poll runs on its own thread because the overlay write copies a champion
-//! archive and the window that draws the manager must not wait on it.
+//! By default (`swap_all_champions == false`), only the local player's currently
+//! picked champion is kept in the overlay directory so other players' champions
+//! are not swapped. When `swap_all_champions == true`, all configured champions
+//! remain active in the overlay simultaneously.
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
@@ -25,7 +22,9 @@ use crate::mods::ModLibraryState;
 use crate::pengu;
 use crate::state::SettingsState;
 use vinciskin_core::cn_catalog::{fetch_heroes, GtimgCdn, HeroCatalog};
-use vinciskin_core::static_swap::{configured_skin, overlay_apply_to_slot};
+use vinciskin_core::static_swap::{
+    configured_skin, get_swap_all_champions, overlay_apply_to_slot, overlay_keep_only,
+};
 
 /// How long between session reads. The client answers in milliseconds; this is
 /// the floor, and what keeps a pick that changes every second from queueing
@@ -71,10 +70,6 @@ pub struct AutoSwapState {
 
 impl AutoSwapState {
     /// Start following the client's champ-select session.
-    ///
-    /// Starting twice is not an error: the second call is a setting that was
-    /// already on, and the thread it would start already runs. Each run gets a
-    /// token of its own, so a thread a stop raced cannot outlive the run.
     pub fn start(&self, app_handle: &AppHandle) -> AppResult<()> {
         let token = {
             let mut current = self.running.lock();
@@ -96,16 +91,11 @@ impl AutoSwapState {
         let config = app_handle.state::<SettingsState>().config();
         let direct = lcu::endpoint(&config).is_some();
 
-        /* A client whose lockfile answers here is read over its own API, so
-        nothing is loaded into it and no listener is started. */
         let (state, listener) = if direct {
             (None, None)
         } else {
             match bridge::start(token_path.as_deref()) {
                 Ok(bridge) => {
-                    /* The plugin is written before the loader check, so a plugin
-                    that already loaded keeps working even when the registration is
-                    something this app did not write. */
                     if let Err(error) = pengu::prepare(app_handle, bridge.port, &bridge.token) {
                         tracing::warn!("client loader not prepared: {error}");
                     }
@@ -118,8 +108,6 @@ impl AutoSwapState {
             }
         };
 
-        /* A stop that ran while the bridge was being prepared leaves nothing to
-        follow, and the listener it started has to go with it. */
         if !token.load(Ordering::SeqCst) {
             if let Some(bridge) = listener {
                 bridge.stop();
@@ -173,7 +161,7 @@ fn follow(
 ) {
     tracing::info!("auto-swap watcher started");
 
-    let mut last: Option<(u32, u32, u32)> = None;
+    let mut last: Option<(u32, u32, Option<u32>, bool)> = None;
 
     while running.load(Ordering::SeqCst) {
         match tick(app_handle, &mut last, bridge.as_ref()) {
@@ -194,11 +182,12 @@ fn follow(
     tracing::info!("auto-swap watcher stopped");
 }
 
-/// One session read: detect the currently equipped skin in champ-select and
-/// write the manager's configured desired skin onto that exact skin slot.
+/// One session read: detect the currently equipped skin in champ-select,
+/// apply the configured skin onto that slot, and prune other champions when
+/// `swap_all_champions` is disabled.
 fn tick(
     app_handle: &AppHandle,
-    last: &mut Option<(u32, u32, u32)>,
+    last: &mut Option<(u32, u32, Option<u32>, bool)>,
     bridge: Option<&Arc<Mutex<Option<Selection>>>>,
 ) -> AppResult<(Option<u32>, Option<AutoApplied>)> {
     let settings = app_handle.state::<SettingsState>();
@@ -224,15 +213,23 @@ fn tick(
     let library = app_handle.state::<ModLibraryState>();
     let storage = library.inner().0.storage_dir(&config)?;
 
-    // Look up the desired skin the user configured for this champion in VinciSkin.
-    let Some(desired_skin) = configured_skin(&storage, &character)? else {
-        return Ok((current, None));
-    };
+    let swap_all = get_swap_all_champions(&storage)?;
+    let desired_skin = configured_skin(&storage, &character)?;
 
-    let key = (selection.champion_id, selection.skin_id, desired_skin);
+    let key = (selection.champion_id, selection.skin_id, desired_skin, swap_all);
     if *last == Some(key) {
         return Ok((current, None));
     }
+
+    let Some(desired_skin) = desired_skin else {
+        // Current champion has no configured skin: in single-champion mode,
+        // clear any leftover overlay files from previously played champions.
+        if !swap_all {
+            overlay_keep_only(&storage, None)?;
+        }
+        *last = Some(key);
+        return Ok((current, None));
+    };
 
     let desired_skin_id = selection
         .champion_id
@@ -247,6 +244,11 @@ fn tick(
         selection.champion_id,
         selection.skin_id,
     )?;
+
+    if !swap_all {
+        overlay_keep_only(&storage, Some(&character))?;
+    }
+
     *last = Some(key);
 
     let applied = AutoApplied {
@@ -259,15 +261,13 @@ fn tick(
         champion = applied.champion_id,
         desired_skin = applied.skin_id,
         equipped_slot = selection.skin_id,
+        swap_all,
         "auto-applied configured skin onto equipped slot"
     );
     Ok((current, Some(applied)))
 }
 
 /// The champion archive a champion id is named after, from the CDN's own table.
-///
-/// The table is small and read once per watcher run: a pick is minutes apart at
-/// the least, and the answer does not change while a patch is not installed.
 fn character_for(app_handle: &AppHandle, champion_id: u32) -> AppResult<String> {
     let catalog = app_handle.state::<AutoCatalog>();
     let mut heroes = catalog.0.lock();

@@ -23,7 +23,38 @@ export function CnCatalog() {
   const [picked, setPicked] = useState("");
   const [quality, setQuality] = useState("");
   const [onlyApplied, setOnlyApplied] = useState(false);
+  const [swapAllChampions, setSwapAllChampions] = useState(false);
+  const [swapAllBusy, setSwapAllBusy] = useState(false);
   const [packsOpen, setPacksOpen] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    void api.cn.getSwapAllChampions().then((result) => {
+      if (alive && isOk(result)) {
+        setSwapAllChampions(result.value);
+      }
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  async function toggleSwapAllChampions(checked: boolean) {
+    setSwapAllBusy(true);
+    try {
+      const result = await api.cn.setSwapAllChampions(checked);
+      if (isOk(result)) {
+        setSwapAllChampions(result.value);
+        toast.info(
+          result.value ? "已开启：同时替换其他已配英雄" : "已关闭：默认仅替换自己当前英雄",
+        );
+      } else {
+        toast.error("切换换肤范围失败", describeError(result.error).description);
+      }
+    } finally {
+      setSwapAllBusy(false);
+    }
+  }
 
   /* The client's champ-select pick is what the page follows, so the skin the
      reader wants is one click away instead of a search. */
@@ -141,6 +172,21 @@ export function CnCatalog() {
               </label>
             </div>
 
+            <div
+              className="flex items-center gap-2"
+              title="关闭时默认只替换自己当前所选英雄；开启后所有已配置的英雄都会同时生效（队友/对手选到也会换肤）"
+            >
+              <Switch
+                id="cn-swap-all-champions"
+                checked={swapAllChampions}
+                disabled={swapAllBusy}
+                onCheckedChange={(checked) => void toggleSwapAllChampions(checked)}
+              />
+              <label htmlFor="cn-swap-all-champions" className="text-sm text-surface-300">
+                同步替换其他英雄
+              </label>
+            </div>
+
             <Button size="sm" variant="ghost" onClick={() => setPacksOpen((open) => !open)}>
               {m.cn_packs_title()}
             </Button>
@@ -157,7 +203,7 @@ export function CnCatalog() {
           </div>
 
           {/* Packs are page-level rather than champion-level: one carries the archives it names,
-              whichever champion that is. Folded away so the skins keep the height. */}
+              whichever champion is that. Folded away so the skins keep the height. */}
           {packsOpen && <CnSkinPacks />}
 
           <div className="min-h-0 flex-1 overflow-y-auto pr-1">

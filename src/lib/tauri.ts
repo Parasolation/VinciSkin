@@ -764,6 +764,9 @@ export const api = {
     startAutoSwap: () => invokeResult<null>("start_cn_auto_swap"),
     stopAutoSwap: () => invokeResult<null>("stop_cn_auto_swap"),
     autoStatus: () => invokeResult<CnAutoStatus>("get_cn_auto_status"),
+    getSwapAllChampions: () => invokeResult<boolean>("get_cn_swap_all_champions"),
+    setSwapAllChampions: (enabled: boolean) =>
+      invokeResult<boolean>("set_cn_swap_all_champions", { enabled }),
     restoreClient: () => invokeResult<null>("restore_cn_client"),
   },
 

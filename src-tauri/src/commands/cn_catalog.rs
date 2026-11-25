@@ -39,7 +39,7 @@ pub struct CnHero {
     /// The Chinese title, `黑暗之女`.
     pub name: String,
     /// Every search term the client itself indexes the champion by: nickname, title, and the
-    /// full and initial pinyin spellings. This is what lets `亚索`, `疾风剑豪` and `ys` all
+    /// full and initial pinyin spellings. This is what lets `亚索`、`疾风剑豪` and `ys` all
     /// reach the same champion in the search box.
     pub keywords: Vec<String>,
     /// The small square the client lists the champion by, or none where the table's alias is not
@@ -49,6 +49,7 @@ pub struct CnHero {
 
 /// How rare the Chinese client calls a skin, as the page's quality filter names it.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, TS, specta::Type)]
+#[ts(export)]
 #[serde(rename_all = "camelCase")]
 pub enum CnQuality {
     /// No tier word on the entry.
@@ -184,10 +185,6 @@ pub async fn get_cn_static_swaps(app_handle: AppHandle) -> IpcResult<Vec<Champio
 }
 
 /// Show `character` the hero's catalog skin `skin_id` by writing it into the overlay.
-///
-/// The game's own archive is left untouched; the injection host serves the
-/// overlay. The base skin's id drops the overlay entry, which is the same call as
-/// [`restore_cn_static_swap`].
 #[tauri::command]
 #[specta::specta]
 pub async fn apply_cn_static_swap(
@@ -218,8 +215,6 @@ pub async fn restore_cn_static_swap(
 }
 
 /// Forget a champion's swap record without touching its archive.
-///
-/// The way out of a swap the record no longer describes, which is where a game patch leaves one.
 #[tauri::command]
 #[specta::specta]
 pub async fn forget_cn_static_swap(character: String, app_handle: AppHandle) -> IpcResult<()> {
@@ -242,9 +237,6 @@ pub async fn get_cn_skin_packs(app_handle: AppHandle) -> IpcResult<Vec<PackSwap>
 }
 
 /// Write a skin pack the user picked over the install's own champion archives.
-///
-/// The pack is a `.fantome` or a `.wad.client`; what it carries replaces the archives it names,
-/// each backed up first. The returned rows are what now stands written.
 #[tauri::command]
 #[specta::specta]
 pub async fn import_cn_skin_pack(
@@ -287,9 +279,6 @@ pub async fn forget_cn_skin_pack(archive: String, app_handle: AppHandle) -> IpcR
 }
 
 /// Fetch a skin pack from an allowed host and write it over the install's own archives.
-///
-/// The fetch lands under the app data directory and is removed once the write is over; the
-/// address is checked against the hosts a pack is fetched from before anything is requested.
 #[tauri::command]
 #[specta::specta]
 pub async fn download_cn_skin_pack(url: String, app_handle: AppHandle) -> IpcResult<Vec<PackSwap>> {
@@ -350,9 +339,6 @@ fn resolve_resource(app_handle: &AppHandle, file_name: &str) -> AppResult<PathBu
 }
 
 /// Start the injection host over the built overlay.
-///
-/// The host scans for the game and injects the hook DLL, which redirects the
-/// game's WAD reads into `<storage>/overlay`. Nothing is written into the game.
 #[tauri::command]
 pub fn start_cn_patcher(app_handle: AppHandle, patcher: State<PatcherState>) -> IpcResult<()> {
     start_cn_patcher_inner(&app_handle, &patcher).into()
@@ -361,9 +347,6 @@ pub fn start_cn_patcher(app_handle: AppHandle, patcher: State<PatcherState>) -> 
 fn start_cn_patcher_inner(app_handle: &AppHandle, patcher: &State<PatcherState>) -> AppResult<()> {
     let (config, storage) = swap_context(app_handle)?;
 
-    /* An overlay built before a game patch mixes a chunk table with an archive
-    the install has since replaced, which crashes the game, so those files are
-    dropped before the host can serve them. */
     match vinciskin_core::static_swap::overlay_purge_stale(&config, &storage) {
         Ok(0) => {}
         Ok(dropped) => tracing::info!(dropped, "dropped overlays built from the previous install"),
@@ -377,8 +360,6 @@ fn start_cn_patcher_inner(app_handle: &AppHandle, patcher: &State<PatcherState>)
         ));
     }
 
-    /* The loader ships beside the app in a bundled build, and inside it in a
-    portable one, where it is unpacked under the app's own data directory. */
     let loader = match resolve_resource(app_handle, LOADER_EXE_NAME) {
         Ok(path) => path,
         Err(_) => {
@@ -404,10 +385,6 @@ pub fn get_cn_patcher_status(patcher: State<PatcherState>) -> IpcResult<PatcherS
 }
 
 /// Follow the client's champ-select session and apply the skin it shows.
-///
-/// The watcher reads the client's own local API, so no click here is needed for
-/// a picked skin to reach the overlay: walking into a game carries whatever the
-/// carousel showed.
 #[tauri::command]
 pub fn start_cn_auto_swap(app_handle: AppHandle) -> IpcResult<()> {
     let watcher: State<AutoSwapState> = app_handle.state();
@@ -429,14 +406,35 @@ pub fn get_cn_auto_status(app_handle: AppHandle) -> IpcResult<AutoStatus> {
     IpcResult::ok(watcher.status())
 }
 
+/// Whether all configured champions stay active in the overlay simultaneously.
+#[tauri::command]
+pub fn get_cn_swap_all_champions(app_handle: AppHandle) -> IpcResult<bool> {
+    (|| {
+        let (_, storage) = swap_context(&app_handle)?;
+        vinciskin_core::static_swap::get_swap_all_champions(&storage)
+    })()
+    .into()
+}
+
+/// Toggle whether other configured champions also stay active in the overlay.
+#[tauri::command]
+pub async fn set_cn_swap_all_champions(
+    enabled: bool,
+    app_handle: AppHandle,
+) -> IpcResult<bool> {
+    off_thread(move || {
+        let (config, storage) = swap_context(&app_handle)?;
+        vinciskin_core::static_swap::set_swap_all_champions(&config, &storage, enabled)
+    })
+    .await
+}
+
 /// Remove the client loader, so the client starts on its own again.
 #[tauri::command]
 pub fn restore_cn_client() -> IpcResult<()> {
     crate::pengu::disable().into()
 }
 
-/// A CDN failure, as the opaque kind. A new enough catalog to deserve its own
-/// remedy can carry one later; today the message is what a report shows.
 fn unreachable(error: CnError) -> AppError {
     AppError::Other(error.to_string())
 }
@@ -454,7 +452,6 @@ fn hero(hero: Hero) -> CnHero {
 }
 
 fn skin(skin: Skin) -> CnSkin {
-    /* Every read of the entry is taken before `name` moves out of it. */
     let is_chroma = skin.is_chroma();
     let art_url = art(skin.art_url());
     let parent_id = skin.parent_id();
@@ -474,10 +471,6 @@ fn skin(skin: Skin) -> CnSkin {
     }
 }
 
-/// The art URL the frontend may draw, or none.
-///
-/// The CDN is the only host the app's images come from, so a URL naming
-/// anywhere else is dropped here rather than handed to the webview.
 fn art(url: Option<String>) -> Option<String> {
     url.filter(|url| is_trusted_image_url(url))
 }
