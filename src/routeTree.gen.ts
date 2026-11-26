@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as DiagnosticsRouteImport } from './routes/diagnostics'
+import { Route as CnOverlayRouteImport } from './routes/cn-overlay'
 import { Route as CnRouteImport } from './routes/cn'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +23,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const DiagnosticsRoute = DiagnosticsRouteImport.update({
   id: '/diagnostics',
   path: '/diagnostics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CnOverlayRoute = CnOverlayRouteImport.update({
+  id: '/cn-overlay',
+  path: '/cn-overlay',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CnRoute = CnRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cn': typeof CnRoute
+  '/cn-overlay': typeof CnOverlayRoute
   '/diagnostics': typeof DiagnosticsRoute
   '/settings': typeof SettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cn': typeof CnRoute
+  '/cn-overlay': typeof CnOverlayRoute
   '/diagnostics': typeof DiagnosticsRoute
   '/settings': typeof SettingsRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cn': typeof CnRoute
+  '/cn-overlay': typeof CnOverlayRoute
   '/diagnostics': typeof DiagnosticsRoute
   '/settings': typeof SettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cn' | '/diagnostics' | '/settings'
+  fullPaths: '/' | '/cn' | '/cn-overlay' | '/diagnostics' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cn' | '/diagnostics' | '/settings'
-  id: '__root__' | '/' | '/cn' | '/diagnostics' | '/settings'
+  to: '/' | '/cn' | '/cn-overlay' | '/diagnostics' | '/settings'
+  id: '__root__' | '/' | '/cn' | '/cn-overlay' | '/diagnostics' | '/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CnRoute: typeof CnRoute
+  CnOverlayRoute: typeof CnOverlayRoute
   DiagnosticsRoute: typeof DiagnosticsRoute
   SettingsRoute: typeof SettingsRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/diagnostics'
       fullPath: '/diagnostics'
       preLoaderRoute: typeof DiagnosticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cn-overlay': {
+      id: '/cn-overlay'
+      path: '/cn-overlay'
+      fullPath: '/cn-overlay'
+      preLoaderRoute: typeof CnOverlayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cn': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CnRoute: CnRoute,
+  CnOverlayRoute: CnOverlayRoute,
   DiagnosticsRoute: DiagnosticsRoute,
   SettingsRoute: SettingsRoute,
 }

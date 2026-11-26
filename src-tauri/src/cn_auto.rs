@@ -14,12 +14,9 @@ use parking_lot::Mutex;
 use serde::Serialize;
 use tauri::{AppHandle, Emitter, Manager};
 
-use crate::bridge;
 use crate::error::{AppError, AppResult};
 use crate::lcu;
-use crate::lcu::Selection;
 use crate::mods::ModLibraryState;
-use crate::pengu;
 use crate::state::SettingsState;
 use vinciskin_core::cn_catalog::{fetch_heroes, GtimgCdn, HeroCatalog};
 use vinciskin_core::static_swap::{
@@ -65,7 +62,6 @@ pub struct AutoStatus {
 pub struct AutoSwapState {
     running: Mutex<Option<Arc<AtomicBool>>>,
     status: Arc<Mutex<AutoStatus>>,
-    bridge: Mutex<Option<bridge::Bridge>>,
 }
 
 impl AutoSwapState {
@@ -85,58 +81,18 @@ impl AutoSwapState {
             token
         };
 
-        let token_path =
-            crate::state::get_app_data_dir(app_handle).map(|dir| dir.join("bridge-token"));
-
-        let config = app_handle.state::<SettingsState>().config();
-        let direct = lcu::endpoint(&config).is_some();
-
-        let (state, listener) = if direct {
-            (None, None)
-        } else {
-            match bridge::start(token_path.as_deref()) {
-                Ok(bridge) => {
-                    if let Err(error) = pengu::prepare(app_handle, bridge.port, &bridge.token) {
-                        tracing::warn!("client loader not prepared: {error}");
-                    }
-                    (Some(Arc::clone(&bridge.state)), Some(bridge))
-                }
-                Err(error) => {
-                    tracing::warn!("client bridge listener failed: {error}");
-                    (None, None)
-                }
-            }
-        };
-
-        if !token.load(Ordering::SeqCst) {
-            if let Some(bridge) = listener {
-                bridge.stop();
-            }
-            return Ok(());
-        }
-
-        *self.bridge.lock() = listener;
-
         let running = Arc::clone(&token);
         let status = Arc::clone(&self.status);
         let handle = app_handle.clone();
 
-        std::thread::spawn(move || follow(&handle, running, status, state));
+        std::thread::spawn(move || follow(&handle, running, status));
         Ok(())
     }
 
-    /// Stop following the session, and stop the client loading the bridge.
+    /// Stop following the session.
     pub fn stop(&self) {
         if let Some(token) = self.running.lock().take() {
             token.store(false, Ordering::SeqCst);
-        }
-
-        if let Some(bridge) = self.bridge.lock().take() {
-            bridge.stop();
-        }
-
-        if let Err(error) = pengu::disable() {
-            tracing::warn!("could not remove the client loader: {error}");
         }
     }
 
@@ -157,14 +113,13 @@ fn follow(
     app_handle: &AppHandle,
     running: Arc<AtomicBool>,
     status: Arc<Mutex<AutoStatus>>,
-    bridge: Option<Arc<Mutex<Option<Selection>>>>,
 ) {
     tracing::info!("auto-swap watcher started");
 
     let mut last: Option<(u32, u32, Option<u32>, bool)> = None;
 
     while running.load(Ordering::SeqCst) {
-        match tick(app_handle, &mut last, bridge.as_ref()) {
+        match tick(app_handle, &mut last) {
             Ok((current, applied)) => set(&status, |s| {
                 s.error = None;
                 s.current_champion = current;
@@ -188,18 +143,36 @@ fn follow(
 fn tick(
     app_handle: &AppHandle,
     last: &mut Option<(u32, u32, Option<u32>, bool)>,
-    bridge: Option<&Arc<Mutex<Option<Selection>>>>,
 ) -> AppResult<(Option<u32>, Option<AutoApplied>)> {
     let settings = app_handle.state::<SettingsState>();
     let config = settings.config();
 
-    let selection = match lcu::endpoint(&config) {
-        Some(endpoint) => lcu::selection(endpoint),
-        None => bridge.and_then(|state| *state.lock()),
+    let Some(endpoint) = lcu::endpoint(&config) else {
+        // No client is up, so the last pick is out of date for the next session.
+        *last = None;
+        crate::cn_overlay::sync(app_handle, None);
+        return Ok((None, None));
     };
 
+    let phase = lcu::gameflow_phase(endpoint.clone());
+    let selection = lcu::selection(endpoint);
+
+    let in_game = matches!(
+        phase.as_deref(),
+        Some("GameStart" | "InProgress" | "Reconnect")
+    );
+    let overlay_champion = if in_game {
+        None
+    } else {
+        selection
+            .as_ref()
+            .filter(|s| s.champion_id != 0)
+            .map(|s| s.champion_id)
+    };
+    crate::cn_overlay::sync(app_handle, overlay_champion);
+
     let Some(selection) = selection else {
-        // No client is up, so the last pick is out of date for the next session.
+        // No champ-select session is open.
         *last = None;
         return Ok((None, None));
     };

@@ -1,7 +1,7 @@
 {
   "identifier": "default",
   "description": "Default capabilities for VinciSkin",
-  "windows": ["main"],
+  "windows": ["main", "cn-overlay"],
   "permissions": [
     "core:default",
     "core:window:allow-minimize",

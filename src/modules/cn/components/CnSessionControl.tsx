@@ -19,17 +19,16 @@ function followLabel(status: CnAutoStatus | null): string {
 }
 
 /**
- * The skin session's two halves, one button each.
+ * The skin session's controls.
  *
- * The loader serves the overlay to the game, and the watcher keeps that overlay
- * on the champion the client picked. Nothing else ties the two together.
+ * The loader serves the overlay to the game, and the champ-select watcher runs
+ * permanently in the background to keep that overlay on the picked champion.
  */
 export function CnSessionControl() {
   const toast = useToast();
   const [patcher, setPatcher] = useState<CnPatcherStatus | null>(null);
   const [auto, setAuto] = useState<CnAutoStatus | null>(null);
   const [injectBusy, setInjectBusy] = useState(false);
-  const [skinBusy, setSkinBusy] = useState(false);
   const [restoreBusy, setRestoreBusy] = useState(false);
 
   useEffect(() => {
@@ -51,7 +50,6 @@ export function CnSessionControl() {
   }, []);
 
   const injectRunning = patcher?.running ?? false;
-  const skinRunning = auto?.running ?? false;
 
   /* The poll verifies this within seconds, but without it a second press
      inside that window acts on the state from before the command. */
@@ -70,24 +68,6 @@ export function CnSessionControl() {
       toast.error(title, errorMessage(error));
     } finally {
       setInjectBusy(false);
-    }
-  }
-
-  async function toggleSkin() {
-    setSkinBusy(true);
-    try {
-      if (skinRunning) {
-        unwrap(await api.cn.stopAutoSwap());
-        setAuto({ running: false, currentChampion: null, applied: null, error: null });
-      } else {
-        unwrap(await api.cn.startAutoSwap());
-        setAuto({ running: true, currentChampion: null, applied: null, error: null });
-      }
-    } catch (error: unknown) {
-      const title = skinRunning ? m.cn_auto_stop_failed_title() : m.cn_auto_failed_title();
-      toast.error(title, errorMessage(error));
-    } finally {
-      setSkinBusy(false);
     }
   }
 
@@ -120,15 +100,6 @@ export function CnSessionControl() {
           onClick={toggleInject}
         >
           {injectRunning ? m.cn_inject_stop_action() : m.cn_inject_start_action()}
-        </Button>
-        <Button
-          size="sm"
-          variant={skinRunning ? "outline" : "default"}
-          disabled={skinBusy}
-          loading={skinBusy}
-          onClick={toggleSkin}
-        >
-          {skinRunning ? m.cn_auto_stop_action() : m.cn_auto_start_action()}
         </Button>
       </div>
     </div>

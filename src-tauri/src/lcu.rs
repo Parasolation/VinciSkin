@@ -31,6 +31,9 @@ const LOCKFILES: [&str; 3] = [
 /// The one champ-select endpoint this module reads, and the only scope it needs.
 const SESSION: &str = "/lol-champ-select/v1/session";
 
+/// The gameflow phase endpoint used to detect when champ select ends or the game starts.
+const GAMEFLOW_PHASE: &str = "/lol-gameflow/v1/gameflow-phase";
+
 /// The endpoint of a running client: the loopback port it answers on and the
 /// password the lockfile hands out for this run.
 #[derive(Debug, Clone)]
@@ -147,6 +150,13 @@ pub fn selection(endpoint: Endpoint) -> Option<Selection> {
             .and_then(Value::as_u64)
             .unwrap_or(0) as u32,
     })
+}
+
+/// The current League client gameflow phase (e.g. `"ChampSelect"`, `"GameStart"`, `"InProgress"`).
+pub fn gameflow_phase(endpoint: Endpoint) -> Option<String> {
+    get(endpoint, GAMEFLOW_PHASE)?
+        .as_str()
+        .map(ToOwned::to_owned)
 }
 
 /// One GET against the client, answered as parsed JSON.

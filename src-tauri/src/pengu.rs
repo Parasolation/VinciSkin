@@ -142,9 +142,10 @@ fn enable(dir: &Path) -> AppResult<()> {
     /* The entry runs the DLL rather than the loader's window executable: the
     executable starts in place of the client and only shows its own window, so
     the client never comes up while it is the registered debugger. */
+    let escaped = value.replace('"', r#"\""#);
     run_elevated(
         "reg.exe",
-        &format!(r#"add "{IFEO_KEY}" /v Debugger /t REG_SZ /d "{value}" /f"#),
+        &format!(r#"add "{IFEO_KEY}" /v Debugger /t REG_SZ /d "{escaped}" /f"#),
     )?;
 
     match registered()? {

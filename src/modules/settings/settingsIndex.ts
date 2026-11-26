@@ -25,6 +25,7 @@ export interface SettingEntry {
 const INDEX = [
   { id: "general.leaguePath", key: "leaguePath", title: "Installation path" },
   { id: "general.launchMode", key: "launchMode", title: "Launcher flow" },
+  { id: "general.cnOverlaySide", key: "cnOverlaySide", title: "选人浮窗停靠位置" },
   {
     id: "general.hideRiotClientOnLaunch",
     key: "hideRiotClientOnLaunch",

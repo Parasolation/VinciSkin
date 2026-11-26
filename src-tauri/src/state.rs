@@ -139,6 +139,16 @@ pub enum LaunchMode {
     Modern,
 }
 
+/// Which side of the League client window the champ-select skin overlay docks to.
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default, PartialEq, TS)]
+#[ts(export)]
+#[serde(rename_all = "lowercase")]
+pub enum CnOverlaySide {
+    Left,
+    #[default]
+    Right,
+}
+
 /// Accent color configuration.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, TS)]
 #[ts(export)]
@@ -233,6 +243,9 @@ pub struct Settings {
     /// the "show performance warnings" setting if/when we add one.
     #[serde(default)]
     pub has_seen_hdd_warning: bool,
+    /// Which side of the League client window the champ-select skin overlay docks to.
+    #[serde(default)]
+    pub cn_overlay_side: CnOverlaySide,
 }
 
 impl Default for Settings {
@@ -257,6 +270,7 @@ impl Default for Settings {
             author_profiles: vec![],
             default_author_profile_id: None,
             has_seen_hdd_warning: false,
+            cn_overlay_side: CnOverlaySide::default(),
         }
     }
 }

@@ -2,6 +2,7 @@
 import type { AccentColor } from "./AccentColor";
 import type { AuthorProfile } from "./AuthorProfile";
 import type { BuiltinModSettings } from "./BuiltinModSettings";
+import type { CnOverlaySide } from "./CnOverlaySide";
 import type { LaunchMode } from "./LaunchMode";
 import type { OpenOn } from "./OpenOn";
 import type { Theme } from "./Theme";
@@ -101,7 +102,11 @@ showModTags: boolean, authorProfiles: Array<AuthorProfile>, defaultAuthorProfile
  * we suppress the warning on subsequent patcher starts. Reset by toggling
  * the "show performance warnings" setting if/when we add one.
  */
-hasSeenHddWarning: boolean, leaguePath: string | null, modStoragePath: string | null, 
+hasSeenHddWarning: boolean, 
+/**
+ * Which side of the League client window the champ-select skin overlay docks to.
+ */
+cnOverlaySide: CnOverlaySide, leaguePath: string | null, modStoragePath: string | null, 
 /**
  * Directory where mod projects are stored (for Creator Workshop).
  */

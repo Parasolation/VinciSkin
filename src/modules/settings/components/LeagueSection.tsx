@@ -11,6 +11,7 @@ import {
   Switch,
 } from "@/components";
 import { m } from "@/i18n";
+import type { CnOverlaySide } from "@/lib/bindings";
 import type { LaunchMode, Settings } from "@/lib/tauri";
 import { useAutoDetectLeaguePath, useValidateLeaguePath } from "@/modules/settings/api";
 
@@ -40,6 +41,23 @@ const LAUNCH_MODES: {
     description:
       "Play starts the patcher and then League. One button for the whole thing, driven through the Riot Client.",
     badge: <ExperimentalChip />,
+  },
+];
+
+const OVERLAY_SIDES: {
+  value: CnOverlaySide;
+  title: string;
+  description: string;
+}[] = [
+  {
+    value: "right",
+    title: "客户端右侧外部",
+    description: "选人时浮窗默认贴靠在英雄联盟客户端窗口右侧外边缘（空间不足时自动切到左侧）。",
+  },
+  {
+    value: "left",
+    title: "客户端左侧外部",
+    description: "选人时浮窗默认贴靠在英雄联盟客户端窗口左侧外边缘（空间不足时自动切到右侧）。",
   },
 ];
 
@@ -151,6 +169,32 @@ export function LeagueSection({ settings, onSave }: LeagueSectionProps) {
                 onSave({ ...settings, hideRiotClientOnLaunch: checked })
               }
             />
+          }
+        />
+
+        <SettingRow
+          kind="action"
+          layout="stacked"
+          setting="cnOverlaySide"
+          description="选人跟随检测到英雄时，置顶选肤浮窗贴靠在客户端窗口的哪一侧。"
+          control={
+            <RadioGroup.Root
+              value={settings.cnOverlaySide}
+              onValueChange={(value: unknown) =>
+                onSave({ ...settings, cnOverlaySide: value as CnOverlaySide })
+              }
+            >
+              <RadioGroup.Options>
+                {OVERLAY_SIDES.map((side) => (
+                  <RadioGroup.Card
+                    key={side.value}
+                    value={side.value}
+                    title={side.title}
+                    description={side.description}
+                  />
+                ))}
+              </RadioGroup.Options>
+            </RadioGroup.Root>
           }
         />
       </SettingGroup>

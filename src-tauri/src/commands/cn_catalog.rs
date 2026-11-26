@@ -435,6 +435,13 @@ pub fn restore_cn_client() -> IpcResult<()> {
     crate::pengu::disable().into()
 }
 
+/// Hide the champ-select overlay window for the rest of the current pick.
+#[tauri::command]
+pub fn dismiss_cn_overlay(app_handle: AppHandle) -> IpcResult<()> {
+    crate::cn_overlay::dismiss(&app_handle);
+    IpcResult::ok(())
+}
+
 fn unreachable(error: CnError) -> AppError {
     AppError::Other(error.to_string())
 }

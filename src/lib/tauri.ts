@@ -768,6 +768,7 @@ export const api = {
     setSwapAllChampions: (enabled: boolean) =>
       invokeResult<boolean>("set_cn_swap_all_champions", { enabled }),
     restoreClient: () => invokeResult<null>("restore_cn_client"),
+    dismissOverlay: () => invokeResult<null>("dismiss_cn_overlay"),
   },
 
   // A project's ignore rules, on tauri-specta.

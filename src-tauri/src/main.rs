@@ -5,6 +5,7 @@
 
 mod bridge;
 mod cn_auto;
+mod cn_overlay;
 mod commands;
 mod deep_link;
 mod error;
@@ -232,6 +233,7 @@ fn main() {
             commands::get_cn_swap_all_champions,
             commands::set_cn_swap_all_champions,
             commands::restore_cn_client,
+            commands::dismiss_cn_overlay,
             // for dynamic icons
             tray::set_tray_state,
         ]))

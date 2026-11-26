@@ -51,6 +51,7 @@ function RootLayout() {
   const location = useLocation();
 
   const { data: setupRequired, isLoading: isCheckingSetup } = useCheckSetupRequired();
+  const isOverlayWindow = location.pathname === "/cn-overlay";
 
   const zoomLevel = useDisplayStore((s) => s.zoomLevel);
   const cornerStyle = useDisplayStore((s) => s.cornerStyle);
@@ -143,10 +144,14 @@ function RootLayout() {
   useHotkeys("ctrl+,", () => navigate({ to: "/settings" }), { preventDefault: true });
   // Redirect to settings if setup is required
   useEffect(() => {
-    if (setupRequired && location.pathname !== "/settings") {
+    if (!isOverlayWindow && setupRequired && location.pathname !== "/settings") {
       navigate({ to: "/settings", search: { firstRun: true } });
     }
-  }, [setupRequired, navigate, location.pathname]);
+  }, [isOverlayWindow, setupRequired, navigate, location.pathname]);
+
+  if (isOverlayWindow) {
+    return <Outlet />;
+  }
 
   // Show loading state while checking setup
   if (isCheckingSetup) {

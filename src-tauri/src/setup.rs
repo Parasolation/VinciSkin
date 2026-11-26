@@ -121,6 +121,7 @@ pub fn run(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     app.manage(crate::patcher::PatcherState::default());
     app.manage(crate::cn_auto::AutoSwapState::default());
     app.manage(crate::cn_auto::AutoCatalog::default());
+    app.manage(crate::cn_overlay::CnOverlayState::default());
 
     // Started below the `manage` calls rather than beside the library it
     // maintains: its hashtable sync ends by dropping what the app read out of
@@ -154,6 +155,15 @@ pub fn run(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     // status bar - this only guarantees something is following it.
     std::thread::spawn(move || {
         launcher.follow_current_session();
+    });
+
+    // Keep champ-select follow always-on from app launch.
+    let for_auto_swap = app_handle.clone();
+    std::thread::spawn(move || {
+        let watcher: tauri::State<'_, crate::cn_auto::AutoSwapState> = for_auto_swap.state();
+        if let Err(error) = watcher.start(&for_auto_swap) {
+            tracing::warn!("could not start auto-swap watcher on startup: {error}");
+        }
     });
 
     if let Ok(Some(urls)) = app.deep_link().get_current() {
