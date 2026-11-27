@@ -109,6 +109,42 @@ pub fn dismiss(app_handle: &AppHandle) {
     }
 }
 
+/// Re-open the overlay if the user dismissed it during the current champ select.
+pub fn reveal(app_handle: &AppHandle) {
+    let side = app_handle
+        .state::<SettingsState>()
+        .0
+        .lock()
+        .cn_overlay_side;
+
+    let overlay_state = app_handle.state::<CnOverlayState>();
+    let mut tracker = overlay_state.inner.lock();
+    tracker.dismissed = false;
+    let champ_id = tracker.champion_id;
+    let client_rect = find_league_client_rect();
+    tracker.visible = true;
+    tracker.last_side = Some(side);
+    if client_rect.is_some() {
+        tracker.last_client_rect = client_rect;
+    }
+    drop(tracker);
+
+    let handle = app_handle.clone();
+    let _ = app_handle.run_on_main_thread(move || {
+        let Some(window) = ensure_window(&handle) else {
+            return;
+        };
+        if let Some(rect) = client_rect {
+            dock_beside_rect(&window, rect, side);
+        }
+        let _ = window.show();
+        let _ = window.set_focus();
+        if let Some(id) = champ_id {
+            let _ = window.emit("cn-overlay-champion", id);
+        }
+    });
+}
+
 fn ensure_window(app_handle: &AppHandle) -> Option<WebviewWindow> {
     if let Some(existing) = app_handle.get_webview_window(OVERLAY_LABEL) {
         return Some(existing);

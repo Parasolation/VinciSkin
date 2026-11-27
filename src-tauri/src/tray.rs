@@ -37,6 +37,7 @@ pub fn setup(app: &mut tauri::App) -> tauri::Result<()> {
         })
         .on_menu_event(|app, event| match event.id.as_ref() {
             "toggle-patcher" => toggle_patcher(app),
+            "show-overlay" => crate::cn_overlay::reveal(app),
             "show" => reveal(app),
             "quit" => app.exit(0),
             _ => {}
@@ -72,6 +73,13 @@ fn menu<R: Runtime, M: Manager<R>>(manager: &M) -> tauri::Result<Menu<R>> {
         manager,
         "toggle-patcher",
         "开启/取消注入",
+        true,
+        None::<&str>,
+    )?)?;
+    menu.append(&MenuItem::with_id(
+        manager,
+        "show-overlay",
+        "显示选人浮窗",
         true,
         None::<&str>,
     )?)?;
