@@ -19,7 +19,7 @@ const APPLY_DEBOUNCE_MS = 450;
  */
 export function CnOverlayWindow() {
   const [championId, setChampionId] = useState<number | null>(null);
-  const [selectedSkinId, setSelectedSkinId] = useState<number | null>(null);
+  const [browsedSkinId, setBrowsedSkinId] = useState<number | null>(null);
   const [hoveredChroma, setHoveredChroma] = useState<CnSkin | null>(null);
   const [statusText, setStatusText] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ kind: "success" | "error"; text: string } | null>(
@@ -27,6 +27,7 @@ export function CnOverlayWindow() {
   );
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const activeThumbRef = useRef<HTMLButtonElement | null>(null);
 
   const heroes = useCnHeroes();
   const hero = useMemo(
@@ -73,7 +74,7 @@ export function CnOverlayWindow() {
       clearTimeout(feedbackTimerRef.current);
       feedbackTimerRef.current = null;
     }
-    setSelectedSkinId(null);
+    setBrowsedSkinId(null);
     setHoveredChroma(null);
     setStatusText(null);
     setFeedback(null);
@@ -100,7 +101,7 @@ export function CnOverlayWindow() {
       ? hero.id * 1000 + swap.skin
       : null;
 
-  const effectiveSkinId = selectedSkinId ?? appliedSkinId ?? cards[0]?.skin.skinId ?? null;
+  const effectiveSkinId = browsedSkinId ?? appliedSkinId ?? cards[0]?.skin.skinId ?? null;
 
   const activeCard = useMemo(() => {
     if (effectiveSkinId === null) return cards[0] ?? null;
@@ -127,9 +128,31 @@ export function CnOverlayWindow() {
     const nextCard = cards[nextIndex];
     if (nextCard) {
       setHoveredChroma(null);
-      scheduleApply(nextCard.skin);
+      setBrowsedSkinId(nextCard.skin.skinId);
     }
   }
+
+  useEffect(() => {
+    activeThumbRef.current?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [activeIndex]);
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        stepSkin(-1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        stepSkin(1);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
 
   /* Default featured preview shows the base skin splash; hovering a chroma previews it immediately. */
   const previewEntry: CnSkin | null = hoveredChroma ?? activeCard?.skin ?? null;
@@ -150,8 +173,8 @@ export function CnOverlayWindow() {
   function scheduleApply(picked: CnSkin) {
     if (hero === null) return;
 
-    setSelectedSkinId(picked.skinId);
-    setStatusText("切换中…");
+    setBrowsedSkinId(picked.skinId);
+    setStatusText("应用中…");
     setFeedback(null);
 
     if (debounceRef.current) {
@@ -245,25 +268,44 @@ export function CnOverlayWindow() {
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col">
-          {/* Client-style carousel: left/right arrows + tall 308:560 featured skin card */}
+          {/* Client-style carousel: left/right arrows + clickable 308:560 featured skin card */}
           {previewEntry && (
-            <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden border-b border-amber-500/20 bg-[#010a13] px-10 py-3">
+            <div
+              className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden border-b border-amber-500/20 bg-[#010a13] px-10 py-3"
+              onWheel={(event) => {
+                if (Math.abs(event.deltaY) > 4 || Math.abs(event.deltaX) > 4) {
+                  stepSkin(event.deltaY > 0 || event.deltaX > 0 ? 1 : -1);
+                }
+              }}
+            >
               <button
                 type="button"
                 onClick={() => stepSkin(-1)}
-                title="上一个皮肤"
+                title="上一个皮肤 (←)"
                 className="absolute left-2 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#c8aa6e]/40 bg-[#091428]/85 text-[#c8aa6e] transition hover:border-[#c8aa6e] hover:bg-[#1e2328]"
               >
                 <CaretLeftIcon className="h-5 w-5" weight="bold" />
               </button>
 
-              <div className="relative h-full aspect-[308/560] overflow-hidden rounded-md border border-[#c8aa6e]/60 bg-[#091428] shadow-xl">
+              <button
+                type="button"
+                onClick={() => scheduleApply(activeCard?.skin ?? previewEntry)}
+                title="点击封面应用此皮肤"
+                className={`group relative h-full aspect-[308/560] cursor-pointer overflow-hidden rounded-md border bg-[#091428] text-left shadow-xl transition ${
+                  appliedSkinId === activeCard?.skin.skinId ||
+                  activeCard?.chromas.some((c) => c.skinId === appliedSkinId)
+                    ? "border-[#c8aa6e] ring-1 ring-[#c8aa6e]/50"
+                    : "border-[#c8aa6e]/40 hover:border-[#c8aa6e]"
+                }`}
+              >
                 {previewEntry.artUrl ? (
                   <img
                     src={previewEntry.artUrl}
                     alt={previewEntry.name}
-                    className={`h-full w-full transition-opacity duration-150 ${
-                      hoveredChroma ? "object-contain p-1.5" : "object-cover object-top"
+                    className={`h-full w-full transition duration-150 ${
+                      hoveredChroma
+                        ? "object-contain p-1.5"
+                        : "object-cover object-top group-hover:scale-[1.02]"
                     }`}
                   />
                 ) : (
@@ -271,21 +313,30 @@ export function CnOverlayWindow() {
                     暂无预览图
                   </div>
                 )}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#091428] via-[#091428]/80 to-transparent" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#091428] via-[#091428]/85 to-transparent" />
                 <div className="absolute inset-x-2.5 bottom-2">
                   <div className="truncate text-xs font-semibold text-[#f0e6d2] drop-shadow">
                     {previewEntry.name}
                   </div>
-                  <div className="text-[11px] text-[#c8aa6e]">
-                    {previewEntry.isBase ? "经典原画" : qualityLabel(previewEntry.quality)}
+                  <div className="flex items-center justify-between gap-1 text-[11px]">
+                    <span className="text-[#c8aa6e]">
+                      {previewEntry.isBase ? "经典原画" : qualityLabel(previewEntry.quality)}
+                    </span>
+                    <span className="text-[#a09b8c]">
+                      {appliedSkinId !== null &&
+                      (appliedSkinId === activeCard?.skin.skinId ||
+                        activeCard?.chromas.some((c) => c.skinId === appliedSkinId))
+                        ? "✓ 已应用"
+                        : "点击封面应用"}
+                    </span>
                   </div>
                 </div>
-              </div>
+              </button>
 
               <button
                 type="button"
                 onClick={() => stepSkin(1)}
-                title="下一个皮肤"
+                title="下一个皮肤 (→)"
                 className="absolute right-2 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#c8aa6e]/40 bg-[#091428]/85 text-[#c8aa6e] transition hover:border-[#c8aa6e] hover:bg-[#1e2328]"
               >
                 <CaretRightIcon className="h-5 w-5" weight="bold" />
@@ -376,11 +427,12 @@ export function CnOverlayWindow() {
                 return (
                   <li key={card.skin.skinId} className="shrink-0">
                     <button
+                      ref={isSelected ? activeThumbRef : null}
                       type="button"
                       title={card.skin.name}
                       onClick={() => {
                         setHoveredChroma(null);
-                        scheduleApply(card.skin);
+                        setBrowsedSkinId(card.skin.skinId);
                       }}
                       className={`relative h-14 w-9 overflow-hidden rounded border transition ${
                         isSelected
