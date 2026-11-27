@@ -20,6 +20,7 @@ const APPLY_DEBOUNCE_MS = 450;
 export function CnOverlayWindow() {
   const [championId, setChampionId] = useState<number | null>(null);
   const [selectedSkinId, setSelectedSkinId] = useState<number | null>(null);
+  const [hoveredChroma, setHoveredChroma] = useState<CnSkin | null>(null);
   const [statusText, setStatusText] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<{ kind: "success" | "error"; text: string } | null>(
     null,
@@ -73,6 +74,7 @@ export function CnOverlayWindow() {
       feedbackTimerRef.current = null;
     }
     setSelectedSkinId(null);
+    setHoveredChroma(null);
     setStatusText(null);
     setFeedback(null);
   }, [championId]);
@@ -113,12 +115,8 @@ export function CnOverlayWindow() {
     );
   }, [cards, effectiveSkinId]);
 
-  const activeEntry: CnSkin | null = useMemo(() => {
-    if (!activeCard) return null;
-    return (
-      activeCard.chromas.find((chroma) => chroma.skinId === effectiveSkinId) ?? activeCard.skin
-    );
-  }, [activeCard, effectiveSkinId]);
+  /* Default featured preview shows the base skin splash; hovering a chroma previews it immediately. */
+  const previewEntry: CnSkin | null = hoveredChroma ?? activeCard?.skin ?? null;
 
   function showFeedback(kind: "success" | "error", text: string) {
     if (feedbackTimerRef.current) {
@@ -231,14 +229,16 @@ export function CnOverlayWindow() {
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col">
-          {/* Featured splash preview */}
-          {activeEntry && (
-            <div className="relative h-44 shrink-0 overflow-hidden border-b border-amber-500/20 bg-[#010a13]">
-              {activeEntry.artUrl ? (
+          {/* Featured portrait preview */}
+          {previewEntry && (
+            <div className="relative h-56 shrink-0 overflow-hidden border-b border-amber-500/20 bg-[#010a13]">
+              {previewEntry.artUrl ? (
                 <img
-                  src={activeEntry.artUrl}
-                  alt={activeEntry.name}
-                  className="h-full w-full object-cover object-top transition-opacity duration-200"
+                  src={previewEntry.artUrl}
+                  alt={previewEntry.name}
+                  className={`h-full w-full transition-opacity duration-150 ${
+                    hoveredChroma ? "object-contain p-2" : "object-cover object-top"
+                  }`}
                 />
               ) : (
                 <div className="flex h-full items-center justify-center text-xs text-[#5b5a56]">
@@ -249,10 +249,10 @@ export function CnOverlayWindow() {
               <div className="absolute inset-x-3 bottom-2 flex items-end justify-between gap-2">
                 <div className="min-w-0">
                   <div className="truncate text-sm font-semibold text-[#f0e6d2] drop-shadow">
-                    {activeEntry.name}
+                    {previewEntry.name}
                   </div>
                   <div className="text-[11px] text-[#c8aa6e]">
-                    {activeEntry.isBase ? "经典原画" : qualityLabel(activeEntry.quality)}
+                    {previewEntry.isBase ? "经典原画" : qualityLabel(previewEntry.quality)}
                   </div>
                 </div>
               </div>
@@ -261,10 +261,14 @@ export function CnOverlayWindow() {
 
           {/* Chroma thumbnail strip when the active skin has chromas */}
           {activeCard && activeCard.chromas.length > 0 && (
-            <div className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-amber-500/15 bg-[#0a1428]/80 px-3 py-2">
+            <div
+              className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-amber-500/15 bg-[#0a1428]/80 px-3 py-2"
+              onMouseLeave={() => setHoveredChroma(null)}
+            >
               <button
                 type="button"
                 title={activeCard.skin.name}
+                onMouseEnter={() => setHoveredChroma(null)}
                 onClick={() => scheduleApply(activeCard.skin)}
                 className={`h-8 w-8 overflow-hidden rounded border transition ${
                   effectiveSkinId === activeCard.skin.skinId
@@ -276,7 +280,7 @@ export function CnOverlayWindow() {
                   <img
                     src={activeCard.skin.artUrl}
                     alt={activeCard.skin.name}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover object-top"
                   />
                 ) : (
                   <span className="flex h-full w-full items-center justify-center bg-[#1e2328] text-[10px]">
@@ -291,6 +295,7 @@ export function CnOverlayWindow() {
                     key={chroma.skinId}
                     type="button"
                     title={chroma.name}
+                    onMouseEnter={() => setHoveredChroma(chroma)}
                     onClick={() => scheduleApply(chroma)}
                     className={`h-8 w-8 overflow-hidden rounded border transition ${
                       selected
@@ -303,7 +308,7 @@ export function CnOverlayWindow() {
                         src={chroma.artUrl}
                         alt={chroma.name}
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain"
                       />
                     ) : (
                       <span className="block h-full w-full bg-[#1e2328]" />
@@ -345,7 +350,7 @@ export function CnOverlayWindow() {
                           : "border-[#3c3c41]/80 hover:border-[#c8aa6e]/60"
                       }`}
                     >
-                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#010a13]">
+                      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#010a13]">
                         {card.skin.artUrl ? (
                           <img
                             src={card.skin.artUrl}

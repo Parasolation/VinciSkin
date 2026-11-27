@@ -1,6 +1,7 @@
 import { AlertBox, Button, EmptyState, Spinner, useConfirm, useToast } from "@/components";
 import { describeError, errorSummary, m } from "@/i18n";
 import type { ChampionSwap, CnHero, CnQuality, CnSkin } from "@/lib/tauri";
+import { useState } from "react";
 
 import {
   useApplyCnSkin,
@@ -147,7 +148,7 @@ export function CnSkinGrid({ hero, quality, onlyApplied }: CnSkinGridProps) {
       {cards.length === 0 ? (
         <EmptyState size="sm" title={m.cn_skins_filtered_empty()} />
       ) : (
-        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {cards.map((card) => (
             <SkinCardItem
               key={card.skin.skinId}
@@ -218,6 +219,7 @@ function SkinCardItem({
   onPick,
 }: SkinCardItemProps) {
   const { skin, chromas } = card;
+  const [hoveredChroma, setHoveredChroma] = useState<CnSkin | null>(null);
 
   const chromaOf = (skinId: number | null) =>
     skinId === null ? undefined : chromas.find((chroma) => chroma.skinId === skinId);
@@ -229,21 +231,41 @@ function SkinCardItem({
      and the two are the same skin on an archive that was never put back. */
   const isRemembered = !isApplied && (skin.skinId === lastSkinId || rememberedChroma !== undefined);
 
-  /* A chroma is shown in place of the skin it varies, so the card looks like what the champion
-     would actually wear - what it holds, or what it was last given. */
-  const shown = appliedChroma ?? rememberedChroma ?? skin;
+  /* Default to the skin's own splash art; switch to a chroma only while hovering it. */
+  const shown = hoveredChroma ?? skin;
+  const canClickCard = !(pending || isApplied || (skin.isBase && appliedSkinId === null));
 
   return (
-    <li className="flex flex-col gap-2 rounded-lg border border-surface-700 bg-surface-800 p-2">
-      <div className="aspect-video w-full overflow-hidden rounded-md bg-surface-900">
-        {shown.artUrl && (
-          <img src={shown.artUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
-        )}
-      </div>
+    <li
+      className={`flex flex-col gap-2 rounded-lg border bg-surface-800 p-2 transition ${
+        isApplied ? "border-accent-400 ring-1 ring-accent-400/30" : "border-surface-700"
+      }`}
+    >
+      <button
+        type="button"
+        disabled={!canClickCard}
+        onClick={() => onPick(skin)}
+        className={`group flex flex-col gap-2 text-left ${
+          canClickCard ? "cursor-pointer" : "cursor-default"
+        }`}
+      >
+        <div className="aspect-[3/4] w-full overflow-hidden rounded-md bg-surface-900">
+          {shown.artUrl && (
+            <img
+              src={shown.artUrl}
+              alt=""
+              loading="lazy"
+              className={`h-full w-full transition duration-150 ${
+                hoveredChroma ? "object-contain p-1" : "object-cover object-top group-hover:scale-105"
+              }`}
+            />
+          )}
+        </div>
 
-      <span className="truncate text-meta text-surface-200" title={shown.name}>
-        {shown.name}
-      </span>
+        <span className="w-full truncate text-meta text-surface-200" title={shown.name}>
+          {shown.name}
+        </span>
+      </button>
 
       <div className="flex flex-wrap items-center gap-x-2">
         {skin.isBase ? (
@@ -261,7 +283,7 @@ function SkinCardItem({
         )}
         {isApplied && (
           <span data-ui="cn-applied-badge" className="text-fine text-accent-400">
-            {m.cn_applied_skin_label()}
+            {appliedChroma ? `已应用 · ${appliedChroma.name}` : m.cn_applied_skin_label()}
           </span>
         )}
         {isRemembered && (
@@ -275,6 +297,7 @@ function SkinCardItem({
         <ul
           className="flex flex-wrap gap-1"
           aria-label={m.cn_chroma_count({ count: chromas.length })}
+          onMouseLeave={() => setHoveredChroma(null)}
         >
           {chromas.map((chroma) => (
             <li key={chroma.skinId}>
@@ -283,6 +306,7 @@ function SkinCardItem({
                 title={m.cn_chroma_action({ name: chroma.name })}
                 aria-label={m.cn_chroma_action({ name: chroma.name })}
                 disabled={pending}
+                onMouseEnter={() => setHoveredChroma(chroma)}
                 onClick={() => onPick(chroma)}
                 className={
                   chroma.skinId === appliedSkinId
@@ -295,7 +319,7 @@ function SkinCardItem({
                     src={chroma.artUrl}
                     alt=""
                     loading="lazy"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 ) : (
                   <span className="block h-full w-full bg-surface-700" />
@@ -305,18 +329,6 @@ function SkinCardItem({
           ))}
         </ul>
       )}
-
-      <Button
-        size="xs"
-        variant={isApplied ? "ghost" : "outline"}
-        compact
-        /* The base skin's own card is the way back, so it is only offered once
-           there is something to go back from. */
-        disabled={pending || isApplied || (skin.isBase && appliedSkinId === null)}
-        onClick={() => onPick(skin)}
-      >
-        {skin.isBase ? m.cn_reset_skin_action() : m.cn_apply_skin_action()}
-      </Button>
     </li>
   );
 }
