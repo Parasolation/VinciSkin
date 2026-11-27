@@ -161,22 +161,21 @@ export function TitleBar({ title = "VinciSkin", appInfo }: TitleBarProps) {
       <div className="flex h-full items-center" data-tauri-drag-region>
         <div className="flex shrink-0 items-center gap-2 pr-4 pl-3" data-tauri-drag-region>
           <TitleMark />
-          <div className="flex flex-col" data-tauri-drag-region>
-            <span
-              className="font-display text-sm leading-tight font-bold tracking-tight whitespace-nowrap text-accent-400"
-              data-tauri-drag-region
-            >
+          <Link
+            to="/cn"
+            className="flex flex-col hover:opacity-85"
+            data-tauri-drag-region="false"
+            title="返回主页"
+          >
+            <span className="font-display text-sm leading-tight font-bold tracking-tight whitespace-nowrap text-accent-400">
               {title}
             </span>
             {version && (
-              <span
-                className="text-[0.625rem] leading-none whitespace-nowrap text-surface-500"
-                data-tauri-drag-region
-              >
+              <span className="text-[0.625rem] leading-none whitespace-nowrap text-surface-500">
                 v{version}
               </span>
             )}
-          </div>
+          </Link>
           <OfficialMark />
         </div>
       </div>

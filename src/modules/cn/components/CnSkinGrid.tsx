@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { AlertBox, Button, EmptyState, Spinner, useConfirm, useToast } from "@/components";
 import { describeError, errorSummary, m } from "@/i18n";
 import type { ChampionSwap, CnHero, CnQuality, CnSkin } from "@/lib/tauri";
@@ -22,11 +20,6 @@ interface CnSkinGridProps {
   onlyApplied: boolean;
 }
 
-interface ChromaPreviewState {
-  chroma: CnSkin;
-  siblings: CnSkin[];
-}
-
 /** One champion's skins, read from the table the Chinese client itself ships. */
 export function CnSkinGrid({ hero, quality, onlyApplied }: CnSkinGridProps) {
   const skins = useCnHeroSkins(hero?.id ?? null);
@@ -36,11 +29,6 @@ export function CnSkinGrid({ hero, quality, onlyApplied }: CnSkinGridProps) {
   const forget = useForgetCnSwap();
   const toast = useToast();
   const confirm = useConfirm();
-  const [chromaPreview, setChromaPreview] = useState<ChromaPreviewState | null>(null);
-
-  useEffect(() => {
-    setChromaPreview(null);
-  }, [hero?.id]);
 
   /* One write serves every card, so a card pressed while another is saving is
      held rather than starting a second one. */
@@ -168,153 +156,10 @@ export function CnSkinGrid({ hero, quality, onlyApplied }: CnSkinGridProps) {
               lastSkinId={lastSkinId}
               pending={pending || blocked}
               onPick={pick}
-              onPreviewChroma={(chroma, siblings) => setChromaPreview({ chroma, siblings })}
             />
           ))}
         </ul>
       )}
-
-      {chromaPreview !== null && (
-        <ChromaPreviewModal
-          chroma={chromaPreview.chroma}
-          siblings={chromaPreview.siblings}
-          appliedSkinId={appliedSkinId}
-          pending={pending || blocked}
-          onSelect={(chroma) =>
-            setChromaPreview((prev) => (prev ? { ...prev, chroma } : null))
-          }
-          onClose={() => setChromaPreview(null)}
-          onConfirm={(chroma) => applySkin(chroma, () => setChromaPreview(null))}
-        />
-      )}
-    </div>
-  );
-}
-
-interface ChromaPreviewModalProps {
-  chroma: CnSkin;
-  siblings: CnSkin[];
-  appliedSkinId: number | null;
-  pending: boolean;
-  onSelect: (chroma: CnSkin) => void;
-  onClose: () => void;
-  onConfirm: (chroma: CnSkin) => void;
-}
-
-/** Modal previewing a chroma skin at full size before confirming the swap. */
-function ChromaPreviewModal({
-  chroma,
-  siblings,
-  appliedSkinId,
-  pending,
-  onSelect,
-  onClose,
-  onConfirm,
-}: ChromaPreviewModalProps) {
-  const isApplied = chroma.skinId === appliedSkinId;
-
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape" && !pending) {
-        onClose();
-      }
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [onClose, pending]);
-
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={chroma.name}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-xs"
-      onClick={() => {
-        if (!pending) onClose();
-      }}
-    >
-      <div
-        className="flex w-full max-w-2xl flex-col gap-4 rounded-xl border border-surface-700 bg-surface-800 p-5 shadow-2xl"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h2 className="truncate text-base font-medium text-surface-100">{chroma.name}</h2>
-            <p className="mt-0.5 text-fine text-surface-400">
-              {isApplied ? m.cn_applied_skin_label() : m.cn_apply_skin_confirm_description()}
-            </p>
-          </div>
-          <Button
-            type="button"
-            size="xs"
-            variant="ghost"
-            disabled={pending}
-            onClick={onClose}
-          >
-            ✕
-          </Button>
-        </div>
-
-        <div className="flex max-h-[55vh] min-h-64 w-full items-center justify-center overflow-hidden rounded-lg border border-surface-700 bg-surface-900">
-          {chroma.artUrl ? (
-            <img
-              src={chroma.artUrl}
-              alt={chroma.name}
-              className="max-h-[55vh] w-full object-contain"
-            />
-          ) : (
-            <span className="text-meta text-surface-500">暂无炫彩预览图</span>
-          )}
-        </div>
-
-        {siblings.length > 1 && (
-          <div className="flex flex-wrap gap-2">
-            {siblings.map((item) => {
-              const selected = item.skinId === chroma.skinId;
-              return (
-                <button
-                  key={item.skinId}
-                  type="button"
-                  title={item.name}
-                  disabled={pending}
-                  onClick={() => onSelect(item)}
-                  className={
-                    selected
-                      ? "h-12 w-12 overflow-hidden rounded-md border-2 border-accent-400 ring-2 ring-accent-400/30"
-                      : "h-12 w-12 overflow-hidden rounded-md border border-surface-600 opacity-80 hover:border-accent-400 hover:opacity-100"
-                  }
-                >
-                  {item.artUrl ? (
-                    <img
-                      src={item.artUrl}
-                      alt={item.name}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <span className="block h-full w-full bg-surface-700" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        <div className="flex items-center justify-end gap-2 pt-1">
-          <Button type="button" size="sm" variant="ghost" disabled={pending} onClick={onClose}>
-            取消
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pending || isApplied}
-            onClick={() => onConfirm(chroma)}
-          >
-            {isApplied ? m.cn_applied_skin_label() : m.cn_apply_skin_action()}
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }
@@ -363,7 +208,6 @@ interface SkinCardItemProps {
   lastSkinId: number | null;
   pending: boolean;
   onPick: (skin: CnSkin) => void;
-  onPreviewChroma: (chroma: CnSkin, siblings: CnSkin[]) => void;
 }
 
 function SkinCardItem({
@@ -372,7 +216,6 @@ function SkinCardItem({
   lastSkinId,
   pending,
   onPick,
-  onPreviewChroma,
 }: SkinCardItemProps) {
   const { skin, chromas } = card;
 
@@ -440,7 +283,7 @@ function SkinCardItem({
                 title={m.cn_chroma_action({ name: chroma.name })}
                 aria-label={m.cn_chroma_action({ name: chroma.name })}
                 disabled={pending}
-                onClick={() => onPreviewChroma(chroma, chromas)}
+                onClick={() => onPick(chroma)}
                 className={
                   chroma.skinId === appliedSkinId
                     ? "h-8 w-8 overflow-hidden rounded border-2 border-accent-400"

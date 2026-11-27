@@ -21,7 +21,11 @@ export function CnOverlayWindow() {
   const [championId, setChampionId] = useState<number | null>(null);
   const [selectedSkinId, setSelectedSkinId] = useState<number | null>(null);
   const [statusText, setStatusText] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ kind: "success" | "error"; text: string } | null>(
+    null,
+  );
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const heroes = useCnHeroes();
   const hero = useMemo(
@@ -64,14 +68,22 @@ export function CnOverlayWindow() {
       clearTimeout(debounceRef.current);
       debounceRef.current = null;
     }
+    if (feedbackTimerRef.current) {
+      clearTimeout(feedbackTimerRef.current);
+      feedbackTimerRef.current = null;
+    }
     setSelectedSkinId(null);
     setStatusText(null);
+    setFeedback(null);
   }, [championId]);
 
   useEffect(() => {
     return () => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
+      }
+      if (feedbackTimerRef.current) {
+        clearTimeout(feedbackTimerRef.current);
       }
     };
   }, []);
@@ -108,11 +120,25 @@ export function CnOverlayWindow() {
     );
   }, [activeCard, effectiveSkinId]);
 
+  function showFeedback(kind: "success" | "error", text: string) {
+    if (feedbackTimerRef.current) {
+      clearTimeout(feedbackTimerRef.current);
+      feedbackTimerRef.current = null;
+    }
+    setFeedback({ kind, text });
+    if (kind === "success") {
+      feedbackTimerRef.current = setTimeout(() => {
+        setFeedback(null);
+      }, 2500);
+    }
+  }
+
   function scheduleApply(picked: CnSkin) {
     if (hero === null) return;
 
     setSelectedSkinId(picked.skinId);
     setStatusText("切换中…");
+    setFeedback(null);
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -125,16 +151,30 @@ export function CnOverlayWindow() {
         restore.mutate(
           { alias: targetHero.alias },
           {
-            onSuccess: () => setStatusText("已恢复默认"),
-            onError: (error) => setStatusText(errorSummary(error)),
+            onSuccess: () => {
+              setStatusText("已恢复默认");
+              showFeedback("success", "已恢复默认皮肤");
+            },
+            onError: (error) => {
+              const detail = errorSummary(error);
+              setStatusText(detail);
+              showFeedback("error", `恢复失败：${detail}`);
+            },
           },
         );
       } else {
         apply.mutate(
           { alias: targetHero.alias, heroId: picked.heroId, skinId: picked.skinId },
           {
-            onSuccess: () => setStatusText("已应用"),
-            onError: (error) => setStatusText(errorSummary(error)),
+            onSuccess: () => {
+              setStatusText("已应用");
+              showFeedback("success", `已应用：${picked.name}`);
+            },
+            onError: (error) => {
+              const detail = errorSummary(error);
+              setStatusText(detail);
+              showFeedback("error", `应用失败：${detail}`);
+            },
           },
         );
       }
@@ -219,21 +259,32 @@ export function CnOverlayWindow() {
             </div>
           )}
 
-          {/* Chroma row when the active skin has chromas */}
+          {/* Chroma thumbnail strip when the active skin has chromas */}
           {activeCard && activeCard.chromas.length > 0 && (
             <div className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-amber-500/15 bg-[#0a1428]/80 px-3 py-2">
               <button
                 type="button"
+                title={activeCard.skin.name}
                 onClick={() => scheduleApply(activeCard.skin)}
-                className={`rounded border px-2 py-0.5 text-[11px] transition ${
+                className={`h-8 w-8 overflow-hidden rounded border transition ${
                   effectiveSkinId === activeCard.skin.skinId
-                    ? "border-[#c8aa6e] bg-[#c8aa6e]/20 text-[#f0e6d2]"
-                    : "border-[#3c3c41] bg-[#1e2328] text-[#a09b8c] hover:border-[#c8aa6e]/60"
+                    ? "border-[#c8aa6e] ring-1 ring-[#c8aa6e]/60"
+                    : "border-[#3c3c41] opacity-80 hover:border-[#c8aa6e]/60 hover:opacity-100"
                 }`}
               >
-                原色
+                {activeCard.skin.artUrl ? (
+                  <img
+                    src={activeCard.skin.artUrl}
+                    alt={activeCard.skin.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="flex h-full w-full items-center justify-center bg-[#1e2328] text-[10px]">
+                    原
+                  </span>
+                )}
               </button>
-              {activeCard.chromas.map((chroma, index) => {
+              {activeCard.chromas.map((chroma) => {
                 const selected = effectiveSkinId === chroma.skinId;
                 return (
                   <button
@@ -241,16 +292,37 @@ export function CnOverlayWindow() {
                     type="button"
                     title={chroma.name}
                     onClick={() => scheduleApply(chroma)}
-                    className={`rounded border px-2 py-0.5 text-[11px] transition ${
+                    className={`h-8 w-8 overflow-hidden rounded border transition ${
                       selected
-                        ? "border-[#c8aa6e] bg-[#c8aa6e]/20 text-[#f0e6d2]"
-                        : "border-[#3c3c41] bg-[#1e2328] text-[#a09b8c] hover:border-[#c8aa6e]/60"
+                        ? "border-[#c8aa6e] ring-1 ring-[#c8aa6e]/60"
+                        : "border-[#3c3c41] opacity-80 hover:border-[#c8aa6e]/60 hover:opacity-100"
                     }`}
                   >
-                    炫彩 {index + 1}
+                    {chroma.artUrl ? (
+                      <img
+                        src={chroma.artUrl}
+                        alt={chroma.name}
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="block h-full w-full bg-[#1e2328]" />
+                    )}
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {feedback && (
+            <div
+              className={`shrink-0 border-b px-3 py-1.5 text-xs font-medium ${
+                feedback.kind === "success"
+                  ? "border-emerald-500/30 bg-emerald-950/70 text-emerald-300"
+                  : "border-rose-500/30 bg-rose-950/70 text-rose-300"
+              }`}
+            >
+              {feedback.text}
             </div>
           )}
 
