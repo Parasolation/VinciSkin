@@ -28,7 +28,7 @@
 
 mod app;
 mod bin;
-mod cn_catalog;
+pub(crate) mod cn_catalog;
 mod deep_link;
 mod diagnostics;
 mod document_assets;
