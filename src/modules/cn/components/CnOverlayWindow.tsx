@@ -231,14 +231,12 @@ export function CnOverlayWindow() {
         <div className="flex min-h-0 flex-1 flex-col">
           {/* Featured portrait preview */}
           {previewEntry && (
-            <div className="relative h-56 shrink-0 overflow-hidden border-b border-amber-500/20 bg-[#010a13]">
+            <div className="relative h-64 shrink-0 overflow-hidden border-b border-amber-500/20 bg-[#010a13]">
               {previewEntry.artUrl ? (
                 <img
                   src={previewEntry.artUrl}
                   alt={previewEntry.name}
-                  className={`h-full w-full transition-opacity duration-150 ${
-                    hoveredChroma ? "object-contain p-2" : "object-cover object-top"
-                  }`}
+                  className="h-full w-full object-contain p-1 transition-opacity duration-150"
                 />
               ) : (
                 <div className="flex h-full items-center justify-center text-xs text-[#5b5a56]">
@@ -350,7 +348,7 @@ export function CnOverlayWindow() {
                           : "border-[#3c3c41]/80 hover:border-[#c8aa6e]/60"
                       }`}
                     >
-                      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#010a13]">
+                      <div className="relative aspect-[308/560] w-full overflow-hidden bg-[#010a13]">
                         {card.skin.artUrl ? (
                           <img
                             src={card.skin.artUrl}

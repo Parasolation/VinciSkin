@@ -249,7 +249,7 @@ function SkinCardItem({
           canClickCard ? "cursor-pointer" : "cursor-default"
         }`}
       >
-        <div className="aspect-[3/4] w-full overflow-hidden rounded-md bg-surface-900">
+        <div className="aspect-[308/560] w-full overflow-hidden rounded-md bg-surface-900">
           {shown.artUrl && (
             <img
               src={shown.artUrl}
