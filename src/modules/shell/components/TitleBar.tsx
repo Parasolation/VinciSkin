@@ -2,14 +2,13 @@ import {
   GearIcon,
   MinusIcon,
   SealCheckIcon,
-  SparkleIcon,
   SquareIcon,
   StethoscopeIcon,
   XIcon,
 } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { type ComponentType, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   ExternalLink,
@@ -29,53 +28,10 @@ import { type AppMark, useAppMark, useRollAppMark } from "@/stores";
 import { twMerge } from "@/utils";
 
 import { AppMenu } from "./AppMenu";
-import { cellActive, cellBase, cellInactive, iconLiftClass } from "./cells";
+import { cellActive, cellBase, cellInactive } from "./cells";
 import { NotificationCenter } from "./NotificationCenter";
 
-const navItems = [{ to: "/cn", label: m.cn_nav_label(), icon: SparkleIcon, exact: false }] as const;
-
-const tabBaseClass = `relative flex h-full items-center gap-1.5 px-3 text-sm font-medium transition-colors hover:bg-surface-700 ${iconLiftClass}`;
-const tabActiveClass = "text-accent-400";
-const tabInactiveClass = "text-surface-400 hover:text-surface-200";
-
 const windowControlClass = "h-full w-10 rounded-none text-surface-400 hover:text-surface-200";
-
-function ActiveIndicator() {
-  return (
-    <span className="absolute right-0 bottom-0 left-0 h-0.5 bg-linear-to-r from-accent-500 to-accent-400" />
-  );
-}
-
-function NavLink({
-  to,
-  label,
-  icon: Icon,
-  exact,
-}: {
-  to: string;
-  label: string;
-  icon: ComponentType<{ className?: string }>;
-  exact: boolean;
-}) {
-  return (
-    <Link
-      to={to}
-      activeOptions={{ exact }}
-      activeProps={{ className: twMerge(tabBaseClass, tabActiveClass) }}
-      inactiveProps={{ className: twMerge(tabBaseClass, tabInactiveClass) }}
-    >
-      {({ isActive }) => (
-        <>
-          <span className="relative">
-            <Icon className="h-4 w-4" />
-          </span>
-          {label}
-          {isActive && <ActiveIndicator />}
-        </>
-      )}
-    </Link>
-  );
-}
 
 /**
  * A verdict that reports facts without blaming anything is information. One
@@ -223,13 +179,6 @@ export function TitleBar({ title = "VinciSkin", appInfo }: TitleBarProps) {
           </div>
           <OfficialMark />
         </div>
-
-        {/* Navigation tabs */}
-        <nav className="flex h-full items-center">
-          {navItems.map((item) => (
-            <NavLink key={item.to} {...item} />
-          ))}
-        </nav>
       </div>
 
       {/* Right: the cells that report state, the app menu, and window controls */}
