@@ -11,7 +11,7 @@ import {
   Switch,
 } from "@/components";
 import { m } from "@/i18n";
-import type { CnOverlaySide } from "@/lib/bindings";
+import type { CnOverlayAlign, CnOverlaySide } from "@/lib/bindings";
 import type { LaunchMode, Settings } from "@/lib/tauri";
 import { useAutoDetectLeaguePath, useValidateLeaguePath } from "@/modules/settings/api";
 
@@ -58,6 +58,23 @@ const OVERLAY_SIDES: {
     value: "left",
     title: "客户端左侧外部",
     description: "选人时浮窗默认贴靠在英雄联盟客户端窗口左侧外边缘（空间不足时自动切到右侧）。",
+  },
+];
+
+const OVERLAY_ALIGNS: {
+  value: CnOverlayAlign;
+  title: string;
+  description: string;
+}[] = [
+  {
+    value: "bottom",
+    title: "对齐客户端底部（右下 / 左下）",
+    description: "默认贴在客户端窗口左下角或右下角，不遮挡上方视线。",
+  },
+  {
+    value: "top",
+    title: "对齐客户端顶部（右上 / 左上）",
+    description: "贴在客户端窗口左上角或右上角。",
   },
 ];
 
@@ -191,6 +208,32 @@ export function LeagueSection({ settings, onSave }: LeagueSectionProps) {
                     value={side.value}
                     title={side.title}
                     description={side.description}
+                  />
+                ))}
+              </RadioGroup.Options>
+            </RadioGroup.Root>
+          }
+        />
+
+        <SettingRow
+          kind="action"
+          layout="stacked"
+          setting="cnOverlayAlign"
+          description="选人浮窗贴靠在客户端窗口的底部还是顶部。"
+          control={
+            <RadioGroup.Root
+              value={settings.cnOverlayAlign}
+              onValueChange={(value: unknown) =>
+                onSave({ ...settings, cnOverlayAlign: value as CnOverlayAlign })
+              }
+            >
+              <RadioGroup.Options>
+                {OVERLAY_ALIGNS.map((align) => (
+                  <RadioGroup.Card
+                    key={align.value}
+                    value={align.value}
+                    title={align.title}
+                    description={align.description}
                   />
                 ))}
               </RadioGroup.Options>

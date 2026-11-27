@@ -31,6 +31,7 @@ export function createMockSettings(overrides?: Partial<Settings>): Settings {
     stopPatcherOnSessionEnd: false,
     hasSeenHddWarning: false,
     cnOverlaySide: "right",
+    cnOverlayAlign: "bottom",
     elevateInjector: false,
     autoCategorizationEnabled: true,
     promoteEnabledMods: false,

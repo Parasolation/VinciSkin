@@ -82,6 +82,7 @@ const SETTING_FORMAT: Partial<Record<SettingKey, SettingFormat>> = {
   startInTray: onOff,
   launchMode: titleCase,
   cnOverlaySide: titleCase,
+  cnOverlayAlign: titleCase,
   hideRiotClientOnLaunch: onOff,
   killLeagueHotkey: optional("None", plain),
 

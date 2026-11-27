@@ -149,6 +149,16 @@ pub enum CnOverlaySide {
     Right,
 }
 
+/// Vertical alignment of the champ-select skin overlay relative to the League client window.
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default, PartialEq, TS)]
+#[ts(export)]
+#[serde(rename_all = "lowercase")]
+pub enum CnOverlayAlign {
+    Top,
+    #[default]
+    Bottom,
+}
+
 /// Accent color configuration.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq, TS)]
 #[ts(export)]
@@ -249,6 +259,9 @@ pub struct Settings {
     /// Which side of the League client window the champ-select skin overlay docks to.
     #[serde(default)]
     pub cn_overlay_side: CnOverlaySide,
+    /// Vertical alignment of the champ-select skin overlay relative to the League client window.
+    #[serde(default)]
+    pub cn_overlay_align: CnOverlayAlign,
 }
 
 impl Default for Settings {
@@ -275,6 +288,7 @@ impl Default for Settings {
             default_author_profile_id: None,
             has_seen_hdd_warning: false,
             cn_overlay_side: CnOverlaySide::default(),
+            cn_overlay_align: CnOverlayAlign::default(),
         }
     }
 }

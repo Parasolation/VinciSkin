@@ -2,6 +2,7 @@
 import type { AccentColor } from "./AccentColor";
 import type { AuthorProfile } from "./AuthorProfile";
 import type { BuiltinModSettings } from "./BuiltinModSettings";
+import type { CnOverlayAlign } from "./CnOverlayAlign";
 import type { CnOverlaySide } from "./CnOverlaySide";
 import type { LaunchMode } from "./LaunchMode";
 import type { OpenOn } from "./OpenOn";
@@ -110,7 +111,11 @@ hasSeenHddWarning: boolean,
 /**
  * Which side of the League client window the champ-select skin overlay docks to.
  */
-cnOverlaySide: CnOverlaySide, leaguePath: string | null, modStoragePath: string | null, 
+cnOverlaySide: CnOverlaySide, 
+/**
+ * Vertical alignment of the champ-select skin overlay relative to the League client window.
+ */
+cnOverlayAlign: CnOverlayAlign, leaguePath: string | null, modStoragePath: string | null, 
 /**
  * Directory where mod projects are stored (for Creator Workshop).
  */

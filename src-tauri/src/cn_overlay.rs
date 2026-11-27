@@ -7,7 +7,7 @@
 use parking_lot::Mutex;
 use tauri::{AppHandle, Emitter, Manager, PhysicalPosition, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
 
-use crate::state::{CnOverlaySide, SettingsState};
+use crate::state::{CnOverlayAlign, CnOverlaySide, SettingsState};
 
 const OVERLAY_LABEL: &str = "cn-overlay";
 const OVERLAY_WIDTH: f64 = 360.0;
@@ -26,16 +26,17 @@ struct OverlayTracker {
     dismissed: bool,
     last_client_rect: Option<(i32, i32, i32, i32)>,
     last_side: Option<CnOverlaySide>,
+    last_align: Option<CnOverlayAlign>,
 }
 
 /// Synchronize the overlay window visibility, position, and active champion
 /// with the current champ-select state.
 pub fn sync(app_handle: &AppHandle, champion_id: Option<u32>) {
-    let side = app_handle
-        .state::<SettingsState>()
-        .0
-        .lock()
-        .cn_overlay_side;
+    let (side, align) = {
+        let settings = app_handle.state::<SettingsState>();
+        let guard = settings.0.lock();
+        (guard.cn_overlay_side, guard.cn_overlay_align)
+    };
 
     let overlay_state = app_handle.state::<CnOverlayState>();
     let mut tracker = overlay_state.inner.lock();
@@ -64,10 +65,12 @@ pub fn sync(app_handle: &AppHandle, champion_id: Option<u32>) {
     let client_rect = find_league_client_rect();
     let needs_reposition = needs_show
         || tracker.last_side != Some(side)
+        || tracker.last_align != Some(align)
         || (client_rect.is_some() && client_rect != tracker.last_client_rect);
 
     tracker.visible = true;
     tracker.last_side = Some(side);
+    tracker.last_align = Some(align);
     if client_rect.is_some() {
         tracker.last_client_rect = client_rect;
     }
@@ -81,7 +84,7 @@ pub fn sync(app_handle: &AppHandle, champion_id: Option<u32>) {
 
         if needs_reposition {
             if let Some(rect) = client_rect {
-                dock_beside_rect(&window, rect, side);
+                dock_beside_rect(&window, rect, side, align);
             }
         }
 
@@ -111,11 +114,11 @@ pub fn dismiss(app_handle: &AppHandle) {
 
 /// Re-open the overlay if the user dismissed it during the current champ select.
 pub fn reveal(app_handle: &AppHandle) {
-    let side = app_handle
-        .state::<SettingsState>()
-        .0
-        .lock()
-        .cn_overlay_side;
+    let (side, align) = {
+        let settings = app_handle.state::<SettingsState>();
+        let guard = settings.0.lock();
+        (guard.cn_overlay_side, guard.cn_overlay_align)
+    };
 
     let overlay_state = app_handle.state::<CnOverlayState>();
     let mut tracker = overlay_state.inner.lock();
@@ -124,6 +127,7 @@ pub fn reveal(app_handle: &AppHandle) {
     let client_rect = find_league_client_rect();
     tracker.visible = true;
     tracker.last_side = Some(side);
+    tracker.last_align = Some(align);
     if client_rect.is_some() {
         tracker.last_client_rect = client_rect;
     }
@@ -135,7 +139,7 @@ pub fn reveal(app_handle: &AppHandle) {
             return;
         };
         if let Some(rect) = client_rect {
-            dock_beside_rect(&window, rect, side);
+            dock_beside_rect(&window, rect, side, align);
         }
         let _ = window.show();
         let _ = window.set_focus();
@@ -177,7 +181,12 @@ fn ensure_window(app_handle: &AppHandle) -> Option<WebviewWindow> {
     Some(window)
 }
 
-fn dock_beside_rect(window: &WebviewWindow, rect: (i32, i32, i32, i32), side: CnOverlaySide) {
+fn dock_beside_rect(
+    window: &WebviewWindow,
+    rect: (i32, i32, i32, i32),
+    side: CnOverlaySide,
+    align: CnOverlayAlign,
+) {
     let (left, top, right, bottom) = rect;
     let center_x = (left + right) / 2;
     let center_y = (top + bottom) / 2;
@@ -245,7 +254,11 @@ fn dock_beside_rect(window: &WebviewWindow, rect: (i32, i32, i32, i32), side: Cn
     };
 
     let max_y = (mon_bottom - height).max(mon_top);
-    let y = top.clamp(mon_top, max_y);
+    let target_y = match align {
+        CnOverlayAlign::Top => top,
+        CnOverlayAlign::Bottom => bottom - height,
+    };
+    let y = target_y.clamp(mon_top, max_y);
 
     let _ = window.set_position(PhysicalPosition::new(x, y));
 }

@@ -26,6 +26,7 @@ export type { Category } from "./Category";
 export type { Check } from "./Check";
 export type { CheckDetail } from "./CheckDetail";
 export type { ClassSchema } from "./ClassSchema";
+export type { CnOverlayAlign } from "./CnOverlayAlign";
 export type { CnOverlaySide } from "./CnOverlaySide";
 export type { CnPackProgress } from "./CnPackProgress";
 export type { CnPackStage } from "./CnPackStage";
