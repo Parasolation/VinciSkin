@@ -43,7 +43,7 @@ export function CnOverlayWindow() {
   useEffect(() => {
     let alive = true;
 
-    async function loadInitial() {
+    async function syncChampion() {
       const result = await api.cn.autoStatus();
       if (!alive || !isOk(result)) return;
       if (result.value.currentChampion) {
@@ -51,7 +51,8 @@ export function CnOverlayWindow() {
       }
     }
 
-    void loadInitial();
+    void syncChampion();
+    const pollId = setInterval(() => void syncChampion(), 1000);
 
     const unlistenPromise = listen<number>("cn-overlay-champion", (event) => {
       if (alive) {
@@ -61,6 +62,7 @@ export function CnOverlayWindow() {
 
     return () => {
       alive = false;
+      clearInterval(pollId);
       void unlistenPromise.then((unlisten) => unlisten());
     };
   }, []);

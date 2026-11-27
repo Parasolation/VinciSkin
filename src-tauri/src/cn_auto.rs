@@ -164,7 +164,7 @@ fn follow(
     let mut last: Option<(u32, u32, Option<u32>, bool)> = None;
 
     while running.load(Ordering::SeqCst) {
-        match tick(app_handle, &mut last, bridge.as_ref()) {
+        match tick(app_handle, &mut last, bridge.as_ref(), &status) {
             Ok((current, applied)) => set(&status, |s| {
                 s.error = None;
                 s.current_champion = current;
@@ -189,6 +189,7 @@ fn tick(
     app_handle: &AppHandle,
     last: &mut Option<(u32, u32, Option<u32>, bool)>,
     bridge: Option<&Arc<Mutex<Option<Selection>>>>,
+    status: &Arc<Mutex<AutoStatus>>,
 ) -> AppResult<(Option<u32>, Option<AutoApplied>)> {
     let settings = app_handle.state::<SettingsState>();
     let config = settings.config();
@@ -213,6 +214,9 @@ fn tick(
             .filter(|s| s.champion_id != 0)
             .map(|s| s.champion_id)
     };
+    // Publish current_champion before showing the overlay so its initial autoStatus()
+    // call sees the champion immediately without racing against overlay rebuilds.
+    set(status, |s| s.current_champion = overlay_champion);
     crate::cn_overlay::sync(app_handle, overlay_champion);
 
     let Some(selection) = selection else {
