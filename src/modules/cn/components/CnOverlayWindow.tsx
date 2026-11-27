@@ -1,4 +1,4 @@
-import { XIcon } from "@phosphor-icons/react";
+import { CaretLeftIcon, CaretRightIcon, XIcon } from "@phosphor-icons/react";
 import { listen } from "@tauri-apps/api/event";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -115,6 +115,22 @@ export function CnOverlayWindow() {
     );
   }, [cards, effectiveSkinId]);
 
+  const activeIndex = useMemo(() => {
+    if (!activeCard) return 0;
+    const idx = cards.findIndex((c) => c.skin.skinId === activeCard.skin.skinId);
+    return idx >= 0 ? idx : 0;
+  }, [cards, activeCard]);
+
+  function stepSkin(delta: number) {
+    if (cards.length === 0) return;
+    const nextIndex = (activeIndex + delta + cards.length) % cards.length;
+    const nextCard = cards[nextIndex];
+    if (nextCard) {
+      setHoveredChroma(null);
+      scheduleApply(nextCard.skin);
+    }
+  }
+
   /* Default featured preview shows the base skin splash; hovering a chroma previews it immediately. */
   const previewEntry: CnSkin | null = hoveredChroma ?? activeCard?.skin ?? null;
 
@@ -229,24 +245,35 @@ export function CnOverlayWindow() {
         </div>
       ) : (
         <div className="flex min-h-0 flex-1 flex-col">
-          {/* Featured portrait preview */}
+          {/* Client-style carousel: left/right arrows + tall 308:560 featured skin card */}
           {previewEntry && (
-            <div className="relative h-64 shrink-0 overflow-hidden border-b border-amber-500/20 bg-[#010a13]">
-              {previewEntry.artUrl ? (
-                <img
-                  src={previewEntry.artUrl}
-                  alt={previewEntry.name}
-                  className="h-full w-full object-contain p-1 transition-opacity duration-150"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center text-xs text-[#5b5a56]">
-                  暂无预览图
-                </div>
-              )}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#091428] via-[#091428]/70 to-transparent" />
-              <div className="absolute inset-x-3 bottom-2 flex items-end justify-between gap-2">
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold text-[#f0e6d2] drop-shadow">
+            <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden border-b border-amber-500/20 bg-[#010a13] px-10 py-3">
+              <button
+                type="button"
+                onClick={() => stepSkin(-1)}
+                title="上一个皮肤"
+                className="absolute left-2 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#c8aa6e]/40 bg-[#091428]/85 text-[#c8aa6e] transition hover:border-[#c8aa6e] hover:bg-[#1e2328]"
+              >
+                <CaretLeftIcon className="h-5 w-5" weight="bold" />
+              </button>
+
+              <div className="relative h-full aspect-[308/560] overflow-hidden rounded-md border border-[#c8aa6e]/60 bg-[#091428] shadow-xl">
+                {previewEntry.artUrl ? (
+                  <img
+                    src={previewEntry.artUrl}
+                    alt={previewEntry.name}
+                    className={`h-full w-full transition-opacity duration-150 ${
+                      hoveredChroma ? "object-contain p-1.5" : "object-cover object-top"
+                    }`}
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-xs text-[#5b5a56]">
+                    暂无预览图
+                  </div>
+                )}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#091428] via-[#091428]/80 to-transparent" />
+                <div className="absolute inset-x-2.5 bottom-2">
+                  <div className="truncate text-xs font-semibold text-[#f0e6d2] drop-shadow">
                     {previewEntry.name}
                   </div>
                   <div className="text-[11px] text-[#c8aa6e]">
@@ -254,13 +281,22 @@ export function CnOverlayWindow() {
                   </div>
                 </div>
               </div>
+
+              <button
+                type="button"
+                onClick={() => stepSkin(1)}
+                title="下一个皮肤"
+                className="absolute right-2 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[#c8aa6e]/40 bg-[#091428]/85 text-[#c8aa6e] transition hover:border-[#c8aa6e] hover:bg-[#1e2328]"
+              >
+                <CaretRightIcon className="h-5 w-5" weight="bold" />
+              </button>
             </div>
           )}
 
           {/* Chroma thumbnail strip when the active skin has chromas */}
           {activeCard && activeCard.chromas.length > 0 && (
             <div
-              className="flex shrink-0 flex-wrap items-center gap-1.5 border-b border-amber-500/15 bg-[#0a1428]/80 px-3 py-2"
+              className="flex shrink-0 flex-wrap items-center justify-center gap-1.5 border-b border-amber-500/15 bg-[#0a1428]/80 px-3 py-2"
               onMouseLeave={() => setHoveredChroma(null)}
             >
               <button
@@ -319,7 +355,7 @@ export function CnOverlayWindow() {
 
           {feedback && (
             <div
-              className={`shrink-0 border-b px-3 py-1.5 text-xs font-medium ${
+              className={`shrink-0 border-b px-3 py-1.5 text-center text-xs font-medium ${
                 feedback.kind === "success"
                   ? "border-emerald-500/30 bg-emerald-950/70 text-emerald-300"
                   : "border-rose-500/30 bg-rose-950/70 text-rose-300"
@@ -329,43 +365,37 @@ export function CnOverlayWindow() {
             </div>
           )}
 
-          {/* Scrollable client-style skin selector grid */}
-          <div className="min-h-0 flex-1 overflow-y-auto p-2.5">
-            <ul className="grid grid-cols-2 gap-2">
+          {/* Horizontal skin strip at the bottom (client-style quick jump) */}
+          <div className="shrink-0 overflow-x-auto bg-[#0a1428] px-2.5 py-2">
+            <ul className="flex gap-1.5">
               {cards.map((card) => {
                 const isSelected =
                   effectiveSkinId === card.skin.skinId ||
                   card.chromas.some((chroma) => chroma.skinId === effectiveSkinId);
 
                 return (
-                  <li key={card.skin.skinId}>
+                  <li key={card.skin.skinId} className="shrink-0">
                     <button
                       type="button"
-                      onClick={() => scheduleApply(card.skin)}
-                      className={`group relative flex w-full flex-col overflow-hidden rounded border text-left transition ${
+                      title={card.skin.name}
+                      onClick={() => {
+                        setHoveredChroma(null);
+                        scheduleApply(card.skin);
+                      }}
+                      className={`relative h-14 w-9 overflow-hidden rounded border transition ${
                         isSelected
-                          ? "border-[#c8aa6e] ring-1 ring-[#c8aa6e]/50"
-                          : "border-[#3c3c41]/80 hover:border-[#c8aa6e]/60"
+                          ? "border-[#c8aa6e] ring-1 ring-[#c8aa6e]/60"
+                          : "border-[#3c3c41]/80 opacity-65 hover:border-[#c8aa6e]/60 hover:opacity-100"
                       }`}
                     >
-                      <div className="relative aspect-[308/560] w-full overflow-hidden bg-[#010a13]">
-                        {card.skin.artUrl ? (
-                          <img
-                            src={card.skin.artUrl}
-                            alt={card.skin.name}
-                            loading="lazy"
-                            className="h-full w-full object-cover object-top transition duration-200 group-hover:scale-105"
-                          />
-                        ) : null}
-                        {card.chromas.length > 0 && (
-                          <span className="absolute right-1 bottom-1 rounded bg-black/75 px-1 py-0.5 text-[10px] text-[#c8aa6e]">
-                            {card.chromas.length} 炫彩
-                          </span>
-                        )}
-                      </div>
-                      <div className="truncate bg-[#1e2328] px-2 py-1 text-[11px] font-medium text-[#f0e6d2]">
-                        {card.skin.name}
-                      </div>
+                      {card.skin.artUrl ? (
+                        <img
+                          src={card.skin.artUrl}
+                          alt={card.skin.name}
+                          loading="lazy"
+                          className="h-full w-full object-cover object-top"
+                        />
+                      ) : null}
                     </button>
                   </li>
                 );
