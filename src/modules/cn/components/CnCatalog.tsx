@@ -8,7 +8,6 @@ import { useCnHeroes } from "../api";
 import { qualityOptions } from "../skins";
 import { CnHeroPicker } from "./CnHeroPicker";
 import { CnSkinGrid } from "./CnSkinGrid";
-import { CnSkinPacks } from "./CnSkinPacks";
 
 /** The champion and skin tables the Chinese client ships, read from the Tencent CDN. */
 export function CnCatalog() {
@@ -22,7 +21,6 @@ export function CnCatalog() {
   const [onlyApplied, setOnlyApplied] = useState(false);
   const [swapAllChampions, setSwapAllChampions] = useState(false);
   const [swapAllBusy, setSwapAllBusy] = useState(false);
-  const [packsOpen, setPacksOpen] = useState(false);
   const [patcher, setPatcher] = useState<CnPatcherStatus | null>(null);
   const [injectBusy, setInjectBusy] = useState(false);
 
@@ -193,10 +191,6 @@ export function CnCatalog() {
               </label>
             </div>
 
-            <Button size="sm" variant="ghost" onClick={() => setPacksOpen((open) => !open)}>
-              {m.cn_packs_title()}
-            </Button>
-
             <Button
               size="sm"
               variant={injectRunning ? "outline" : "default"}
@@ -208,10 +202,6 @@ export function CnCatalog() {
               {injectRunning ? "取消注入" : "开启注入"}
             </Button>
           </div>
-
-          {/* Packs are page-level rather than champion-level: one carries the archives it names,
-              whichever champion is that. Folded away so the skins keep the height. */}
-          {packsOpen && <CnSkinPacks />}
 
           <div className="min-h-0 flex-1 overflow-y-auto pr-1">
             <CnSkinGrid
