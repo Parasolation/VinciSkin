@@ -5,6 +5,7 @@
 
 const ENDPOINT = 'http://127.0.0.1:__PORT__/state?token=__TOKEN__'
 const EVENT = 'OnJsonApiEvent_lol-champ-select_v1_session'
+const PHASE_EVENT = 'OnJsonApiEvent_lol-gameflow_v1_phase'
 
 let retry = 1000
 let last = ''
@@ -41,6 +42,7 @@ function connect() {
   socket.onopen = () => {
     retry = 1000
     socket.send(JSON.stringify([5, EVENT]))
+    socket.send(JSON.stringify([5, PHASE_EVENT]))
 
     // Events only arrive on a change, so read once to seed the current pick.
     fetch('/lol-champ-select/v1/session')
@@ -58,7 +60,17 @@ function connect() {
       return
     }
 
-    if (!Array.isArray(message) || message[0] !== 8 || message[1] !== EVENT) return
+    if (!Array.isArray(message) || message[0] !== 8) return
+
+    if (message[1] === PHASE_EVENT) {
+      const phase = (message[2] || {}).data
+      if (phase === 'GameStart' || phase === 'InProgress' || phase === 'Reconnect') {
+        post(0, 0)
+      }
+      return
+    }
+
+    if (message[1] !== EVENT) return
 
     const payload = message[2] || {}
     report(payload.eventType, payload.data)
