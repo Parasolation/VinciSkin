@@ -222,7 +222,7 @@ export function CnOverlayWindow() {
 
   return (
     <div
-      className="flex h-screen flex-col overflow-hidden border border-amber-500/30 bg-[#091428] text-[#f0e6d2] select-none"
+      className="relative flex h-screen flex-col overflow-hidden border border-amber-500/30 bg-[#091428] text-[#f0e6d2] select-none"
       data-ui="CnOverlayWindow"
     >
       {/* League-client-inspired draggable header */}
@@ -408,10 +408,10 @@ export function CnOverlayWindow() {
 
           {feedback && (
             <div
-              className={`shrink-0 border-b px-3 py-1.5 text-center text-xs font-medium ${
+              className={`pointer-events-none absolute top-14 left-1/2 z-20 max-w-[85%] -translate-x-1/2 truncate rounded-full border px-3 py-1 text-center text-xs font-medium shadow-lg backdrop-blur-xs ${
                 feedback.kind === "success"
-                  ? "border-emerald-500/30 bg-emerald-950/70 text-emerald-300"
-                  : "border-rose-500/30 bg-rose-950/70 text-rose-300"
+                  ? "border-emerald-500/40 bg-emerald-950/90 text-emerald-300"
+                  : "border-rose-500/40 bg-rose-950/90 text-rose-300"
               }`}
             >
               {feedback.text}
