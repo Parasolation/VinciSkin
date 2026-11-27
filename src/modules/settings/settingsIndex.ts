@@ -32,6 +32,7 @@ const INDEX = [
     title: "Hide Riot Client on Game start",
   },
   { id: "general.autoRun", key: "autoRun", title: "Auto run" },
+  { id: "general.autoStartPatcher", key: "autoStartPatcher", title: "启动时自动开启注入" },
   { id: "general.minimizeToTray", key: "minimizeToTray", title: "Minimize to system tray" },
   { id: "general.startInTray", key: "startInTray", title: "Start minimized to tray" },
   {

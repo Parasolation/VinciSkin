@@ -344,7 +344,10 @@ pub fn start_cn_patcher(app_handle: AppHandle, patcher: State<PatcherState>) -> 
     start_cn_patcher_inner(&app_handle, &patcher).into()
 }
 
-fn start_cn_patcher_inner(app_handle: &AppHandle, patcher: &State<PatcherState>) -> AppResult<()> {
+pub(crate) fn start_cn_patcher_inner(
+    app_handle: &AppHandle,
+    patcher: &PatcherState,
+) -> AppResult<()> {
     let (config, storage) = swap_context(app_handle)?;
 
     match vinciskin_core::static_swap::overlay_purge_stale(&config, &storage) {
@@ -355,9 +358,7 @@ fn start_cn_patcher_inner(app_handle: &AppHandle, patcher: &State<PatcherState>)
 
     let overlay = overlay_dir(&storage);
     if !overlay.is_dir() {
-        return Err(AppError::Other(
-            "no overlay has been built yet - apply a skin first".into(),
-        ));
+        fs_err::create_dir_all(&overlay)?;
     }
 
     let loader = match resolve_resource(app_handle, LOADER_EXE_NAME) {

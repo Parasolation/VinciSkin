@@ -146,6 +146,17 @@ pub fn run(app: &mut tauri::App) -> Result<(), Box<dyn std::error::Error>> {
         if settings.watcher_enabled {
             crate::mods::watcher::start_library_watcher(&app_handle);
         }
+        if settings.auto_start_patcher {
+            let for_patcher = app_handle.clone();
+            std::thread::spawn(move || {
+                let patcher: tauri::State<'_, crate::patcher::PatcherState> = for_patcher.state();
+                if let Err(error) =
+                    crate::commands::cn_catalog::start_cn_patcher_inner(&for_patcher, &patcher)
+                {
+                    tracing::warn!("could not start patcher on startup: {error}");
+                }
+            });
+        }
     }
 
     // A game outlives the manager and the session id following it does not, so

@@ -36,6 +36,7 @@ pub fn setup(app: &mut tauri::App) -> tauri::Result<()> {
             }
         })
         .on_menu_event(|app, event| match event.id.as_ref() {
+            "toggle-patcher" => toggle_patcher(app),
             "show" => reveal(app),
             "quit" => app.exit(0),
             _ => {}
@@ -43,6 +44,17 @@ pub fn setup(app: &mut tauri::App) -> tauri::Result<()> {
         .build(app)?;
 
     Ok(())
+}
+
+fn toggle_patcher(app: &AppHandle) {
+    let patcher: tauri::State<'_, crate::patcher::PatcherState> = app.state();
+    if patcher.status().running {
+        if let Err(error) = patcher.stop() {
+            tracing::warn!("could not stop patcher from tray: {error}");
+        }
+    } else if let Err(error) = crate::commands::cn_catalog::start_cn_patcher_inner(app, &patcher) {
+        tracing::warn!("could not start patcher from tray: {error}");
+    }
 }
 
 fn reveal(app: &AppHandle) {
@@ -58,15 +70,22 @@ fn menu<R: Runtime, M: Manager<R>>(manager: &M) -> tauri::Result<Menu<R>> {
     let menu = Menu::new(manager)?;
     menu.append(&MenuItem::with_id(
         manager,
+        "toggle-patcher",
+        "开启/取消注入",
+        true,
+        None::<&str>,
+    )?)?;
+    menu.append(&MenuItem::with_id(
+        manager,
         "show",
-        "Show Manager",
+        "打开主界面",
         true,
         None::<&str>,
     )?)?;
     menu.append(&MenuItem::with_id(
         manager,
         "quit",
-        "Quit",
+        "退出",
         true,
         None::<&str>,
     )?)?;

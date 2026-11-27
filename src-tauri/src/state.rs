@@ -205,9 +205,12 @@ pub struct Settings {
     /// Whether to minimize to system tray instead of taskbar. Default: true.
     #[serde(default = "default_true")]
     pub minimize_to_tray: bool,
-    /// Whether to start the application minimized to the system tray. Default: false.
-    #[serde(default)]
+    /// Whether to start the application minimized to the system tray. Default: true.
+    #[serde(default = "default_true")]
     pub start_in_tray: bool,
+    /// Whether to start the CN injection host automatically on launch. Default: true.
+    #[serde(default = "default_true")]
+    pub auto_start_patcher: bool,
     /// Whether to register the app to launch automatically on login. Default: false.
     #[serde(default)]
     pub auto_run: bool,
@@ -259,7 +262,8 @@ impl Default for Settings {
             backdrop_blur: None,
             library_view_mode: None,
             minimize_to_tray: true,
-            start_in_tray: false,
+            start_in_tray: true,
+            auto_start_patcher: true,
             auto_run: false,
             launch_mode: LaunchMode::default(),
             migration_dismissed: false,

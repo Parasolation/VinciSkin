@@ -25,6 +25,17 @@ export function StartupAndTraySection({ settings, onSave }: StartupAndTraySectio
             />
           }
         />
+
+        <SettingRow
+          setting="autoStartPatcher"
+          description="打开应用后自动开启注入，无需手动点击。关闭应用时会自动取消注入。"
+          control={
+            <Switch
+              checked={settings.autoStartPatcher}
+              onCheckedChange={(checked) => onSave({ ...settings, autoStartPatcher: checked })}
+            />
+          }
+        />
       </SettingGroup>
 
       <SettingGroup id="general.tray" title="Tray">

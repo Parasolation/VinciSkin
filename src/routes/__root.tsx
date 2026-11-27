@@ -28,7 +28,6 @@ import {
 import { useAppInfo, useCheckSetupRequired } from "@/modules/settings";
 import {
   DevConsoleLazy,
-  OfficialFooterBar,
   OfficialNoticeDialog,
   TitleBar,
   useDevLogStream,
@@ -170,7 +169,6 @@ function RootLayout() {
           <Outlet />
         </div>
       </main>
-      <OfficialFooterBar />
       <LibraryMigrationDialog />
       <ModHealthSweepListener />
       <InstallMismatchDialog />

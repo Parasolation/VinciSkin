@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
 
 import { Button, ComboboxField, EmptyState, Spinner, Switch, useToast } from "@/components";
-import { describeError, m } from "@/i18n";
-import { api, type CnHero, type CnQuality, isOk, unwrap } from "@/lib/tauri";
-import { usePlay } from "@/modules/launcher";
+import { describeError, errorMessage, m } from "@/i18n";
+import { api, type CnHero, type CnPatcherStatus, type CnQuality, isOk, unwrap } from "@/lib/tauri";
 
 import { useCnHeroes } from "../api";
 import { qualityOptions } from "../skins";
 import { CnHeroPicker } from "./CnHeroPicker";
-import { CnSessionControl } from "./CnSessionControl";
 import { CnSkinGrid } from "./CnSkinGrid";
 import { CnSkinPacks } from "./CnSkinPacks";
 
 /** The champion and skin tables the Chinese client ships, read from the Tencent CDN. */
 export function CnCatalog() {
   const heroes = useCnHeroes();
-  const { launchOnly, isBusy } = usePlay();
   const toast = useToast();
 
   /* Held as the option value rather than a number, so the picker stays controlled from the
@@ -26,6 +23,8 @@ export function CnCatalog() {
   const [swapAllChampions, setSwapAllChampions] = useState(false);
   const [swapAllBusy, setSwapAllBusy] = useState(false);
   const [packsOpen, setPacksOpen] = useState(false);
+  const [patcher, setPatcher] = useState<CnPatcherStatus | null>(null);
+  const [injectBusy, setInjectBusy] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -85,19 +84,42 @@ export function CnCatalog() {
   const hero: CnHero | null =
     heroes.data?.heroes.find((candidate) => String(candidate.id) === picked) ?? null;
 
-  /* The skin lives in the overlay, which the injection host serves to the game.
-     The host scans for the game, so it starts first and the launch follows. */
-  async function launch() {
-    if (isBusy) return;
+  useEffect(() => {
+    let alive = true;
 
-    try {
-      unwrap(await api.cn.startPatcher());
-    } catch {
-      /* A host that is already up is not a reason to refuse the launch. */
+    async function pollPatcher() {
+      const result = await api.cn.patcherStatus();
+      if (alive && isOk(result)) {
+        setPatcher(result.value);
+      }
     }
 
-    await launchOnly();
-    toast.info(m.cn_load_started_title(), m.cn_load_started_description());
+    void pollPatcher();
+    const id = setInterval(() => void pollPatcher(), 2000);
+    return () => {
+      alive = false;
+      clearInterval(id);
+    };
+  }, []);
+
+  const injectRunning = patcher?.running ?? false;
+
+  async function toggleInject() {
+    setInjectBusy(true);
+    try {
+      if (injectRunning) {
+        unwrap(await api.cn.stopPatcher());
+        setPatcher({ running: false, state: null, error: null });
+      } else {
+        unwrap(await api.cn.startPatcher());
+        setPatcher({ running: true, state: null, error: null });
+      }
+    } catch (error: unknown) {
+      const title = injectRunning ? m.cn_inject_stop_failed_title() : m.cn_inject_failed_title();
+      toast.error(title, errorMessage(error));
+    } finally {
+      setInjectBusy(false);
+    }
   }
 
   if (heroes.isPending) {
@@ -125,23 +147,7 @@ export function CnCatalog() {
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-3 overflow-hidden p-6" data-ui="CnCatalog">
-      <header className="flex shrink-0 items-baseline gap-3">
-        <h1 className="text-lg font-medium text-surface-100">{m.cn_title()}</h1>
-        <span className="text-fine text-surface-500">
-          {m.cn_patch_label({ version: heroes.data.version })}
-        </span>
-      </header>
-
-      <div
-        className="flex shrink-0 items-center gap-2 rounded-md border border-surface-800 bg-surface-900/40 px-3 py-1.5"
-        data-ui="CnCatalog:status-bar"
-      >
-        <CnSessionControl />
-      </div>
-
-      <p className="shrink-0 text-fine text-surface-500">{m.cn_risk_notice()}</p>
-
+    <div className="flex h-full min-h-0 flex-col gap-3 overflow-hidden p-5" data-ui="CnCatalog">
       <div className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row">
         <aside className="flex max-h-56 min-h-0 flex-col lg:max-h-none lg:w-60 lg:shrink-0">
           <CnHeroPicker
@@ -193,12 +199,13 @@ export function CnCatalog() {
 
             <Button
               size="sm"
+              variant={injectRunning ? "outline" : "default"}
               className="ml-auto"
-              disabled={isBusy}
-              loading={isBusy}
-              onClick={launch}
+              disabled={injectBusy}
+              loading={injectBusy}
+              onClick={toggleInject}
             >
-              {m.cn_load_action()}
+              {injectRunning ? "取消注入" : "开启注入"}
             </Button>
           </div>
 

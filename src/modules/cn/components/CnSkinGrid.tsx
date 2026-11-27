@@ -81,16 +81,6 @@ export function CnSkinGrid({ hero, quality, onlyApplied }: CnSkinGridProps) {
       return;
     }
 
-    /* Writing into the game's own files is worth a confirmation every time
-       rather than only the first. */
-    const accepted = await confirm({
-      title: m.cn_apply_skin_confirm_title({ name: picked.name }),
-      description: m.cn_apply_skin_confirm_description(),
-      confirmLabel: m.cn_apply_skin_action(),
-      tone: "warning",
-    });
-    if (!accepted) return;
-
     applySkin(picked);
   }
 

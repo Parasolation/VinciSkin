@@ -39,9 +39,13 @@ libraryViewMode: string | null,
  */
 minimizeToTray: boolean, 
 /**
- * Whether to start the application minimized to the system tray. Default: false.
+ * Whether to start the application minimized to the system tray. Default: true.
  */
 startInTray: boolean, 
+/**
+ * Whether to start the CN injection host automatically on launch. Default: true.
+ */
+autoStartPatcher: boolean, 
 /**
  * Whether to register the app to launch automatically on login. Default: false.
  */
